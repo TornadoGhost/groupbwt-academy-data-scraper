@@ -19,7 +19,7 @@ class ProductSeeder extends Seeder
         if ($retailers->count() < 1) {
             $retailers = Retailer::factory(10)->create();
         }
-        Product::factory(10)
+        Product::factory(1000)
             ->create()
             ->each(function ($product) use ($retailers) {
                 $randomRetailers = $retailers->random(rand(1, 10));
