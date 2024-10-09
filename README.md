@@ -17,3 +17,7 @@ Steps to start the project:
 - ./vendor/bin/sail artisan key:generate
 - ./vendor/bin/sail artisan migrate
 - ./vendor/bin/sail artisan db:seed
+
+## DataBase documentation
+
+[ER-Diagram](https://dbdiagram.io/d/Scraping-Data-67050124fb079c7ebdb788a5)
