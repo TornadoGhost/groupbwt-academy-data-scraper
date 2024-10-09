@@ -7,7 +7,7 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## Start
+## Instructions for Running this Project
 
 Before you start, you must have installed Composer and Docker.
 Steps to start the project:
