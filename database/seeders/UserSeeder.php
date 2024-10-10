@@ -35,7 +35,7 @@ class UserSeeder extends Seeder
         }
 
         // isAdmin equal 0 by default
-        User::factory(10)
+        User::factory(5)
             ->create([
                 'region_id' => Region::query()->inRandomOrder()->first()->id
             ])
