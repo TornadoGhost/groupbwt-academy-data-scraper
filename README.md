@@ -23,4 +23,4 @@ Steps to start the project:
 
 ## DataBase documentation
 
-[ER-Diagram](https://dbdiagram.io/d/Scraping-Data-67050124fb079c7ebdb788a5)
+[ER-Diagram](https://dbdiagram.io/d/Scraping-Data-6707f06797a66db9a3903414)
