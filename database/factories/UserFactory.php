@@ -2,8 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Region;
-use Database\Seeders\RegionSeeder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
