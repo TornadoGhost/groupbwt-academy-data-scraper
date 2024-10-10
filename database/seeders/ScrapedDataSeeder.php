@@ -46,21 +46,5 @@ class ScrapedDataSeeder extends Seeder
             }
             $startDate->addDay();
         }
-
-        /*for ($i = 0; $i < 365; $i++) {
-            foreach ($products as $product) {
-                $data = ScrapedData::factory()->create([
-                    'product_id' => $product->id,
-                    'retailer_id' => Retailer::query()->inRandomOrder()->first()->id,
-                    'created_at' => $startDate,
-                    'updated_at' => $startDate
-                ]);
-
-                ScrapedDataImages::factory(rand(1, 3))->create([
-                    'scraped_data_id' => $data->id,
-                ]);
-            }
-            $startDate->addDay();
-        }*/
     }
 }
