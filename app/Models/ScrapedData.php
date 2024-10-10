@@ -12,6 +12,7 @@ class ScrapedData extends Model
     use HasFactory;
 
     protected $table = 'scraped_data';
+    public $timestamps = false;
 
     public function images(): HasMany
     {
