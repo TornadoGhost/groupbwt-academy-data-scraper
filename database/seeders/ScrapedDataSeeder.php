@@ -31,11 +31,12 @@ class ScrapedDataSeeder extends Seeder
 
         while ($startDate <= $currentDate) {
             foreach ($retailers as $retailer) {
-                for ($i = 0; $i < $retailer->products()->count(); $i++) {
+                foreach ($retailer->products as $product) {
                     $scrapedData = ScrapedData::factory()->create([
                         'retailer_id' => $retailer->id,
+                        'product_id' => $product->id,
+                        'user_id' => $product->user->id,
                         'created_at' => $startDate,
-                        'updated_at' => $startDate
                     ]);
 
                     ScrapedDataImages::factory(rand(1, 3))->create([
