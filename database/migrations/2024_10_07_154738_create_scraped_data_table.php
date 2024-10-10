@@ -17,7 +17,10 @@ return new class extends Migration
             $table->string('description');
             $table->integer('price');
             $table->foreignId('retailer_id')->constrained()->onDelete('cascade');
-            $table->timestamps();
+            $table->foreignId('product_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('session_id', 100)->index();
+            $table->timestamp('created_at')->index();
         });
     }
 
@@ -28,6 +31,8 @@ return new class extends Migration
     {
         Schema::table('scraped_data', function(Blueprint $table) {
             $table->dropForeign(['retailer_id']);
+            $table->dropForeign(['product_id']);
+            $table->dropForeign(['user_id']);
         });
         Schema::dropIfExists('scraped_data');
     }
