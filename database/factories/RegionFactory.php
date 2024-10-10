@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -27,7 +28,8 @@ class RegionFactory extends Factory
             'Eastern Asia',
         ];
         return [
-            'name' => array_rand($regions)
+            'name' => array_rand($regions),
+            'created_at' => Carbon::now(),
         ];
     }
 }

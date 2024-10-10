@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,10 +17,17 @@ class ProductFactory extends Factory
      */
     public function definition(): array
     {
+        $randomUser = User::query()->where('isAdmin', '0')->inRandomOrder()->first()->id;
+        if (!$randomUser) {
+            $randomUser = User::factory()->create();
+        }
+
         return [
             'title' => $this->faker->word(),
             'manufacturer_part_number' => strtoupper($this->faker->unique()->lexify('????-????-????')),
-            'pack_size' => $this->faker->randomElement(['case', 'each'])
+            'pack_size' => $this->faker->randomElement(['case', 'each']),
+            'url' => $this->faker->url(),
+            'user_id' => $randomUser,
         ];
     }
 }
