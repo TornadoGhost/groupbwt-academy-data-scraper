@@ -15,12 +15,18 @@ return new class extends Migration
             $table->id();
             $table->string('title', 100);
             $table->string('description');
-            $table->integer('price');
+            $table->float('price');
+            $table->float('avg_rating')->default(0);
+            $table->integer('stars_1')->default(0);
+            $table->integer('stars_2')->default(0);
+            $table->integer('stars_3')->default(0);
+            $table->integer('stars_4')->default(0);
+            $table->integer('stars_5')->default(0);
             $table->foreignId('retailer_id')->constrained()->onDelete('cascade');
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('session_id', 100)->index();
-            $table->timestamp('created_at')->index();
+            $table->foreignId('session_id')->constrained('scraping_sessions')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 
@@ -29,11 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('scraped_data', function(Blueprint $table) {
-            $table->dropForeign(['retailer_id']);
-            $table->dropForeign(['product_id']);
-            $table->dropForeign(['user_id']);
-        });
         Schema::dropIfExists('scraped_data');
     }
 };

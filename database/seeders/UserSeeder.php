@@ -24,24 +24,16 @@ class UserSeeder extends Seeder
             ]);
         }
 
-        $retailers = Retailer::all();
-        if ($retailers->count() < 1) {
-            $retailers = Retailer::factory(10)->create();
-        }
-
-        $region = Region::all();
-        if ($region->count() < 1) {
-            $this->call(RegionSeeder::class);
-        }
+        $retailers = collect(Retailer::all()->modelKeys());
+        $regions = collect(Region::all()->modelKeys());
 
         // isAdmin equal 0 by default
         User::factory(5)
             ->create([
-                'region_id' => Region::query()->inRandomOrder()->first()->id
+                'region_id' => $regions->random()
             ])
             ->each(function ($user) use ($retailers) {
-                $randomRetailer = $retailers->random(rand(1, 10));
-                $user->retailers()->attach($randomRetailer);
+                $user->retailers()->attach($retailers->random(rand(1, 10)));
             });
     }
 }

@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ScrapedDataImages>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ScrapedDataImage>
  */
-class ScrapedDataImagesFactory extends Factory
+class ScrapedDataImageFactory extends Factory
 {
     /**
      * Define the model's default state.

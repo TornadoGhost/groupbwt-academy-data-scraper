@@ -12,11 +12,10 @@ class ScrapedData extends Model
     use HasFactory;
 
     protected $table = 'scraped_data';
-    public $timestamps = false;
 
     public function images(): HasMany
     {
-        return $this->hasMany(ScrapedDataImages::class);
+        return $this->hasMany(ScrapedDataImage::class);
     }
 
     public function retailer(): BelongsTo
@@ -32,5 +31,10 @@ class ScrapedData extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function scraping_session(): BelongsTo
+    {
+        return $this->belongsTo(ScrapingSession::class);
     }
 }

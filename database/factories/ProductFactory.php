@@ -26,7 +26,6 @@ class ProductFactory extends Factory
             'title' => $this->faker->word(),
             'manufacturer_part_number' => strtoupper($this->faker->unique()->lexify('????-????-????')),
             'pack_size' => $this->faker->randomElement(['case', 'each']),
-            'url' => $this->faker->url(),
             'user_id' => $randomUser,
         ];
     }

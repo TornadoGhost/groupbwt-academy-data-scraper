@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('title', 100);
             $table->string('manufacturer_part_number')->unique();
             $table->string('pack_size', 20);
-            $table->string('url');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
@@ -27,9 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->dropForeign(['user_id']);
-        });
         Schema::dropIfExists('products');
     }
 };

@@ -25,4 +25,9 @@ class Retailer extends Model
     {
         return $this->belongsToMany(User::class, 'user_retailer');
     }
+
+    public function scrapingSessions(): HasMany
+    {
+        return $this->hasMany(ScrapingSession::class);
+    }
 }

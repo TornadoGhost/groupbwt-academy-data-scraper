@@ -23,9 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('scraped_data_images', function(Blueprint $table) {
-            $table->dropForeign(['scraped_data_id']);
-        });
         Schema::dropIfExists('scraped_data_images');
     }
 };
