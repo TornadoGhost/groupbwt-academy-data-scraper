@@ -26,7 +26,7 @@ class ScrapedDataImageSeeder extends Seeder
                 'scraped_data_id' => $d,
             ];
         }
-        $chunks = array_chunk($data, 5000);
+        $chunks = array_chunk($data, 4000);
         foreach ($chunks as $chunk) {
             DB::transaction(function () use ($chunk) {
                 DB::table('scraped_data_images')->insert($chunk);
