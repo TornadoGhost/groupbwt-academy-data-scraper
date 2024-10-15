@@ -62,11 +62,9 @@ class ScrapedDataSeeder extends Seeder
             $startDate->addDay();
         }
 
-        $chunks = array_chunk($data, 4000);
+        $chunks = array_chunk($data, 1000);
         foreach ($chunks as $chunk) {
-            DB::transaction(function () use ($chunk) {
                 DB::table('scraped_data')->insert($chunk);
-            });
         }
     }
 }

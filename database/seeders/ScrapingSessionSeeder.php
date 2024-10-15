@@ -28,8 +28,8 @@ class ScrapingSessionSeeder extends Seeder
                 $data[] = [
                     'status_id' => $statuses->random(),
                     'retailer_id' => $retailer,
-                    'started_at' => $startDate,
-                    'ended_at' => $startDate,
+                    'started_at' => $startDate->copy(),
+                    'ended_at' => $startDate->copy(),
                 ];
             }
             $startDate->addDay();
