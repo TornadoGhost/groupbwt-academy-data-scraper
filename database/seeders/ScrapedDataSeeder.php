@@ -54,8 +54,8 @@ class ScrapedDataSeeder extends Seeder
                         'product_id' => $product->id,
                         'user_id' => $product->user->id,
                         'session_id' => $counter,
-                        'created_at' => $startDate,
-                        'updated_at' => $startDate
+                        'created_at' => $startDate->copy(),
+                        'updated_at' => $startDate->copy()
                     ];
                 }
             }

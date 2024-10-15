@@ -15,9 +15,12 @@ class SessionStatusSeeder extends Seeder
     {
         $statuses = ['In Progress', 'Done', 'Error'];
 
-        foreach($statuses as $status) {
+        foreach($statuses as $index => $status) {
             SessionStatus::factory()->create(
-                ['name' => $status]
+                [
+                    'code' => ++$index,
+                    'code_name' => $status
+                ]
             );
         }
     }

@@ -19,7 +19,7 @@ class ProductSeeder extends Seeder
         $faker = Faker::create();
         $retailers = collect(Retailer::all()->modelKeys());
 
-        Product::factory(10)
+        Product::factory(1000)
             ->create()
             ->each(function ($product) use ($retailers, $faker) {
                 $randomRetailers = $retailers->random(rand(1, 10));
