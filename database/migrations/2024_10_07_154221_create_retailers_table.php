@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('reference');
             $table->string('currency', 20);
             $table->string('logo_path');
+            $table->smallInteger('isActive', unsigned: true)->default(1);
             $table->timestamps();
         });
     }
