@@ -20,7 +20,8 @@ class RetailerFactory extends Factory
             'name' => $this->faker->unique()->company(),
             'reference' => $this->faker->unique()->url(),
             'currency' => $this->faker->currencyCode(),
-            'logo_path' => $this->faker->unique()->imageUrl(100,100,'business')
+            'logo_path' => $this->faker->unique()->imageUrl(100,100,'business'),
+            'isActive' => 1,
         ];
     }
 }
