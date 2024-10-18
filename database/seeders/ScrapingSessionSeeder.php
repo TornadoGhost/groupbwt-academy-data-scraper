@@ -20,8 +20,8 @@ class ScrapingSessionSeeder extends Seeder
         $data = [];
         $startDate = Carbon::now()->subYear();
         $currentDate = Carbon::now();
-        $statuses = collect(SessionStatus::all()->modelKeys());
-        $retailers = collect(Retailer::all()->modelKeys());
+        $statuses = SessionStatus::query()->pluck('id');
+        $retailers = Retailer::query()->pluck('id');
 
         while ($startDate <= $currentDate) {
             foreach($retailers as $retailer) {

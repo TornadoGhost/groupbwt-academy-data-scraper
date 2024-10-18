@@ -18,7 +18,7 @@ class ScrapedDataImageSeeder extends Seeder
     {
         $data = [];
         $faker = Faker::create();
-        $scrapedData = collect(ScrapedData::query()->limit(200000)->get()->modelKeys());
+        $scrapedData = ScrapedData::query()->limit(200000)->get()->modelKeys();
 
         foreach ($scrapedData as $d) {
             $data[] = [

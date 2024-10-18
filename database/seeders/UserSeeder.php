@@ -24,8 +24,8 @@ class UserSeeder extends Seeder
             ]);
         }
 
-        $retailers = collect(Retailer::all()->modelKeys());
-        $regions = collect(Region::all()->modelKeys());
+        $retailers = Retailer::query()->pluck('id');
+        $regions = Region::query()->pluck('id');
 
         // isAdmin equal 0 by default
         User::factory(5)
