@@ -17,7 +17,7 @@ class ProductSeeder extends Seeder
     public function run(): void
     {
         $faker = Faker::create();
-        $retailers = collect(Retailer::all()->modelKeys());
+        $retailers = Retailer::query()->pluck('id');
 
         Product::factory(1000)
             ->create()
