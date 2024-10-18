@@ -19,8 +19,8 @@ class ScrapingSessionFactory extends Factory
      */
     public function definition(): array
     {
-        $statuses = collect(SessionStatus::all()->modelKeys());
-        $retailers = collect(Retailer::all()->modelKeys());
+        $statuses = SessionStatus::query()->pluck('id');
+        $retailers = Retailer::query()->pluck('id');
 
         return [
             'status_id' => $statuses->random(),

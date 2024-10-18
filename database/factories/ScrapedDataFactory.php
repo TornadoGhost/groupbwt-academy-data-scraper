@@ -20,10 +20,10 @@ class ScrapedDataFactory extends Factory
      */
     public function definition(): array
     {
-        $randomRetailer = collect(Retailer::all()->modelKeys());
-        $randomProduct = collect(Product::all()->modelKeys());
-        $randomUser = collect(User::all()->modelKeys());
-        $randomSessionId = collect(ScrapingSession::all()->modelKeys());
+        $retailers = Retailer::query()->pluck('id');
+        $products = Product::query()->pluck('id');
+        $users = User::query()->pluck('id');
+        $scrapingSessions = ScrapingSession::query()->pluck('id');
         $stars_1 = rand(1, 50);
         $stars_2 = rand(1, 50);
         $stars_3 = rand(1, 50);
@@ -41,10 +41,10 @@ class ScrapedDataFactory extends Factory
             'stars_3' => $stars_3,
             'stars_4' => $stars_4,
             'stars_5' => $stars_5,
-            'retailer_id' => $randomRetailer->random(),
-            'product_id' => $randomProduct->random(),
-            'user_id' => $randomUser->random(),
-            'session_id' => $randomSessionId->random()
+            'retailer_id' => $retailers->random(),
+            'product_id' => $products->random(),
+            'user_id' => $users->random(),
+            'session_id' => $scrapingSessions->random()
         ];
     }
 }
