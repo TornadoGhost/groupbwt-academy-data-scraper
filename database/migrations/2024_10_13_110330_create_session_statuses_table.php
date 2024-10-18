@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('session_statuses', function (Blueprint $table) {
             $table->id();
-            $table->smallInteger('code', unsigned: true);
+            $table->smallInteger('code', unsigned: true)->unique();
             $table->string('code_name', 20);
         });
     }

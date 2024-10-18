@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('password');
             $table->foreignId('region_id')->nullable();
             $table->smallInteger('isAdmin', unsigned: true)->default(0);
-            $table->rememberToken();
             $table->timestamps();
         });
     }

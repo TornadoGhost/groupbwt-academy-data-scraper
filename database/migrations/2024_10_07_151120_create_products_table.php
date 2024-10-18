@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('title', 100);
-            $table->string('manufacturer_part_number')->unique();
+            $table->string('manufacturer_part_number');
             $table->string('pack_size', 20);
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
