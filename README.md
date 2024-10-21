@@ -31,7 +31,7 @@ For removing revoked users tokens you can do it manually or with schedule.
 For manually run `./vendor/bin/sail artisan passport:purge` to remove all current revoked tokens.
 If you don't want to purge tokens manually every day, you can use schedule, run `./vendor/bin/sail artisan shedule:list`.
 You can config scheduler for how often it will be removing revoked tokens, you just need find this file `routes/console.php` and
-change method. [(hourly(), daily(), weekly()](https://laravel.com/docs/11.x/scheduling#schedule-frequency-options) and so on
+change method. [(hourly(), daily(), weekly()...)](https://laravel.com/docs/11.x/scheduling#schedule-frequency-options) and so on
 should run.
 ## Status codes for Scraping session
 
