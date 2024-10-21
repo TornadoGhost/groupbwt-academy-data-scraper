@@ -15,12 +15,12 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             RegionSeeder::class,
-            SessionStatusSeeder::class,
             RetailerSeeder::class,
             UserSeeder::class,
             ProductSeeder::class,
             ScrapingSessionSeeder::class,
-            ScrapedDataSeeder::class,
+//            ScrapedDataSeeder::class,
+//            ScrapedDataImageSeeder::class
         ]);
     }
 }

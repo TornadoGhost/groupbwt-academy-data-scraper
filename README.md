@@ -20,7 +20,29 @@ Steps to start the project:
 - ./vendor/bin/sail artisan key:generate
 - ./vendor/bin/sail artisan migrate
 - ./vendor/bin/sail artisan db:seed
+- ./vendor/bin/sail artisan passport:client --personal, after you will get `Client ID` and `Client secret`, inside of
+  `.env` you will find PASSPORT_PERSONAL_ACCESS_CLIENT_ID="client-id-value"
+  PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET="unhashed-client-secret-value" and put data accordingly
+- ./vendor/bin/sail artisan storage:link
+
+## Additional
+
+For removing revoked users tokens you can do it manually or with schedule.
+For manually run `./vendor/bin/sail artisan passport:purge` to remove all current revoked tokens.
+If you don't want to purge tokens manually every day, you can use schedule, run `./vendor/bin/sail artisan shedule:list`.
+You can config scheduler for how often it will be removing revoked tokens, you just need find this file `routes/console.php` and
+change method. [(hourly(), daily(), weekly()](https://laravel.com/docs/11.x/scheduling#schedule-frequency-options) and so on
+should run.
+## Status codes for Scraping session
+
+`RUNNING = 0`
+`COMPLETED = 1`
+`FAILED = 13`
 
 ## DataBase documentation
 
 [ER-Diagram](https://dbdiagram.io/d/Scraping-Data-v-last-670a88bd97a66db9a3c012a4)
+
+## API documentation
+
+[API-Swagger](https://app.swaggerhub.com/apis/TORNADOGHOST/Scraper/1.0.0)

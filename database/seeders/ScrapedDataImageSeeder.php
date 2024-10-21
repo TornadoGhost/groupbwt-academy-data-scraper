@@ -21,10 +21,12 @@ class ScrapedDataImageSeeder extends Seeder
         $scrapedData = ScrapedData::query()->limit(200000)->get()->modelKeys();
 
         foreach ($scrapedData as $d) {
-            $data[] = [
-                'path' => $faker->imageUrl(),
-                'scraped_data_id' => $d,
-            ];
+            for ($i = 0; $i < rand(1, 3); $i++) {
+                $data[] = [
+                    'path' => $faker->imageUrl(),
+                    'scraped_data_id' => $d,
+                ];
+            }
         }
         $chunks = array_chunk($data, 4000);
         foreach ($chunks as $chunk) {

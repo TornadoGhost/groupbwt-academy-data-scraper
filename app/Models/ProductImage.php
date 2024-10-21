@@ -11,8 +11,14 @@ class ProductImage extends Model
     use HasFactory;
 
     public $timestamps = false;
+
+    protected $fillable = [
+        'path',
+        'product_id'
+    ];
+
     public function product(): BelongsTo
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class, 'product_id');
     }
 }

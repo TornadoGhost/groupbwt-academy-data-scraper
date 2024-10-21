@@ -13,6 +13,13 @@ class ScrapingSession extends Model
 
     public $timestamps = false;
 
+    protected $fillable = [
+        'status_code',
+        'retailer_id',
+        'started_at',
+        'ended_at',
+    ];
+
     public function retailer(): BelongsTo
     {
         return $this->belongsTo(Retailer::class);
@@ -21,10 +28,5 @@ class ScrapingSession extends Model
     public function scrapedData(): HasMany
     {
         return $this->hasMany(ScrapedData::class);
-    }
-
-    public function status(): BelongsTo
-    {
-        return $this->belongsTo(SessionStatus::class);
     }
 }

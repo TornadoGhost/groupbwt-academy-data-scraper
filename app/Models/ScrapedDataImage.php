@@ -12,6 +12,11 @@ class ScrapedDataImage extends Model
 
     public $timestamps = false;
 
+    protected $fillable = [
+        'path',
+        'scraped_data_id'
+    ];
+
     public function scrapedData(): BelongsTo
     {
         return $this->belongsTo(ScrapedData::class);

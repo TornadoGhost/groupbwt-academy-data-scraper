@@ -11,6 +11,14 @@ class Retailer extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'reference',
+        'currency',
+        'logo_path',
+        'isActive',
+    ];
+
     public function scrapedData(): HasMany
     {
         return $this->hasMany(ScrapedData::class);
@@ -18,7 +26,7 @@ class Retailer extends Model
 
     public function products(): BelongsToMany
     {
-        return $this->belongsToMany(Product::class);
+        return $this->belongsToMany(Product::class)->withPivot('isActive', 'product_url');
     }
 
     public function users(): BelongsToMany

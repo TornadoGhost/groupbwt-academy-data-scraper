@@ -13,7 +13,23 @@ class ScrapedData extends Model
 
     protected $table = 'scraped_data';
 
-    public function images(): HasMany
+    protected $fillable = [
+        'title',
+        'description',
+        'price',
+        'avg_rating',
+        'stars_1',
+        'stars_2',
+        'stars_3',
+        'stars_4',
+        'stars_5',
+        'retailer_id',
+        'product_id',
+        'user_id',
+        'session_id'
+    ];
+
+    public function scrapedDataImages(): HasMany
     {
         return $this->hasMany(ScrapedDataImage::class);
     }
@@ -33,8 +49,8 @@ class ScrapedData extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function scraping_session(): BelongsTo
+    public function scrapingSession(): BelongsTo
     {
-        return $this->belongsTo(ScrapingSession::class);
+        return $this->belongsTo(ScrapingSession::class, 'session_id');
     }
 }
