@@ -18,9 +18,6 @@ return new class extends Migration
             $table->integer('status_code')->default(0);
             $table->timestamp('started_at');
             $table->timestamp('ended_at')->nullable();
-
-            // Унікальний індекс для retailer_id і дати
-            $table->unique(['retailer_id', DB::raw('DATE(started_at)')], 'retailer_date_unique');
         });
     }
 
