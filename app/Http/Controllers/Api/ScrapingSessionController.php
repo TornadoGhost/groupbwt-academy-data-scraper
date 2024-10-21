@@ -37,6 +37,10 @@ class ScrapingSessionController extends Controller
 
         $session = $this->sessionService->create($request->validated());
 
+        if (!$session) {
+            return $this->errorResponse('Session for this retailer_id already created for this date', 422);
+        }
+
         return $this->successResponse("Scraping session created", 201, ScrapingSessionResource::make($session));
     }
 
