@@ -20,14 +20,13 @@ class ScrapingSessionSeeder extends Seeder
         $data = [];
         $startDate = Carbon::now()->subYear();
         $currentDate = Carbon::now();
-        $statuses = SessionStatus::query()->pluck('id');
         $retailers = Retailer::query()->pluck('id');
 
         while ($startDate <= $currentDate) {
             foreach($retailers as $retailer) {
                 $data[] = [
-                    'status_id' => $statuses->random(),
                     'retailer_id' => $retailer,
+                    'status_code' => 1,
                     'started_at' => $startDate->copy(),
                     'ended_at' => $startDate->copy(),
                 ];

@@ -19,14 +19,13 @@ class ScrapingSessionFactory extends Factory
      */
     public function definition(): array
     {
-        $statuses = SessionStatus::query()->pluck('id');
         $retailers = Retailer::query()->pluck('id');
 
         return [
-            'status_id' => $statuses->random(),
             'retailer_id' => $retailers->random(),
+            'status_code' => 1,
             'started_at' => Carbon::now(),
-            'ended_at' => Carbon::now()->addDay(),
+            'ended_at' => Carbon::now()->addHours(12),
         ];
     }
 }
