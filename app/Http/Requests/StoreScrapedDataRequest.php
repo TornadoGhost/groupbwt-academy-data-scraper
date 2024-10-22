@@ -27,7 +27,7 @@ class StoreScrapedDataRequest extends FormRequest
             'session_id' => 'required|integer|exists:scraping_sessions,id',
             'mpn' => 'required|string|max:50',
             'images' => 'array',
-            'images.*' => 'image|mimes:jps,jpeg,png|max:2048'
+            'images.*' => 'image|mimes:jpg,jpeg,png|max:2048'
         ];
     }
 }

@@ -30,7 +30,7 @@ class StoreProductRequest extends FormRequest
             'retailers.retailer_id.*' => 'exists:retailers,id',
             'retailers.product_url.*' => 'string|min:5|max:255',
             'images' => 'array',
-            'images.*' => 'image|mimes:jps,jpeg,png|max:2048'
+            'images.*' => 'image|mimes:jpg,jpeg,png|max:2048'
         ];
     }
 }
