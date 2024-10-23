@@ -304,12 +304,10 @@ return [
     'menu' => [
         // Navbar items:
         [
-            'type' => 'navbar-search',
-            'text' => 'search',
-            'topnav_right' => true,
-        ],
-        [
-            'type' => 'fullscreen-widget',
+            'type' => 'button',
+            'url' => '',
+            'id' => 'logout',
+            'text' => 'Logout',
             'topnav_right' => true,
         ],
 
