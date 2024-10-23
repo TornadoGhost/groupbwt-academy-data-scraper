@@ -2,9 +2,20 @@
 
 {{-- Extend and customize the browser title --}}
 
+@section('content_top_nav_right')
+    <li class="nav-item">
+        <form class="nav-link" action="{{route('logout')}}" method="post">
+            @csrf
+            <x-adminlte-button class="btn-sm" label="Logout" type="submit"/>
+        </form>
+    </li>
+@endsection
+
 @section('title')
     {{ config('adminlte.title') }}
-    @hasSection('subtitle') | @yield('subtitle') @endif
+    @hasSection('subtitle')
+        @yield('subtitle')
+    @endif
 @stop
 
 {{-- Extend and customize the page content header --}}
@@ -48,11 +59,6 @@
 
 @push('js')
     <script>
-
-        $(document).ready(function() {
-            // Add your common script logic here...
-        });
-
     </script>
 @endpush
 
@@ -62,14 +68,16 @@
     <style type="text/css">
 
         {{-- You can add AdminLTE customizations here --}}
-/*
-    .card-header {
-        border-bottom: none;
-    }
-    .card-title {
-        font-weight: 600;
-    }
-    */
+
+
+        /*
+                    .card-header {
+                        border-bottom: none;
+                    }
+                    .card-title {
+                        font-weight: 600;
+                    }
+                    */
 
     </style>
 @endpush
