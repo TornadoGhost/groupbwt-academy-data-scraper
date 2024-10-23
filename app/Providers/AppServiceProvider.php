@@ -24,6 +24,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-
+        Passport::personalAccessTokensExpireIn(now()->addMinutes((int)config('session.lifetime')));
     }
 }
