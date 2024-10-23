@@ -1,7 +1,6 @@
-export function mainFetch(path = '/', method = get, body = '', headers = {}) {
+export function mainFetch(path = '/', method = 'get', body = '', headers = {}) {
     const token = getCookie('laravel_token');
-    console.log(token)
-    return fetch(`http://localhost/api/${path}`, {
+    const options = {
         method: method,
         headers: {
             'Accept': 'application/json',
@@ -9,8 +8,13 @@ export function mainFetch(path = '/', method = get, body = '', headers = {}) {
             'Authorization': `Bearer ${token}`,
             ...headers,
         },
-        body: body
-    }).then(response => response.json());
+    };
+
+    if (body && (method === 'POST' || method === 'PUT' || method === 'PATCH')) {
+        options.body = JSON.stringify(body);
+    }
+    return fetch(`http://localhost/api/${path}`, options)
+        .then(response => response.json());
 }
 
 const allCookies = document.cookie;
