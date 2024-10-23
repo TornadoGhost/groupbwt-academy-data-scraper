@@ -6,10 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginUserRequest;
 use App\Services\Contracts\UserServiceInterface;
 use App\Traits\JsonResponseHelper;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Laravel\Passport\TokenRepository;
+use Illuminate\Support\Facades\Cookie;
 
 class AuthController extends Controller
 {
@@ -19,37 +18,35 @@ class AuthController extends Controller
     {
     }
 
-    public function login(LoginUserRequest $request)
+    public function login(LoginUserRequest $request): JsonResponse
     {
-
         if (Auth::guard('api')->user()) {
             return $this->errorResponse('Authenticated users cannot access the login page', 403);
         }
 
-        $user = $this->userService->findByEmail($request->email);
+        if (Auth::attempt($request->validated())) {
+            $user = auth()->user();
+            $token = $user->createToken('main')->accessToken;
+            $cookie = Cookie::make('laravel_token', $token, 525949, '/', config('url'), true);
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
+            return $this->successResponse('Login successful', data: [
+                'id' => $user->id,
+                'username' => $user->username,
+                'email' => $user->email,
+                'token' => $token
+            ])->cookie($cookie);
+        } else {
             return $this->errorResponse('User unauthorized', 401);
         }
-
-        $token = $user->createToken('main')->accessToken;
-
-        return $this->successResponse('Login successful', data: [
-            'id' => $user->id,
-            'username' => $user->username,
-            'email' => $user->email,
-            'accessToken' => $token
-        ]);
     }
 
-    public function logout()
+    public function logout(): JsonResponse
     {
         $user = auth()->user();
 
         if ($user) {
-            $user->token()->revoke();
-
-            return $this->successResponse('You have been successfully logged out!');
+            $user->tokens()->delete();
+            return $this->successResponse('You have been successfully logged out!')->withCookie(Cookie::forget('laravel_token'));
         }
 
         return $this->errorResponse('User unauthorized', 401);
