@@ -10,10 +10,11 @@
 @endsection
 
 @section('auth_body')
-    <form id="form" class="form">
+    <form action="{{ route('login.store') }}" method="post" id="form" class="form">
+        @csrf
         {{-- Email field --}}
         <div class="input-group mb-3">
-            <input type="email" name="email" class="form-control"
+            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
                    value="{{ old('email') }}" placeholder="{{ __('adminlte::adminlte.email') }}" autofocus>
 
             <div class="input-group-append">
@@ -22,9 +23,11 @@
                 </div>
             </div>
 
+            @error('email')
             <span class="invalid-feedback" role="alert">
-                <strong id="email-error"></strong>
-            </span>
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
         </div>
 
         {{-- Password field --}}
@@ -39,9 +42,11 @@
             </div>
 
 
+            @error('password')
             <span class="invalid-feedback" role="alert">
-                <strong id="password-error"></strong>
-            </span>
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
         </div>
 
         {{-- Login field --}}
@@ -60,9 +65,7 @@
     <script type="module">
         import {mainFetch} from "{{ asset('js/mainFetch.js') }}";
 
-        form.addEventListener('submit', function (event) {
-            event.preventDefault();
-
+        form.addEventListener('submit', function () {
             const formData = {
                 email: form.elements.email.value,
                 password: form.elements.password.value,
@@ -78,7 +81,6 @@
                         document.getElementById('password-error').innerText = password[0];
                     } else {
                         localStorage.setItem('accessToken', data.token);
-                        window.location.href = "{{ route('home') }}";
                     }
                 })
                 .catch(error => console.log(error));
