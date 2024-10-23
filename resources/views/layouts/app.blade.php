@@ -6,7 +6,7 @@
     <li class="nav-item">
         <form class="nav-link" action="{{route('logout')}}" method="post">
             @csrf
-            <x-adminlte-button class="btn-sm" label="Logout" type="submit"/>
+            <x-adminlte-button id="logout" class="btn-sm" label="Logout" type="submit"/>
         </form>
     </li>
 @endsection
@@ -58,7 +58,12 @@
 {{-- Add common Javascript/Jquery code --}}
 
 @push('js')
-    <script>
+    <script type="module">
+        import {mainFetch} from "{{ asset('js/mainFetch.js') }}";
+
+        logout.addEventListener('click', function () {
+            mainFetch('logout', 'POST');
+        });
     </script>
 @endpush
 
@@ -68,6 +73,7 @@
     <style type="text/css">
 
         {{-- You can add AdminLTE customizations here --}}
+
 
 
         /*
