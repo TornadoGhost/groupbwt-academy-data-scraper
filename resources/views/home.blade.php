@@ -24,18 +24,7 @@
 {{-- Push extra scripts --}}
 
 @push('js')
-    <script type="module">
-        import {mainFetch} from "{{ asset('js/mainFetch.js') }}";
+    <script>
 
-        logout.addEventListener('click', function (event) {
-            event.preventDefault();
-
-            mainFetch('logout', 'POST')
-                .then(() => {
-                    localStorage.removeItem('accessToken');
-                    window.location.href = "{{ route('login') }}";
-                })
-                .catch(error => console.log(error));
-        });
     </script>
 @endpush
