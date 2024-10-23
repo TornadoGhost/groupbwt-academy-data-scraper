@@ -8,7 +8,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cookie;
 
 class AuthController extends Controller
 {
@@ -21,19 +20,17 @@ class AuthController extends Controller
     {
         if (Auth::attempt($request->validated())) {
             $request->session()->regenerate();
-            $token = Auth::user()->createToken('main')->accessToken;
-            $cookie = Cookie::make('laravel_token', $token, config('session.lifetime'), '/', config('url'), false, false);
 
-            return redirect()->route('home')->cookie($cookie);
+            return redirect()->route('home');
+        } else {
+            return redirect()->back()->withErrors(['some_error' => 'Something went wrong, try again later.']);
         }
     }
 
     public function logout(Request $request): RedirectResponse
     {
-        Auth::user()->tokens()->delete();
         Auth::logout();
         $request->session()->invalidate();
-        Cookie::forget('laravel_token');
 
         return redirect()->route('login');
     }
