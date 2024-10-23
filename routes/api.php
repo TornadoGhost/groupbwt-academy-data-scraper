@@ -30,4 +30,8 @@ Route::middleware('auth:api')->group(function () {
     });
 
     Route::get('metrics', MetricController::class);
+
+    Route::post('logout', [AuthController::class, 'logout']);
 });
+
+Route::post('login', [AuthController::class, 'login']);
