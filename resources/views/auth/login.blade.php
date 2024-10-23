@@ -10,6 +10,11 @@
 @endsection
 
 @section('auth_body')
+    @if($errors->has('some_error'))
+        <div class="alert alert-danger">
+            {{ $errors->first('token_null') }}
+        </div>
+    @endif
     <form action="{{ route('login.store') }}" method="post" id="form" class="form">
         @csrf
         {{-- Email field --}}
@@ -70,20 +75,7 @@
                 email: form.elements.email.value,
                 password: form.elements.password.value,
             };
-
-            mainFetch('login', 'POST', JSON.stringify(formData))
-                .then(({data}) => {
-                    if (data.errors) {
-                        const {email, password} = data.errors;
-                        form.email.classList.add("is-invalid");
-                        form.password.classList.add("is-invalid");
-                        document.getElementById('email-error').innerText = email;
-                        document.getElementById('password-error').innerText = password[0];
-                    } else {
-                        localStorage.setItem('accessToken', data.token);
-                    }
-                })
-                .catch(error => console.log(error));
+            mainFetch('login', 'POST', formData);
         });
     </script>
 @endpush
