@@ -1,5 +1,5 @@
 export function mainFetch(path = '/', method = get, body = '', headers = {}) {
-    const token = localStorage.getItem('accessToken');
+    const token = getCookie('laravel_token');
     console.log(token)
     return fetch(`http://localhost/api/${path}`, {
         method: method,
@@ -11,4 +11,11 @@ export function mainFetch(path = '/', method = get, body = '', headers = {}) {
         },
         body: body
     }).then(response => response.json());
-};
+}
+
+const allCookies = document.cookie;
+const cookiesArray = allCookies.split('; ');
+function getCookie(name) {
+    const cookie = cookiesArray.find(cookie => cookie.startsWith(`${name}=`));
+    return cookie ? cookie.split('=')[1] : null; // Повертає значення cookie або null, якщо не знайдено
+}
