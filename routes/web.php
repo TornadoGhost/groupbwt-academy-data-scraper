@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
-    Route::get('/products', [ProductController::class, 'index'])->name('products');
+    Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+    Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
