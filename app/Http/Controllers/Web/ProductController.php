@@ -5,10 +5,15 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
 
-class LoginController extends Controller
+class ProductController extends Controller
 {
     public function index(): View
     {
-        return view('auth.login');
+        return view('products.index');
+    }
+
+    public function create()
+    {
+        return view('products.create');
     }
 }
