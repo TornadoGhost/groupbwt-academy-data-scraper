@@ -15,10 +15,10 @@ class StoreAuthenticateRequest extends FormRequest
     {
         return [
             'email' => [
-                'required', 'email'
+                'required', 'email', 'min:5', 'max:75'
             ],
             'password' => [
-                'required'
+                'required','string','min:5','max:255'
             ]
         ];
     }
