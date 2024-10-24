@@ -10,7 +10,6 @@ use App\Models\Product;
 use App\Services\Contracts\ProductServiceInterface;
 use App\Traits\JsonResponseHelper;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ProductController extends Controller
 {
@@ -19,11 +18,11 @@ class ProductController extends Controller
     {
     }
 
-    public function index(): AnonymousResourceCollection
+    public function index(): JsonResponse
     {
-        $products = $this->productService->all(15);
+        $products = $this->productService->all();
 
-        return ProductResource::collection($products);
+        return $this->successResponse('Product created', data: ProductResource::collection($products));;
     }
 
     public function store(StoreProductRequest $request): JsonResponse
