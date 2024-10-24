@@ -12,7 +12,7 @@
 @section('auth_body')
     @if($errors->has('some_error'))
         <div class="alert alert-danger">
-            {{ $errors->first('token_null') }}
+            {{ $errors->first('some_error') }}
         </div>
     @endif
     <form action="{{ route('login.store') }}" method="post" id="form" class="form">
@@ -75,7 +75,10 @@
                 email: form.elements.email.value,
                 password: form.elements.password.value,
             };
-            mainFetch('login', 'POST', formData);
+            const option = {
+                'Content-Type': 'application/json'
+            };
+            mainFetch('login', 'POST', JSON.stringify(formData), option);
         });
     </script>
 @endpush
