@@ -27,10 +27,24 @@ class StoreProductRequest extends FormRequest
             ],
             'pack_size' => 'required|string|min:3|max:20',
             'retailers' => 'required|array',
-            'retailers.retailer_id.*' => 'exists:retailers,id',
-            'retailers.product_url.*' => 'string|min:5|max:255',
+            'retailers.*.retailer_id' => 'required|distinct|exists:retailers,id',
+            'retailers.*.product_url' => 'required|string|min:5|max:255',
             'images' => 'array',
             'images.*' => 'image|mimes:jpg,jpeg,png|max:2048'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'retailers.*.retailer_id.required' => 'The retailer field is required.',
+            'retailers.*.retailer_id.distinct' => 'The retailer must be unique in the list.',
+            'retailers.*.retailer_id.exists' => 'The selected retailer does not exist in the database.',
+
+            'retailers.*.product_url.required' => 'The product URL is required.',
+            'retailers.*.product_url.string' => 'The product URL must be a string.',
+            'retailers.*.product_url.min' => 'The product URL must be at least :min characters.',
+            'retailers.*.product_url.max' => 'The product URL may not be greater than :max characters.',
         ];
     }
 }
