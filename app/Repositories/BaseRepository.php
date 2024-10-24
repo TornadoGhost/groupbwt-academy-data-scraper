@@ -26,12 +26,12 @@ abstract class BaseRepository implements BaseRepositoryInterface
         return $this->model;
     }
 
-    public function all($perPage)
+    public function all()
     {
         return $this->model()
             ->orderByDesc('created_at')
             ->orderByDesc('id')
-            ->paginate($perPage);
+            ->get();
     }
 
     public function find($uid)

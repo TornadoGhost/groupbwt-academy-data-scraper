@@ -12,13 +12,13 @@ use Illuminate\Support\Facades\DB;
 class ScrapedDataRepository extends BaseRepository implements ScrapedDataRepositoryInterface
 {
 
-    public function all($perPage = 15)
+    public function all()
     {
         if (auth()->user()->isAdmin) {
             return $this->model()
                 ->with('scrapedDataImages')
                 ->latest('session_id')
-                ->paginate($perPage);
+                ->get();
         }
 
         $userId = auth()->id();
@@ -26,7 +26,7 @@ class ScrapedDataRepository extends BaseRepository implements ScrapedDataReposit
         return $this->model()
             ->where('user_id', $userId)
             ->latest('session_id')
-            ->paginate($perPage);
+            ->get();
     }
 
     public function find($uid)

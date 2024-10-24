@@ -19,9 +19,9 @@ abstract class BaseCrudService implements BaseCrudServiceInterface
         return $this->repository;
     }
 
-    public function all($perPage = 15)
+    public function all()
     {
-        return $this->repository()->all($perPage);
+        return $this->repository()->all();
     }
 
     public function find($attribute)

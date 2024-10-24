@@ -4,7 +4,7 @@ namespace App\Repositories\Contracts;
 
 interface BaseRepositoryInterface
 {
-    public function all(int $perPage);
+    public function all();
 
     public function find(string $uid);
 

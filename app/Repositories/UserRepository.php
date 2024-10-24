@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
 {
-    public function all($perPage)
+    public function all()
     {
         $userId = auth()->user()->id;
 
@@ -16,7 +16,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
             ->where('id', '!=', $userId)
             ->orderByDesc('created_at')
             ->orderByDesc('id')
-            ->paginate($perPage);
+            ->get();
     }
 
     public function create($attributes)

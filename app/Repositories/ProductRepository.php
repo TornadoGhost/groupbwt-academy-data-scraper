@@ -11,23 +11,21 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductRepository extends BaseRepository implements ProductRepositoryInterface
 {
-    public function all($perPage = 15)
+    public function all()
     {
         if (auth()->user()->isAdmin) {
             $model = $this->model()
                 ->with('retailers')
-                ->with('users')
+                ->with('user')
                 ->with('images');
 
-            return $this->getLatestPaginatedData($model, $perPage);
-
+            return $this->getLatestData($model);
         }
         $model = $this->model()
             ->with('retailers')
             ->where('user_id', auth()->id());
 
-        return $this->getLatestPaginatedData($model, $perPage);
-
+        return $this->getLatestData($model);
     }
 
     public function create($attributes)
@@ -62,6 +60,14 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
     public function find($uid)
     {
+        if (auth()->user()->isAdmin) {
+            return $this->model
+                ->with('retailers')
+                ->with('images')
+                ->where('manufacturer_part_number', $uid)
+                ->firstOrFail();
+        }
+
         return $this->model
             ->with('retailers')
             ->with('images')
@@ -93,7 +99,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         $product = $this->model
             ->with('images')
             ->where('manufacturer_part_number', $uid)
-            ->firstOrFail();
+            ->first();
 
         $images = $product->images;
 
@@ -110,11 +116,11 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         return Product::class;
     }
 
-    protected function getLatestPaginatedData($model, $perPage)
+    protected function getLatestData($model)
     {
         return $model
             ->latest('created_at')
             ->latest('id')
-            ->paginate($perPage);
+            ->get();
     }
 }

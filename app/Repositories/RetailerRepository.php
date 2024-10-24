@@ -10,13 +10,13 @@ use Illuminate\Support\Facades\DB;
 class RetailerRepository extends BaseRepository implements RetailerRepositoryInterface
 {
 
-    public function all($perPage)
+    public function all()
     {
         if (auth()->user()->isAdmin) {
             return $this->model
                 ->orderByDesc('created_at')
                 ->orderByDesc('id')
-                ->paginate($perPage);
+                ->get();
         }
         return $this->model
             ->where('isActive', 1)

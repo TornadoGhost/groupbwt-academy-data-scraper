@@ -8,13 +8,13 @@ use Carbon\Carbon;
 
 class ScrapingSessionRepository extends BaseRepository implements ScrapingSessionRepositoryInterface
 {
-    public function all($perPage)
+    public function all()
     {
         return $this->model()
             ->with('retailer')
             ->orderByDesc('started_at')
             ->orderByDesc('id')
-            ->paginate($perPage);
+            ->get();
     }
 
     public function create($attributes)

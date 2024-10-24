@@ -4,7 +4,7 @@ namespace App\Services\Contracts;
 
 interface BaseCrudServiceInterface
 {
-    public function all(int $perPage);
+    public function all();
 
     public function find(string $attribute);
 
