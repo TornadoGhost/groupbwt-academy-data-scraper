@@ -45,12 +45,15 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
                 ]);
             }
 
-            foreach ($attributes['images'] as $image) {
-                $path = $this->saveImage($image);
-                $product->images()->create([
-                    'path' => $path
-                ]);
+            if ($attributes['images'] ?? null) {
+                foreach ($attributes['images'] as $image) {
+                    $path = $this->saveImage($image);
+                    $product->images()->create([
+                        'path' => $path
+                    ]);
+                }
             }
+
 
             return $product;
         });
