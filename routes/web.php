@@ -7,8 +7,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
-    Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-    Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
+
+    Route::controller(ProductController::class)->group(function () {
+        Route::get('/products', 'index')->name('products.index');
+        Route::get('/products/create', 'create')->name('products.create');
+        Route::get('/products/{mpn}', 'show')->name('products.show');
+    });
+
+
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
