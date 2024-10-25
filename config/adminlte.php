@@ -396,7 +396,7 @@ return [
             ],
         ],
         'DatatablesPlugins' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
@@ -480,6 +480,16 @@ return [
                 ],
             ],
         ],
+        'bootstrap-icons' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => '//cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.min.css',
+                ],
+            ],
+        ],
         'Sweetalert2' => [
             'active' => false,
             'files' => [
@@ -512,6 +522,52 @@ return [
                     'type' => 'js',
                     'asset' => true,
                     'location' => 'vendor/bs-custom-file-input/bs-custom-file-input.js',
+                ],
+            ],
+        ],
+        'inputFileKrajee' => [
+            'active' => false,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/kartik-v-bootstrap-fileinput/js/fileinput.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'vendor/kartik-v-bootstrap-fileinput/css/fileinput.css',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/kartik-v-bootstrap-fileinput/themes/bs5/theme.js',
+                ],
+            ],
+        ],
+        'explorer' => [
+            'active' => false,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'vendor/kartik-v-bootstrap-fileinput/themes/explorer/theme.css',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/kartik-v-bootstrap-fileinput/themes/explorer/theme.js',
+                ],
+            ],
+        ],
+
+        'bootstrap-5' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js',
                 ],
             ],
         ],
