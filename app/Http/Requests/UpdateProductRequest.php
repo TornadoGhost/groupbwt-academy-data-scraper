@@ -15,15 +15,14 @@ class UpdateProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|min:3|max:100',
+            'title' => 'string|min:3|max:100',
             'manufacturer_part_number' => [
-                'required',
                 'string',
                 'min:3',
                 'max:50'
             ],
-            'pack_size' => 'required|string|min:3|max:20',
-            'retailers' => 'required|array',
+            'pack_size' => 'string|min:3|max:20',
+            'retailers' => 'array',
             'retailers.retailer_id.*' => 'exists:retailers,id',
             'retailers.product_url.*' => 'string|min:5|max:255',
         ];
