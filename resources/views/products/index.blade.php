@@ -15,9 +15,9 @@
     @php
         $heads = [
             'id',
-            'title',
-            ['label' => 'manufacturer_part_number', 'width' => 40],
-            'pack_size',
+            'Title',
+            'Manufacturer part number',
+            'Pack size',
             ['label' => 'Actions', 'no-export' => true, 'width' => 5],
         ];
         $config['dom'] = '<"row" <"col-sm-7" B> <"col-sm-5 d-flex justify-content-end" i> >
@@ -27,7 +27,7 @@
         $config["lengthMenu"] = [ 10, 50, 100, 500];
     @endphp
     <x-adminlte-datatable id="table2" :heads="$heads" head-theme="dark" :config="$config"
-                          striped hoverable bordered compressed beautify with-buttons/>
+                          striped bordered compressed beautify with-buttons hoverable/>
     <x-adminlte-modal id="modalMin" title="Warning" theme="red">
         <p>Are you sure, you want to delete?</p>
         <x-slot name="footerSlot">
@@ -114,11 +114,18 @@
                         document.removeEventListener('click', modalRemoveProductAccept);
                     });
                 });
+                const editButtons = document.querySelectorAll('button[id=product-edit]');
+                editButtons.forEach(elem => {
+                    elem.addEventListener('click', function(event) {
+                        const mpn = getMpnForRow(event.target.closest('tr[class=odd]'));
+                        window.location.href = `products/${mpn}`;
+                    });
+                })
 
                 function modalRemoveProductAccept(element) {
                     document.addEventListener('click', function (event) {
                         if (event.target === document.getElementById('delete-btn')) {
-                            const mpn = table.row(element).data().manufacturer_part_number;
+                            const mpn = getMpnForRow(element);
                             mainFetch(`products/${mpn}`, 'delete')
                                 .then(response => {
                                     if (response?.status === 'Error') {
@@ -134,8 +141,13 @@
                     })
                 }
 
-                const editProduct = document.getElementById('product-edit');
-                const showProduct = document.getElementById('product-show');
+                function getMpnForRow(element) {
+                    return getRowData(element).manufacturer_part_number;
+                }
+
+                function getRowData(element) {
+                    return table.row(element).data();
+                }
             }
 
             // Знищуємо попередню таблицю, якщо вона існує
