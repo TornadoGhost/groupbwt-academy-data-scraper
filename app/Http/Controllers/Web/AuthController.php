@@ -16,14 +16,14 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
-    public function login(StoreAuthenticateRequest $request)
+    public function login(StoreAuthenticateRequest $request): RedirectResponse
     {
         if (Auth::attempt($request->validated())) {
             $request->session()->regenerate();
 
             return redirect()->route('home');
         } else {
-            return redirect()->back()->withErrors(['some_error' => 'Something went wrong, try again later.']);
+            return redirect()->back()->withErrors(['errorLogin' => 'Wrong email or password'])->withInput();
         }
     }
 
