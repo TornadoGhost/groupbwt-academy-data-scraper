@@ -190,7 +190,7 @@
                 'Content-Type': 'application/x-www-form-urlencoded',
             };
 
-            mainFetch('products/{{ $product->manufacturer_part_number }}', 'PATCH', urlEncodedData.toString(), options)
+            mainFetch('products/{{ $product->manufacturer_part_number }}', 'PATCH', data.toString(), options)
                 .then(response => {
                     if (response.errors) {
                         const errors = response.errors;
