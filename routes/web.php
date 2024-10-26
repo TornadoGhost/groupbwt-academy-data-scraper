@@ -3,6 +3,7 @@
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\AuthController;
 use App\Http\Controllers\Web\ProductController;
+use App\Http\Controllers\Web\RetailerController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth'])->group(function () {
@@ -12,6 +13,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/products', 'index')->name('products.index');
         Route::get('/products/create', 'create')->name('products.create');
         Route::get('/products/{mpn}', 'show')->name('products.show');
+    });
+    Route::controller(RetailerController::class)->group(function () {
+        Route::get('/retailers', 'index')->name('retailers.index');
+        Route::get('/retailers/create', 'create')->name('retailers.create');
+        Route::get('/retailers/{id}', 'show')->name('retailers.show');
     });
 
 
