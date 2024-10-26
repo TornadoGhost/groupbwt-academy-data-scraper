@@ -93,7 +93,6 @@
 @push('js')
     <script type="module">
         import {mainFetch} from "{{ asset('js/mainFetch.js') }}";
-        import {getCookie} from "{{ asset('js/getCookie.js') }}";
 
         let counter = 0;
 
@@ -147,7 +146,6 @@
 
             const form = document.getElementById('product-create');
             let formData = new FormData(form);
-            const token = getCookie('laravel_token');
 
             mainFetch('products', 'POST', formData)
                 .then(response => {
