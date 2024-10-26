@@ -19,6 +19,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/retailers/create', 'create')->name('retailers.create');
         Route::get('/retailers/{id}', 'show')->name('retailers.show');
     });
+    Route::controller(UserController::class)->middleware(AuthenticateAdmin::class)->group(function () {
+        Route::get('/users', 'index')->name('users.index');
+        Route::get('/users/create', 'create')->name('users.create');
+        Route::get('/users/{id}', 'show')->name('users.show');
+    });
 
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
