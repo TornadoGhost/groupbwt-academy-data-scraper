@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Retailer;
 use App\Repositories\Contracts\RetailerRepositoryInterface;
 use App\Services\Contracts\RetailerServiceInterface;
 
@@ -20,6 +21,11 @@ class RetailerService extends BaseCrudService implements RetailerServiceInterfac
     public function restore(int $uid)
     {
         return $this->repository()->restore($uid);
+    }
+
+    public function findWithUsers(int $id): Retailer
+    {
+        return $this->repository()->findWithUsers($id);
     }
 
     protected function getRepositoryClass()
