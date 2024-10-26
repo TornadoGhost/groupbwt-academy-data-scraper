@@ -114,6 +114,7 @@
 @push('js')
     <script type="module">
         import {mainFetch} from "{{ asset('js/mainFetch.js') }}";
+        import {updatePrepareData} from "{{ asset('js/updatePrepareData.js') }}";
 
         /*$("#images").fileinput({
             theme: "explorer",
@@ -184,14 +185,7 @@
             event.preventDefault();
 
             const form = document.getElementById('product-update');
-            let formData = new FormData(form);
-            const urlEncodedData = new URLSearchParams();
-
-            formData.forEach((value, key) => {
-                urlEncodedData.append(key, value);
-                console.log(key, value);
-            });
-
+            const data = updatePrepareData(form);
             const options = {
                 'Content-Type': 'application/x-www-form-urlencoded',
             };
