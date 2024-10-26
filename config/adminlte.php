@@ -336,6 +336,21 @@ return [
                 ],
             ],
         ],
+        [
+            'text' => 'Users',
+            'icon' => 'fas fa-fw fa-share',
+            'submenu' => [
+                [
+                    'text' => 'Users list',
+                    'url' => 'users',
+                ],
+                [
+                    'text' => 'Creat user',
+                    'url' => 'users/create',
+                ],
+            ],
+            'can' => 'isAdmin',
+        ],
         /*['header' => 'labels'],
         [
             'text' => 'important',
