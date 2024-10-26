@@ -2,12 +2,10 @@
 
 namespace App\Providers;
 
-use App\Models\Retailer;
-use App\Policies\RetailerPolicy;
+use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Passport\Passport;
-use Illuminate\Support\Facades\Route;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,6 +22,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Passport
         Passport::personalAccessTokensExpireIn(now()->addMinutes((int)config('session.lifetime')));
+
+        // Gates
+        Gate::define('isAdmin', function (User $user) {
+            return $user->isAdmin;
+        });
     }
 }
