@@ -29,8 +29,8 @@ Route::middleware('auth:api')->group(function () {
         Route::patch('/retailers/{retailer_id}/revoke-access', 'revokeAccess');
     });
 
+    Route::get('retailers/{retailer_id}/users', [RetailerController::class, 'getWithUsers']);
     Route::get('metrics', MetricController::class);
-
     Route::post('logout', [AuthController::class, 'logout']);
 });
 
