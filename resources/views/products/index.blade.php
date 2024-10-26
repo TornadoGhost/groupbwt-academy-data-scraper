@@ -86,6 +86,7 @@
                         {"data": "title"},
                         {"data": "manufacturer_part_number"},
                         {"data": "pack_size"},
+                        {"data": "created_at"},
                         {
                             "data": null, // Поле action, яке буде рендеритись вручну
                             "render": function () {
