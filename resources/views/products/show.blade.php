@@ -137,8 +137,7 @@
 
         const retailersData = await getData();
         const options = retailersData.map(retailer =>
-            `
-    <option value="${retailer.id}">${retailer.name}</option>`
+            `<option value="${retailer.id}">${retailer.name}</option>`
         ).join('');
 
         const addRetailersBtn = document.getElementById('add-retailers');
@@ -188,16 +187,11 @@
 
             const form = document.getElementById('product-update');
             const data = updatePrepareData(form);
-            const options = {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            };
 
-            mainFetch('products/{{ $product->manufacturer_part_number }}', 'PATCH', data.toString(), options)
+            mainFetch('products/{{ $product->manufacturer_part_number }}', 'PATCH', data.toString())
                 .then(response => {
                     if (response.errors) {
                         const errors = response.errors;
-                        console.log(errors);
-
                         const errorInputName = Object.entries(errors);
                         errorInputName.forEach(value => {
                             addValidationMessage(value[0], value[1][0])
