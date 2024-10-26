@@ -4,6 +4,8 @@ use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\AuthController;
 use App\Http\Controllers\Web\ProductController;
 use App\Http\Controllers\Web\RetailerController;
+use App\Http\Controllers\Web\UserController;
+use App\Http\Middleware\AuthenticateAdmin;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth'])->group(function () {
