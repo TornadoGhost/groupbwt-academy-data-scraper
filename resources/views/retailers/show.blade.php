@@ -93,11 +93,8 @@
 
             const form = document.getElementById('retailer-update');
             const data = updatePrepareData(form);
-            const options = {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            };
 
-            mainFetch('retailers/{{ $retailer['id'] }}', 'PATCH', data.toString(), options)
+            mainFetch('retailers/{{ $retailer['id'] }}', 'PATCH', data.toString())
                 .then(response => {
                     if (response?.errors) {
                         const errors = response.errors;
