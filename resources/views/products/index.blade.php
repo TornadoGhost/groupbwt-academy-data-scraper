@@ -18,6 +18,7 @@
             'Title',
             'Manufacturer part number',
             'Pack size',
+            'Created',
             ['label' => 'Actions', 'no-export' => true, 'width' => 5],
         ];
         $config['dom'] = '<"row" <"col-sm-7" B> <"col-sm-5 d-flex justify-content-end" i> >
