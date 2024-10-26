@@ -60,13 +60,13 @@
             @if($product)
                 @foreach($product->retailers as $key => $retailer)
                     <div class="d-flex align-items-center" data-retailer>
-                        <x-adminlte-select2 id="retailers-select" name=`retailers[{{$key+10000}}][retailer_id]`
+                        <x-adminlte-select2 id="retailers-select" name='retailers[{{$key+10000}}][retailer_id]'
                                             label="Product URL"
                                             igroup-size="lg" data-placeholder="Select an option...">
                             <x-slot name="prependSlot">
                                 <div class="input-group">
-                                    <input class="form-control" id="retailers.${counter}.product_url"
-                                           name="retailers[${counter}][product_url]"
+                                    <input class="form-control" id="retailers.{{ $key+10000 }}.product_url"
+                                           name="retailers[{{ $key+10000 }}][product_url]"
                                            type="text" placeholder="Enter product url"
                                            value="{{ $retailer->pivot->product_url }}">
                                     <span class="invalid-feedback" role="alert">
