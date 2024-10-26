@@ -22,6 +22,11 @@ class RetailerPolicy
         return $user->retailers->contains($retailer->id);
     }
 
+    public function viewWithUsers(): bool
+    {
+        return false;
+    }
+
     public function create(): bool
     {
         return false;
@@ -37,17 +42,17 @@ class RetailerPolicy
         return false;
     }
 
-    public function restore()
+    public function restore(): bool
     {
         return false;
     }
 
-    public function grandAccess()
+    public function grandAccess(): bool
     {
         return false;
     }
 
-    public function revokeAccess()
+    public function revokeAccess(): bool
     {
         return false;
     }
