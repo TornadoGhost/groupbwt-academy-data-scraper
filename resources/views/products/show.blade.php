@@ -4,7 +4,7 @@
 @section('adminlte_css_pre')
 @stop
 
-@section('subtitle', 'Create products')
+@section('subtitle', 'Update product')
 @section('content_header_title', 'Home')
 @section('content_header_subtitle', 'Products')
 @section('content_header_subtitle_subtitle', 'Update')
