@@ -309,7 +309,7 @@ return [
 
         // Sidebar items:
         [
-            'text' => 'multilevel',
+            'text' => 'Products',
             'icon' => 'fas fa-fw fa-share',
             'submenu' => [
                 [
@@ -319,6 +319,20 @@ return [
                 [
                     'text' => 'Creat product',
                     'url' => 'products/create',
+                ],
+            ],
+        ],
+        [
+            'text' => 'Retailers',
+            'icon' => 'fas fa-fw fa-share',
+            'submenu' => [
+                [
+                    'text' => 'Retailers list',
+                    'url' => 'retailers',
+                ],
+                [
+                    'text' => 'Creat retailer',
+                    'url' => 'retailers/create',
                 ],
             ],
         ],
@@ -568,6 +582,21 @@ return [
                     'type' => 'js',
                     'asset' => false,
                     'location' => '//cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js',
+                ],
+            ],
+        ],
+        'bootstrap-bs' => [
+            'active' => false,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => '//cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => false,
+                    'location' => '//cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js',
                 ],
             ],
         ],
