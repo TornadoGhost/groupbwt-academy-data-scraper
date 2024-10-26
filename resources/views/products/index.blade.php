@@ -74,9 +74,6 @@
             async function initTable() {
                 const table = new DataTable('#table2', {
                     "data": await getTableData(),
-                    "buttons": [
-                        'copy', 'excel', 'pdf'
-                    ],
                     "layout": {
                         topStart: 'buttons'
                     },
