@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRetailerRequest;
 use App\Http\Requests\UpdateRetailerRequest;
 use App\Http\Resources\RetailerResource;
+use App\Http\Resources\RetailerUsersResource;
 use App\Models\Retailer;
 use App\Models\User;
 use App\Services\Contracts\RetailerServiceInterface;
@@ -81,5 +82,16 @@ class RetailerController extends Controller
         $this->retailerService->restore($id);
 
         return $this->successResponse("Retailer restored");
+    }
+
+    public function getWithUsers(int $retailer_id): JsonResponse
+    {
+        if (auth()->user()->cannot('viewWithUsers', Retailer::class)) {
+            return $this->unauthorizedResponse();
+        }
+
+        $data = $this->retailerService->findWithUsers($retailer_id);
+
+        return $this->successResponse('Retailer received', data: RetailerUsersResource::make($data));
     }
 }
