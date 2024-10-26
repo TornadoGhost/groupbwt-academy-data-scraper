@@ -10,14 +10,13 @@
 @endsection
 
 @section('auth_body')
-    @if($errors->has('some_error'))
+    @error('errorLogin')
         <div class="alert alert-danger">
-            {{ $errors->first('some_error') }}
+            {{ $message }}
         </div>
-    @endif
+    @enderror
     <form action="{{ route('login.store') }}" method="post" id="form" class="form">
         @csrf
-        {{-- Email field --}}
         <div class="input-group mb-3">
             <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
                    value="{{ old('email') }}" placeholder="{{ __('adminlte::adminlte.email') }}" autofocus>
@@ -34,27 +33,20 @@
                 </span>
             @enderror
         </div>
-
-        {{-- Password field --}}
         <div class="input-group mb-3">
             <input type="password" name="password" class="form-control @error('password') is-invalid @enderror"
                    placeholder="{{ __('adminlte::adminlte.password') }}">
-
             <div class="input-group-append">
                 <div class="input-group-text">
                     <span class="fas fa-lock {{ config('adminlte.classes_auth_icon', '') }}"></span>
                 </div>
             </div>
-
-
             @error('password')
             <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
                 </span>
             @enderror
         </div>
-
-        {{-- Login field --}}
         <div class="row">
             <div class="col-5">
                 <button type=submit
