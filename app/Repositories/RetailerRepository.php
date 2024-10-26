@@ -69,7 +69,6 @@ class RetailerRepository extends BaseRepository implements RetailerRepositoryInt
     public function grandAccess(int $retailer_id, array $users_id)
     {
         $retailer = $this->model
-            ->where('isActive', 1)
             ->findOrFail($retailer_id);
 
         return DB::transaction(function () use ($retailer, $users_id) {
@@ -101,6 +100,11 @@ class RetailerRepository extends BaseRepository implements RetailerRepositoryInt
             $retailer->users()->detach($users_id);
         });
 
+    }
+
+    public function findWithUsers(int $id): Retailer
+    {
+        return $this->model->with('users')->findOrFail($id);
     }
 
     protected function getModelClass(): string
