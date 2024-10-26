@@ -100,6 +100,8 @@
     <x-adminlte-modal id="modalMin" title="Success" theme="green">
         <p>Product updated.</p>
     </x-adminlte-modal>
+    <x-adminlte-button class="d-none" id="modal-open-btn" label="Open Modal" data-toggle="modal"
+                       data-target="#modalMin"/>
 @stop
 
 {{-- Push extra CSS --}}
