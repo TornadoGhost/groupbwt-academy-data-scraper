@@ -60,7 +60,7 @@
             @if($product)
                 @foreach($product->retailers as $key => $retailer)
                     <div class="d-flex align-items-center" data-retailer>
-                        <x-adminlte-select2 id="retailers-select" name='retailers[{{$key+10000}}][retailer_id]'
+                        <x-adminlte-select2 id="retailers-select-{{$key+10000}}" name='retailers[{{$key+10000}}][retailer_id]'
                                             label="Product URL"
                                             igroup-size="lg" data-placeholder="Select an option...">
                             <x-slot name="prependSlot">
@@ -78,10 +78,15 @@
                                     </span>
                                 </div>
                             </x-slot>
-                            <option>Select retailer</option>
+                            <option disabled>Select retailer</option>;
                             @foreach($retailers as $r)
-                                <option @if($retailer->name === $r->name) selected
-                                        @endif value="{{ $r->id }}">{{ $r->name }}</option>
+                                <option @if($retailer->name === $r->name)
+                                            selected
+                                        @endif @if(!in_array($r->id, $availableRetailersId))
+                                    disabled
+                                @endif value="{{ $r->id }}">
+                                    {{ $r->name }}
+                                </option>
                             @endforeach
                         </x-adminlte-select2>
                         <x-adminlte-button id="remove-button" class="btn-sm" type="reset" theme="outline-danger"
@@ -117,21 +122,6 @@
     <script type="module">
         import {mainFetch} from "{{ asset('js/mainFetch.js') }}";
         import {updatePrepareData} from "{{ asset('js/updatePrepareData.js') }}";
-
-        /*$("#images").fileinput({
-            theme: "explorer",
-            allowedFileExtensions: ['jpg', 'png', 'jpeg'],
-            overwriteInitial: false,
-            initialPreviewAsData: true,
-            maxFileSize: 10000,
-            removeFromPreviewOnError: true,
-            initialPreview: [
-                @foreach($product->images as $image)
-                    "{{ asset($image->path) }}",
-                @endforeach()
-            ],
-            initialPreviewDownloadUrl: 'https://picsum.photos/id/{key}/1920/1080'
-        });*/
 
         let counter = 0;
 
