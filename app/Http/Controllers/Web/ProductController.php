@@ -28,7 +28,7 @@ class ProductController extends Controller
     public function show($mpn): View
     {
         $product = $this->productService->find($mpn);
-        $retailers = $this->retailerService->all();
+        $retailers = $this->retailerService->list();
 
         return view('products.show', compact('product', 'retailers'));
     }
