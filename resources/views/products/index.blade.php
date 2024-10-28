@@ -29,6 +29,15 @@
     @endphp
     <x-adminlte-datatable id="table2" :heads="$heads" head-theme="dark" :config="$config"
                           striped bordered compressed beautify with-buttons hoverable/>
+    <x-adminlte-modal id="productImages" title="Product Images" size="lg" theme="teal" v-centered static-backdrop
+                      scrollable>
+        <p></p>
+        <x-slot name="footerSlot">
+            <x-adminlte-input-file id="image-file" name="image-file" multiple/>
+            <x-adminlte-button id="add-image" class="mr-auto" theme="success" label="Add"/>
+            <x-adminlte-button theme="danger" label="Close" data-dismiss="modal"/>
+        </x-slot>
+    </x-adminlte-modal>
     <x-adminlte-modal id="modalMin" title="Warning" theme="red">
         <p>Are you sure, you want to delete?</p>
         <x-slot name="footerSlot">
