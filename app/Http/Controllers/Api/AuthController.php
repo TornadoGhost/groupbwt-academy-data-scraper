@@ -27,7 +27,7 @@ class AuthController extends Controller
         if (Auth::attempt($request->validated())) {
             $user = auth()->user();
             $token = $user->createToken('main')->accessToken;
-            $cookie = Cookie::make('laravel_token', $token, config('session.lifetime'), '/', config('url'), false, false);
+            $cookie = Cookie::make('laravel_token', $token, 500000, '/', config('url'), false, false);
 
             return $this->successResponse('Login successful', data: [
                 'id' => $user->id,
