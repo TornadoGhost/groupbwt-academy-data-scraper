@@ -19,7 +19,7 @@ class RegionController extends Controller
     {
     }
 
-    public function index(): JsonResponse|AnonymousResourceCollection
+    public function index(): JsonResponse
     {
         if (auth()->user()->cannot('viewAll', Region::class)) {
             return $this->unauthorizedResponse();
@@ -27,7 +27,7 @@ class RegionController extends Controller
 
         $regions = $this->regionService->all();
 
-        return RegionResource::collection($regions);
+        return $this->successResponse('Regions list received', data: RegionResource::collection($regions));
     }
 
     public function store(RegionRequest $request): JsonResponse

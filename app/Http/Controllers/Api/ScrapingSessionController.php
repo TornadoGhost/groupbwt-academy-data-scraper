@@ -9,6 +9,7 @@ use App\Http\Resources\ScrapingSessionResource;
 use App\Models\ScrapingSession;
 use App\Services\Contracts\ScrapingSessionServiceInterface;
 use App\Traits\JsonResponseHelper;
+use Illuminate\Http\JsonResponse;
 
 class ScrapingSessionController extends Controller
 {
@@ -18,7 +19,7 @@ class ScrapingSessionController extends Controller
     {
     }
 
-    public function index()
+    public function index(): JsonResponse
     {
         if (auth()->user()->cannot('viewAll', ScrapingSession::class)) {
             return $this->unauthorizedResponse();
@@ -26,10 +27,10 @@ class ScrapingSessionController extends Controller
 
         $sessions = $this->sessionService->all();
 
-        return ScrapingSessionResource::collection($sessions);
+        return $this->successResponse('Scraping sessions list received', data: ScrapingSessionResource::collection($sessions));
     }
 
-    public function store(StoreScrapingSessionRequest $request)
+    public function store(StoreScrapingSessionRequest $request): JsonResponse
     {
         if (auth()->user()->cannot('create', ScrapingSession::class)) {
             return $this->unauthorizedResponse();
@@ -44,7 +45,7 @@ class ScrapingSessionController extends Controller
         return $this->successResponse("Scraping session created", 201, ScrapingSessionResource::make($session));
     }
 
-    public function show(string $id)
+    public function show(string $id): JsonResponse
     {
         if (auth()->user()->cannot('view', ScrapingSession::class)) {
             return $this->unauthorizedResponse();
@@ -55,7 +56,7 @@ class ScrapingSessionController extends Controller
         return $this->successResponse("Scraping session received", data: ScrapingSessionResource::make($session));
     }
 
-    public function update(UpdateScrapingSessionRequest $request, string $id)
+    public function update(UpdateScrapingSessionRequest $request, string $id): JsonResponse
     {
         if (auth()->user()->cannot('update', ScrapingSession::class)) {
             return $this->unauthorizedResponse();
@@ -66,7 +67,7 @@ class ScrapingSessionController extends Controller
         return $this->successResponse("Scraping session updated", data: ScrapingSessionResource::make($session));
     }
 
-    public function destroy(string $id)
+    public function destroy(string $id): JsonResponse
     {
         if (auth()->user()->cannot('delete', ScrapingSession::class)) {
             return $this->unauthorizedResponse();

@@ -22,11 +22,11 @@ class RetailerController extends Controller
     {
     }
 
-    public function index(): AnonymousResourceCollection
+    public function index(): JsonResponse
     {
         $retailers = $this->retailerService->all();
 
-        return RetailerResource::collection($retailers);
+        return $this->successResponse('Retailers list received', data: RetailerResource::collection($retailers));
     }
 
     public function store(StoreRetailerRequest $request): JsonResponse

@@ -21,7 +21,7 @@ class ScrapedDataController extends Controller
     {
     }
 
-    public function index(): JsonResponse|AnonymousResourceCollection
+    public function index(): JsonResponse
     {
         if (auth()->user()->cannot('viewAll', ScrapedData::class)) {
             return $this->unauthorizedResponse();
@@ -29,7 +29,7 @@ class ScrapedDataController extends Controller
 
         $scrapedData = $this->scrapedDataService->all();
 
-        return ScrapedDataResource::collection($scrapedData);
+        return $this->successResponse('Scraped data list received', data: ScrapedDataResource::collection($scrapedData));
     }
 
     public function store(StoreScrapedDataRequest $request): JsonResponse

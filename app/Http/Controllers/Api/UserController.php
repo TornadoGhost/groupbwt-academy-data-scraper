@@ -20,7 +20,7 @@ class UserController extends Controller
     {
     }
 
-    public function index(): AnonymousResourceCollection|JsonResponse
+    public function index(): JsonResponse
     {
         if (auth()->user()->cannot('viewAll', User::class)) {
             return $this->unauthorizedResponse();
@@ -28,7 +28,7 @@ class UserController extends Controller
 
         $users = $this->userService->all(15);
 
-        return UserResource::collection($users);
+        return $this->successResponse('Users list received', data: UserResource::collection($users));
     }
 
     public function store(StoreUserRequest $request): JsonResponse
