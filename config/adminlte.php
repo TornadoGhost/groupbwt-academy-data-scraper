@@ -351,6 +351,21 @@ return [
             'can' => 'isAdmin',
         ],
         [
+            'text' => 'Regions',
+            'icon' => 'fas fa-fw fa-share',
+            'submenu' => [
+                [
+                    'text' => 'Regions list',
+                    'url' => 'regions',
+                ],
+                [
+                    'text' => 'Creat Region',
+                    'url' => 'regions/create',
+                ],
+            ],
+            'can' => 'isAdmin',
+        ],
+        [
             'text' => 'Metrics',
             'url' => 'metrics',
             'icon' => 'far fa-fw fa-file',
