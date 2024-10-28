@@ -8,7 +8,6 @@ use App\Services\Contracts\ScrapedDataServiceInterface;
 use App\Traits\JsonResponseHelper;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class MetricController extends Controller
 {
@@ -17,7 +16,7 @@ class MetricController extends Controller
     {
     }
 
-    public function __invoke(Request $request)
+    public function __invoke(MetricRequest $request): JsonResponse
     {
         $productId = $request->product_id ?? 0;
         $mpn = $request->manufacturer_part_number ?? 0;
