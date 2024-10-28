@@ -8,4 +8,5 @@ interface RetailerRepositoryInterface extends BaseRepositoryInterface
     public function revokeAccess(int $retailer_id, array $users_id);
     public function restore(int $uid);
     public function findWithUsers(int $id);
+    public function list();
 }

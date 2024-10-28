@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\Product;
 use App\Models\Retailer;
 use App\Repositories\Contracts\RetailerRepositoryInterface;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
 class RetailerRepository extends BaseRepository implements RetailerRepositoryInterface
@@ -22,6 +23,11 @@ class RetailerRepository extends BaseRepository implements RetailerRepositoryInt
             ->where('isActive', 1)
             ->whereRelation('users', 'id', auth()->id())
             ->get();
+    }
+
+    public function list(): Collection
+    {
+        return $this->model()->all();
     }
 
     public function delete($uid)

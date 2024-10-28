@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Retailer;
 use App\Repositories\Contracts\RetailerRepositoryInterface;
 use App\Services\Contracts\RetailerServiceInterface;
+use Illuminate\Database\Eloquent\Collection;
 
 class RetailerService extends BaseCrudService implements RetailerServiceInterface
 {
@@ -26,6 +27,11 @@ class RetailerService extends BaseCrudService implements RetailerServiceInterfac
     public function findWithUsers(int $id): Retailer
     {
         return $this->repository()->findWithUsers($id);
+    }
+
+    public function list(): Collection
+    {
+        return $this->repository()->list();
     }
 
     protected function getRepositoryClass()
