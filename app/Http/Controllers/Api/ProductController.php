@@ -22,7 +22,7 @@ class ProductController extends Controller
     {
         $products = $this->productService->all();
 
-        return $this->successResponse('Product created', data: ProductResource::collection($products));;
+        return $this->successResponse('Product created', data: ProductResource::collection($products));
     }
 
     public function store(StoreProductRequest $request): JsonResponse
