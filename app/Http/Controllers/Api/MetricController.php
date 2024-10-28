@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MetricRequest;
+use App\Services\Contracts\MetricServiceInterface;
 use App\Services\Contracts\ScrapedDataServiceInterface;
 use App\Services\Contracts\ScrapingSessionServiceInterface;
 use App\Traits\JsonResponseHelper;
@@ -16,7 +17,9 @@ class MetricController extends Controller
 
     public function __construct(
         protected ScrapedDataServiceInterface $scrapedDataService,
-        protected ScrapingSessionServiceInterface $scrapingSessionService)
+        protected ScrapingSessionServiceInterface $scrapingSessionService,
+        protected MetricServiceInterface $metricService,
+    )
     {
     }
 
@@ -37,17 +40,10 @@ class MetricController extends Controller
         $avgRating = $this->scrapedDataService->avgRating($productId, $mpn, $retailerId, $startDate, $endDate, $userId);
         $avgPrice = $this->scrapedDataService->avgPrice($productId, $mpn, $retailerId, $startDate, $endDate, $userId);
         $avgImages = $this->scrapedDataService->avgImages($productId, $mpn, $retailerId, $startDate, $endDate, $userId);
-        $mergedData = $avgRating->map(function ($item) use ($avgPrice, $avgImages) {
-            $retailerId = $item['retailer_id'];
+        $avgPriceMap = $avgPrice->keyBy('retailer_id')->toArray();
+        $avgImagesMap = $avgImages->keyBy('retailer_id')->toArray();
 
-            return [
-                'retailer_id' => $retailerId,
-                'retailer_name' => $item['retailer']['name'],
-                'average_product_rating' => round($item['average_product_rating'], 2),
-                'average_product_price' => round($avgPrice->firstWhere('retailer_id', $retailerId)['average_product_price'], 2),
-                'average_images_per_product' => round((float)$avgImages->firstWhere('retailer_id', $retailerId)['average_images_per_product'], 2),
-            ];
-        });
+        $mergedData = $this->metricService->getAvgData($avgRating, $avgPriceMap, $avgImagesMap);
 
         return $this->successResponse("Metrics data received", data: $mergedData);
     }
