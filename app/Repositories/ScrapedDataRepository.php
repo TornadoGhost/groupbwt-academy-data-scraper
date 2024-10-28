@@ -82,7 +82,7 @@ class ScrapedDataRepository extends BaseRepository implements ScrapedDataReposit
         });
     }
 
-    public function getMetricData($query, $productId = 0, $mpn = '', $retailerId = 0, $date = '', $userId = 0)
+    public function getMetricData(Builder $query, int $productId = 0, string $mpn = '', int $retailerId = 0, string $startDate = '', string $endDate = '', int $userId = 0): Collection
     {
         $dateFormat = Carbon::parse($date)->format('Y-m-d');
 
