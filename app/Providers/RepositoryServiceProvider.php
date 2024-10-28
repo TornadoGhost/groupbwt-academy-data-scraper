@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Repositories\Contracts\ImageProductRepositoryInterface;
 use App\Repositories\Contracts\ProductRepositoryInterface;
 use App\Repositories\Contracts\RegionRepositoryInterface;
 use App\Repositories\Contracts\RetailerRepositoryInterface;
@@ -9,6 +10,7 @@ use App\Repositories\Contracts\ScrapedDataRepositoryInterface;
 use App\Repositories\Contracts\ScrapingSessionRepositoryInterface;
 use App\Repositories\Contracts\SessionStatusRepositoryInterface;
 use App\Repositories\Contracts\UserRepositoryInterface;
+use App\Repositories\ImageProductRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\RegionRepository;
 use App\Repositories\RetailerRepository;
@@ -16,6 +18,7 @@ use App\Repositories\ScrapedDataRepository;
 use App\Repositories\ScrapingSessionRepository;
 use App\Repositories\SessionStatusRepository;
 use App\Repositories\UserRepository;
+use App\Services\Contracts\ImageServiceInterface;
 use App\Services\Contracts\ProductServiceInterface;
 use App\Services\Contracts\RegionServiceInterface;
 use App\Services\Contracts\RetailerServiceInterface;
@@ -23,6 +26,7 @@ use App\Services\Contracts\ScrapedDataServiceInterface;
 use App\Services\Contracts\ScrapingSessionServiceInterface;
 use App\Services\Contracts\SessionStatusServiceInterface;
 use App\Services\Contracts\UserServiceInterface;
+use App\Services\ImageService;
 use App\Services\ProductService;
 use App\Services\RegionService;
 use App\Services\RetailerService;
@@ -56,6 +60,10 @@ class RepositoryServiceProvider extends ServiceProvider
 
         $this->app->singleton(ScrapedDataRepositoryInterface::class, ScrapedDataRepository::class);
         $this->app->singleton(ScrapedDataServiceInterface::class, ScrapedDataService::class);
+
+        $this->app->singleton(ImageServiceInterface::class, ImageService::class);
+        $this->app->singleton(ImageProductRepositoryInterface::class, ImageProductRepository::class);
+
     }
 
     /**
