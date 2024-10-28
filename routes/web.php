@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\AuthController;
+use App\Http\Controllers\Web\MetricController;
 use App\Http\Controllers\Web\ProductController;
 use App\Http\Controllers\Web\RetailerController;
 use App\Http\Controllers\Web\UserController;
@@ -26,6 +27,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/users/create', 'create')->name('users.create');
         Route::get('/users/{id}', 'show')->name('users.show');
     });
+    Route::get('/metrics', [MetricController::class, 'index'])->name('metrics.index');
 
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
