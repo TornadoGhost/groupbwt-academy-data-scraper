@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\Product;
 use App\Models\ScrapedData;
 use App\Repositories\Contracts\ScrapedDataRepositoryInterface;
+use App\Services\ImageService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -13,6 +14,10 @@ use Illuminate\Support\Facades\DB;
 
 class ScrapedDataRepository extends BaseRepository implements ScrapedDataRepositoryInterface
 {
+    public function __construct(protected ImageService $imageService)
+    {
+        parent::__construct();
+    }
 
     public function all()
     {
@@ -58,7 +63,7 @@ class ScrapedDataRepository extends BaseRepository implements ScrapedDataReposit
             ]);
 
             foreach ($attributes['images'] as $image) {
-                $path = $this->saveImage($image);
+                $path = $this->imageService->saveImage($image);
                 $scrapedData->scrapedDataImages()->create([
                     'path' => $path,
                 ]);
@@ -76,7 +81,7 @@ class ScrapedDataRepository extends BaseRepository implements ScrapedDataReposit
 
         return DB::transaction(function () use ($scrapedData) {
             foreach ($scrapedData->scrapedDataImages as $image) {
-                $this->deleteImage($image->path);
+                $this->imageService->deleteImageByPath($image->path);
             }
             $scrapedData->delete();
         });
