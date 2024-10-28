@@ -4,9 +4,11 @@ namespace App\Repositories;
 
 use App\Models\Product;
 use App\Models\ScrapedData;
-use App\Models\ScrapingSession;
 use App\Repositories\Contracts\ScrapedDataRepositoryInterface;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Facades\DB;
 
 class ScrapedDataRepository extends BaseRepository implements ScrapedDataRepositoryInterface
