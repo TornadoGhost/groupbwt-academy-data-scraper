@@ -29,7 +29,25 @@ class ScrapingSessionRepository extends BaseRepository implements ScrapingSessio
         }
     }
 
-    protected function getModelClass()
+    public function getLatestScrapingSession(): string
+    {
+        return $this->model()->select('started_at')
+            ->whereNotNull('ended_at')
+            ->latest('started_at')
+            ->first()
+            ->started_at;
+    }
+
+    public function getFirstScrapingSession(): string
+    {
+        return $this->model()->select('started_at')
+            ->whereNotNull('ended_at')
+            ->oldest('started_at')
+            ->first()
+            ->started_at;
+    }
+
+    protected function getModelClass(): string
     {
         return ScrapingSession::class;
     }
