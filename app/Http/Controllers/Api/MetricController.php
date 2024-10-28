@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\MetricRequest;
 use App\Services\Contracts\ScrapedDataServiceInterface;
 use App\Traits\JsonResponseHelper;
+use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class MetricController extends Controller
@@ -16,22 +19,21 @@ class MetricController extends Controller
 
     public function __invoke(Request $request)
     {
-
-        $productId = $request->product_id ? $request->product_id : 0;
-        $mpn = $request->manufacturer_part_number ? $request->manufacturer_part_number : 0;
-        $retailerId = $request->retailer_id ? $request->retailer_id : 0;
-        $date = $request->date ? $request->date : $this->scrapedDataService->getLatestScrapedData();
+        $productId = $request->product_id ?? 0;
+        $mpn = $request->manufacturer_part_number ?? 0;
+        $retailerId = $request->retailer_id ?? 0;
+        $startDate = $request->start_date ?? Carbon::parse($this->scrapingSessionService->getLatestScrapingSession())->format('Y-m-d');
+        $endDate = $request->end_date ?? '';
 
         if (auth()->user()->isAdmin) {
-            $userId = $request->userId ? $request->userId : 0;
+            $userId = $request->userId ?? 0;
         } else {
             $userId = auth()->id();
         }
 
-        $avgRating = $this->scrapedDataService->avgRating($productId, $mpn, $retailerId, $date, $userId);
-        $avgPrice = $this->scrapedDataService->avgPrice($productId, $mpn, $retailerId, $date, $userId);
-        $avgImages = $this->scrapedDataService->avgImages($productId, $mpn, $retailerId, $date, $userId);
-
+        $avgRating = $this->scrapedDataService->avgRating($productId, $mpn, $retailerId, $startDate, $endDate, $userId);
+        $avgPrice = $this->scrapedDataService->avgPrice($productId, $mpn, $retailerId, $startDate, $endDate, $userId);
+        $avgImages = $this->scrapedDataService->avgImages($productId, $mpn, $retailerId, $startDate, $endDate, $userId);
         $mergedData = $avgRating->map(function ($item) use ($avgPrice, $avgImages) {
             $retailerId = $item['retailer_id'];
 
