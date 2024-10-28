@@ -19,6 +19,7 @@ use App\Repositories\ScrapingSessionRepository;
 use App\Repositories\SessionStatusRepository;
 use App\Repositories\UserRepository;
 use App\Services\Contracts\ImageServiceInterface;
+use App\Services\Contracts\MetricServiceInterface;
 use App\Services\Contracts\ProductServiceInterface;
 use App\Services\Contracts\RegionServiceInterface;
 use App\Services\Contracts\RetailerServiceInterface;
@@ -27,6 +28,7 @@ use App\Services\Contracts\ScrapingSessionServiceInterface;
 use App\Services\Contracts\SessionStatusServiceInterface;
 use App\Services\Contracts\UserServiceInterface;
 use App\Services\ImageService;
+use App\Services\MetricService;
 use App\Services\ProductService;
 use App\Services\RegionService;
 use App\Services\RetailerService;
@@ -64,6 +66,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->singleton(ImageServiceInterface::class, ImageService::class);
         $this->app->singleton(ImageProductRepositoryInterface::class, ImageProductRepository::class);
 
+        $this->app->singleton(MetricServiceInterface::class, MetricService::class);
     }
 
     /**
