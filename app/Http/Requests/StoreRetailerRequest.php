@@ -14,11 +14,11 @@ class StoreRetailerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|min:3|max:100',
-            'reference' => 'required|string|min:5|max:255',
-            'currency' => 'required|string|min:2|max:20',
-            'logo_path' => 'required|string|min:5|max:255',
-            'isActive' => 'int'
+            'name' => ['required', 'string', 'min:3', 'max:100'],
+            'reference' => ['required', 'string', 'min:5', 'max:255'],
+            'currency' => ['required', 'string', 'min:2', 'max:20'],
+            'logo_path' => ['required', 'string', 'min:5', 'max:255'],
+            'isActive' => ['int'],
         ];
     }
 }

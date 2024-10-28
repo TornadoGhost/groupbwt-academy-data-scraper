@@ -16,14 +16,15 @@ class StoreScrapingSessionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'retailer_id' => 'required|int|exists:retailers,id',
+            'retailer_id' => ['required', 'int', 'exists:retailers,id'],
             'status_code' => [
                 'required',
                 'integer',
                 Rule::enum(ScrapingSessionStatus::class)->only([ScrapingSessionStatus::RUNNING]),
             ],
-            'started_at' => 'required|date',
-            'ended_at' => 'date'
+            'started_at' => ['required', 'date'],
+            'ended_at' => ['date'],
+
         ];
     }
 }

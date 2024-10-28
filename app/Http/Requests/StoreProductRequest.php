@@ -15,26 +15,24 @@ class StoreProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|min:3|max:100',
+            'title' => ['required', 'string', 'min:3', 'max:100'],
             'manufacturer_part_number' => [
                 'required',
                 'string',
-                Rule::unique('products')->where(function ($query) {
-                    return $query->where('user_id', auth()->user()->id);
-                }),
+                Rule::unique('products')->where(fn ($query) => $query->where('user_id', auth()->id())),
                 'min:3',
                 'max:50'
             ],
-            'pack_size' => 'required|string|min:3|max:20',
-            'retailers' => 'required|array',
-            'retailers.*.retailer_id' => 'required|distinct|exists:retailers,id',
-            'retailers.*.product_url' => 'required|string|min:5|max:255',
-            'images' => 'array',
-            'images.*' => 'image|mimes:jpg,jpeg,png|max:2048'
+            'pack_size' => ['required', 'string', 'min:3', 'max:20'],
+            'retailers' => ['required', 'array'],
+            'retailers.*.retailer_id' => ['required', 'distinct', 'exists:retailers,id'],
+            'retailers.*.product_url' => ['required', 'string', 'min:5', 'max:255'],
+            'images' => ['array'],
+            'images.*' => ['image', 'mimes:jpg,jpeg,png', 'max:2048'],
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
             'retailers.*.retailer_id.required' => 'The retailer field is required.',

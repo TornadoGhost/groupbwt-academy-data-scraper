@@ -14,12 +14,8 @@ class StoreAuthenticateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => [
-                'required', 'email', 'min:5', 'max:75'
-            ],
-            'password' => [
-                'required','string','min:5','max:255'
-            ]
+            'email' => ['required', 'email', 'min:5', 'max:75'],
+            'password' => ['required','string','min:5','max:255']
         ];
     }
 }

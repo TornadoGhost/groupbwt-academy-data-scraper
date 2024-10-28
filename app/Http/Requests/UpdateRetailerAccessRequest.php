@@ -6,16 +6,11 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateRetailerAccessRequest extends FormRequest
 {
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
-            'users_id' => 'required|array',
-            'users_id.*' => 'exists:users,id'
+            'users_id' => ['required', 'array'],
+            'users_id.*' => ['exists:users,id'],
         ];
     }
 }

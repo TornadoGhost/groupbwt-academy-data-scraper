@@ -14,9 +14,9 @@ class MetricRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'product_id' => 'nullable|int|exists:products,id',
-            'manufacturer_part_number' => 'nullable|string|exists:products,manufacturer_part_number',
-            'retailer_id' => 'nullable|int|exists:retailers,id',
+            'product_id' => ['nullable', 'int', 'exists:products,id'],
+            'manufacturer_part_number' => ['nullable', 'string', 'exists:products,manufacturer_part_number'],
+            'retailer_id' => ['nullable', 'int', 'exists:retailers,id'],
         ];
     }
 }
