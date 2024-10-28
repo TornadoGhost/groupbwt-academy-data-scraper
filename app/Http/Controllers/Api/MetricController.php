@@ -38,9 +38,10 @@ class MetricController extends Controller
 
             return [
                 'retailer_id' => $retailerId,
-                'average_product_rating' => round($item['average_product_rating'], 4),
-                'average_product_price' => round($avgPrice->firstWhere('retailer_id', $retailerId)['average_product_price'], 4),
-                'average_images_per_product' => round((float)$avgImages->firstWhere('retailer_id', $retailerId)['average_images_per_product'], 4),
+                'retailer_name' => $item['retailer']['name'],
+                'average_product_rating' => round($item['average_product_rating'], 2),
+                'average_product_price' => round($avgPrice->firstWhere('retailer_id', $retailerId)['average_product_price'], 2),
+                'average_images_per_product' => round((float)$avgImages->firstWhere('retailer_id', $retailerId)['average_images_per_product'], 2),
             ];
         });
 
