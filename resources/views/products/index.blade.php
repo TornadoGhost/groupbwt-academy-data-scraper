@@ -94,7 +94,7 @@
                         {"data": "pack_size"},
                         {"data": "created_at"},
                         {
-                            "data": null, // Поле action, яке буде рендеритись вручну
+                            "data": null,
                             "render": function () {
                                 return `
                             <button id="product-edit" class="btn btn-xs btn-default text-primary mx-1 shadow" title="Edit">
@@ -102,6 +102,9 @@
                             </button>
                             <button id="product-delete" class="btn btn-xs btn-default text-danger mx-1 shadow" title="Delete">
                                 <i class="fa fa-lg fa-fw fa-trash"></i>
+                            </button>
+                            <button id="product-images" class="btn btn-xs btn-default text-danger mx-1 shadow" title="Images" data-toggle="modal" data-target="#productImages">
+                                <i class="fa fa-lg fa-fw fa-image"></i>
                             </button>
                         `;
                             },
