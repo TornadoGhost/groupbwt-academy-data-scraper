@@ -12,8 +12,6 @@ abstract class BaseRepository implements BaseRepositoryInterface
 {
     use JsonResponseHelper;
 
-    const IMAGE_PATH = "images/";
-
     protected Model $model;
 
     public function __construct()
@@ -56,21 +54,6 @@ abstract class BaseRepository implements BaseRepositoryInterface
     {
         return $this->model()->findOrFail($uid)->delete($uid);
     }
-
-
-    protected function saveImage(string $path): false|string
-    {
-        $imagePath = self::IMAGE_PATH . auth()->id();
-
-        return Storage::disk('public')->putFile($imagePath, new File($path), 'public');
-    }
-
-
-    protected function deleteImage(string $path): bool
-    {
-        return Storage::disk('public')->delete($path);
-    }
-
 
     abstract protected function getModelClass();
 }

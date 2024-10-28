@@ -4,6 +4,8 @@ namespace App\Repositories;
 
 use App\Models\Product;
 use App\Repositories\Contracts\ProductRepositoryInterface;
+use App\Services\Contracts\ImageServiceInterface;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\DB;
@@ -11,6 +13,10 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductRepository extends BaseRepository implements ProductRepositoryInterface
 {
+    public function __construct(protected ImageServiceInterface $imageService)
+    {
+        parent::__construct();
+    }
     public function all()
     {
         if (auth()->user()->isAdmin) {
@@ -45,17 +51,15 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
             if ($attributes['images'] ?? null) {
                 foreach ($attributes['images'] as $image) {
-                    $path = $this->saveImage($image);
+                    $path = $this->imageService->saveImage($image);
                     $product->images()->create([
                         'path' => $path
                     ]);
                 }
             }
 
-
             return $product;
         });
-
     }
 
     public function find($uid)
@@ -105,7 +109,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
         return DB::transaction(function () use ($product, $images) {
             foreach ($images as $image) {
-                $this->deleteImage($image->path);
+                $this->imageService->deleteImageByPath($image->path);
             }
             $product->delete();
         });
