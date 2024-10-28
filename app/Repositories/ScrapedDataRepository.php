@@ -84,10 +84,13 @@ class ScrapedDataRepository extends BaseRepository implements ScrapedDataReposit
 
     public function getMetricData(Builder $query, int $productId = 0, string $mpn = '', int $retailerId = 0, string $startDate = '', string $endDate = '', int $userId = 0): Collection
     {
-        $dateFormat = Carbon::parse($date)->format('Y-m-d');
+        $startDateFormatted = Carbon::createFromFormat('Y-m-d', $startDate)->startOfDay();
 
-        if ($date) {
-            $query->where('created_at', 'like', $dateFormat . '%');
+        if ($startDate && !$endDate) {
+            $query->where('created_at', 'like', $startDateFormatted->format('Y-m-d') . '%');
+        } else if ($startDate && $endDate) {
+            $endDateFormatted = Carbon::createFromFormat('Y-m-d', $endDate)->endOfDay()->format('Y-m-d H:i:s');
+            $query->whereBetween('created_at', [$startDateFormatted->format('Y-m-d H:i:s'), $endDateFormatted]);
         }
 
         if ($userId) {
