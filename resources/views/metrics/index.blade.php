@@ -227,6 +227,9 @@
             }
             controller = new AbortController();
 
+            spinner.classList.remove('d-none');
+            spinner.classList.add('d-flex');
+
             const list = document.getElementById('retailers-metrics');
             if (list.children[0]) {
                 list.innerHTML = '';
