@@ -237,15 +237,6 @@
                 spinner.classList.add('d-flex');
             }
 
-            console.log('All variables: ', {
-                startDate,
-                endDate,
-                retailerId,
-                productId,
-                mpn,
-                userId
-            });
-
             const signal = controller.signal;
             mainFetch(
                 `metrics?product_id=${productId}
@@ -259,6 +250,7 @@
                     if (response.status === "Success") {
                         spinner.classList.remove('d-flex');
                         spinner.classList.add('d-none');
+
                         for (const key in response.data) {
                             const liElement = document.createElement("li");
                             liElement.classList.add('col');
