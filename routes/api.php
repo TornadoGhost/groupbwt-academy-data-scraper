@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ImageProductController;
 use App\Http\Controllers\Api\MetricController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\RegionController;
@@ -31,6 +32,11 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('retailers/{retailer_id}/users', [RetailerController::class, 'getWithUsers']);
     Route::get('metrics', MetricController::class);
+    Route::controller(ImageProductController::class)->group(function() {
+        Route::post('/images', 'store');
+        Route::delete('/images/{id}', 'destroy');
+    });
+
     Route::post('logout', [AuthController::class, 'logout']);
 });
 
