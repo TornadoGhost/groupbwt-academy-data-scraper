@@ -120,7 +120,7 @@
                             </span>
                         </div>
                     </x-slot>
-                    <option>Select retailer</option>
+                    <option selected disabled>Select retailer</option>
                     ${options}
                 </x-adminlte-select2>
                 <x-adminlte-button id="remove-button" class="btn-sm" type="reset" theme="outline-danger" icon="fas fa-lg fa-trash"/>

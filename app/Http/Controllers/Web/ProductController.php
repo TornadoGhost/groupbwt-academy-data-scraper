@@ -29,7 +29,9 @@ class ProductController extends Controller
     {
         $product = $this->productService->find($mpn);
         $retailers = $this->retailerService->list();
+        $availableRetailers = $this->retailerService->all()->toArray();
+        $availableRetailersId = array_column($availableRetailers, 'id');
 
-        return view('products.show', compact('product', 'retailers'));
+        return view('products.show', compact('product', 'retailers', 'availableRetailersId'));
     }
 }
