@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MetricRequest;
 use App\Services\Contracts\ScrapedDataServiceInterface;
+use App\Services\Contracts\ScrapingSessionServiceInterface;
 use App\Traits\JsonResponseHelper;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -12,7 +13,10 @@ use Illuminate\Http\JsonResponse;
 class MetricController extends Controller
 {
     use JsonResponseHelper;
-    public function __construct(protected ScrapedDataServiceInterface $scrapedDataService)
+
+    public function __construct(
+        protected ScrapedDataServiceInterface $scrapedDataService,
+        protected ScrapingSessionServiceInterface $scrapingSessionService)
     {
     }
 
