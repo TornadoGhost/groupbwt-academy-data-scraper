@@ -4,6 +4,7 @@ use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\AuthController;
 use App\Http\Controllers\Web\MetricController;
 use App\Http\Controllers\Web\ProductController;
+use App\Http\Controllers\Web\RegionController;
 use App\Http\Controllers\Web\RetailerController;
 use App\Http\Controllers\Web\UserController;
 use App\Http\Middleware\AuthenticateAdmin;
@@ -26,6 +27,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/users', 'index')->name('users.index');
         Route::get('/users/create', 'create')->name('users.create');
         Route::get('/users/{id}', 'show')->name('users.show');
+    });
+    Route::controller(RegionController::class)->group(function () {
+        Route::get('/regions', 'index')->name('regions.index');
+        Route::get('/regions/create', 'create')->name('regions.create');
+        Route::get('/regions/{id}', 'show')->name('regions.show');
     });
     Route::get('/metrics', [MetricController::class, 'index'])->name('metrics.index');
 
