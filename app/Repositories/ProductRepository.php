@@ -80,6 +80,22 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             ->firstOrFail();
     }
 
+    public function findById(int $id): Product
+    {
+        if (auth()->user()->isAdmin) {
+            return $this->model
+                ->with('retailers')
+                ->with('images')
+                ->firstOrFail($id);
+        }
+
+        return $this->model()
+            ->with('retailers')
+            ->with('images')
+            ->where('user_id', auth()->id())
+            ->findOrFail($id);
+    }
+
     public function update($uid, $attributes)
     {
         $product = $this->model
