@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'title' => 'Data Scraper',
+    'title' => '',
     'title_prefix' => '',
     'title_postfix' => '',
 
@@ -133,7 +133,7 @@ return [
     |
     */
 
-    'usermenu_enabled' => true,
+    'usermenu_enabled' => false,
     'usermenu_header' => false,
     'usermenu_header_class' => 'bg-primary',
     'usermenu_image' => false,
@@ -239,8 +239,8 @@ return [
     'right_sidebar' => false,
     'right_sidebar_icon' => 'fas fa-cogs',
     'right_sidebar_theme' => 'dark',
-    'right_sidebar_slide' => true,
-    'right_sidebar_push' => true,
+    'right_sidebar_slide' => false,
+    'right_sidebar_push' => false,
     'right_sidebar_scrollbar_theme' => 'os-theme-light',
     'right_sidebar_scrollbar_auto_hide' => 'l',
 
@@ -257,7 +257,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'home',
+    'dashboard_url' => '/',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'password_email_url' => 'password/email',
@@ -304,7 +304,6 @@ return [
     'menu' => [
         // Navbar items:
         [
-
         ],
 
         // Sidebar items:
@@ -350,6 +349,11 @@ return [
                 ],
             ],
             'can' => 'isAdmin',
+        ],
+        [
+            'text' => 'Metrics',
+            'url' => 'metrics',
+            'icon' => 'far fa-fw fa-file',
         ],
         /*['header' => 'labels'],
         [
