@@ -109,47 +109,35 @@ class ScrapedDataRepository extends BaseRepository implements ScrapedDataReposit
         return $query->get();
     }
 
-    public function avgRating($productId = 0, $mpn = '', $retailerId = 0, $date = '', $userId = 0)
+    protected function getAvgMetricData(Expression $select, int $productId = 0, string $mpn = '', int $retailerId = 0, string $startDate = '', string $endDate = '', int $userId = 0, bool $isAvgImages = false): Collection
     {
-        $query = $this->model()->query()->select(
-            'retailer_id',
-            DB::raw('AVG(avg_rating) as average_product_rating'));
+        $query = $this->model()->query();
 
-        return $this->getMetricData($query, $productId, $mpn, $retailerId, $date, $userId);
+        if ($isAvgImages) {
+            $query->leftJoin('scraped_data_images', 'scraped_data.id', '=', 'scraped_data_images.scraped_data_id');
+        }
+
+        $query->with('retailer:id,name')->select('retailer_id', $select);
+
+        return $this->getMetricData($query, $productId, $mpn, $retailerId, $startDate, $endDate, $userId);
     }
 
-    public function avgPrice($productId = 0, $mpn = '', $retailerId = 0, $date = '', $userId = 0)
+    public function avgRating(int $productId = 0, string $mpn = '', int $retailerId = 0, string $startDate = '', string $endDate = '', int $userId = 0): Collection
     {
-        $query = $this->model()->query()->select(
-            'retailer_id',
-            DB::raw('AVG(price) as average_product_price'));
-        return $this->getMetricData($query, $productId, $mpn, $retailerId, $date, $userId);
+        return $this->getAvgMetricData(DB::raw('AVG(avg_rating) as average_product_rating'), $productId, $mpn, $retailerId, $startDate, $endDate, $userId);
     }
 
-    public function avgImages($productId = 0, $mpn = '', $retailerId = 0, $date = '', $userId = 0)
+    public function avgPrice(int $productId = 0, string $mpn = '', int $retailerId = 0, string $startDate = '', string $endDate = '', int $userId = 0): Collection
     {
-        $query = $this->model()->query()
-            ->leftJoin('scraped_data_images', 'scraped_data.id', '=', 'scraped_data_images.scraped_data_id')
-            ->select(
-            'retailer_id',
-            DB::raw('COUNT(scraped_data_images.id) / COUNT(DISTINCT scraped_data.id) as average_images_per_product')
-        );
-
-        return $this->getMetricData($query, $productId, $mpn, $retailerId, $date, $userId);
+        return $this->getAvgMetricData(DB::raw('AVG(price) as average_product_price'), $productId, $mpn, $retailerId, $startDate, $endDate, $userId);
     }
 
-    public function getLatestScrapedData()
+    public function avgImages(int $productId = 0, string $mpn = '', int $retailerId = 0, string $startDate = '', string $endDate = '', int $userId = 0): Collection
     {
-        return ScrapingSession::select('started_at')
-            ->where('retailer_id', 10)
-            ->whereNotNull('ended_at')
-            ->groupBy('started_at')
-            ->latest('started_at')
-            ->first()
-            ->started_at;
+        return $this->getAvgMetricData(DB::raw('COUNT(scraped_data_images.id) / COUNT(DISTINCT scraped_data.id) as average_images_per_product'), $productId, $mpn, $retailerId, $startDate, $endDate, $userId, true);
     }
 
-    protected function getProduct(string $mpn)
+    protected function getProduct(string $mpn): mixed
     {
         return Product::select(['id', 'user_id'])
             ->where('manufacturer_part_number', $mpn)
