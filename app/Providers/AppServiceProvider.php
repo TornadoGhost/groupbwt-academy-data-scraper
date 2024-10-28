@@ -22,9 +22,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Passport
-        Passport::personalAccessTokensExpireIn(now()->addMinutes((int)config('session.lifetime')));
-
         // Gates
         Gate::define('isAdmin', function (User $user) {
             return $user->isAdmin;
