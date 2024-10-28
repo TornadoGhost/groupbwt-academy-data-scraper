@@ -14,12 +14,12 @@ class RetailerRepository extends BaseRepository implements RetailerRepositoryInt
     public function all()
     {
         if (auth()->user()->isAdmin) {
-            return $this->model
+            return $this->model()
                 ->orderByDesc('created_at')
                 ->orderByDesc('id')
                 ->get();
         }
-        return $this->model
+        return $this->model()
             ->where('isActive', 1)
             ->whereRelation('users', 'id', auth()->id())
             ->get();
