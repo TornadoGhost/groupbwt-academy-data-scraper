@@ -146,9 +146,8 @@
                 }
             }
 
-            // Знищуємо попередню таблицю, якщо вона існує
             if ($.fn.DataTable.isDataTable('#table2')) {
-                $('#table2').DataTable().clear().destroy(); // Очищення та знищення таблиці
+                $('#table2').DataTable().clear().destroy();
             }
 
             initTable();
