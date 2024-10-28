@@ -3,12 +3,6 @@
 {{-- Extend and customize the browser title --}}
 
 @section('content_top_nav_right')
-    <li class="nav-item">
-        <form class="nav-link" action="{{route('logout')}}" method="post">
-            @csrf
-            <x-adminlte-button id="logout" class="btn-sm" label="Logout" type="submit"/>
-        </form>
-    </li>
 @endsection
 
 @section('title')
@@ -71,19 +65,8 @@
 
 @push('css')
     <style type="text/css">
-
-        {{-- You can add AdminLTE customizations here --}}
-
-
-
-        /*
-                    .card-header {
-                        border-bottom: none;
-                    }
-                    .card-title {
-                        font-weight: 600;
-                    }
-                    */
-
+        .content-wrapper {
+            height: auto;
+        }
     </style>
 @endpush
