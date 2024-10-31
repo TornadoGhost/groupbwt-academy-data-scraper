@@ -15,6 +15,9 @@
 
 @section('content_body')
     @if(Auth::user()->isAdmin)
+        <a href="{{ route('retailers.create') }}">
+            <x-adminlte-button class="mb-2" label="Create retailers" theme="primary"/>
+        </a>
         @php
             $heads = [
                 'id',
