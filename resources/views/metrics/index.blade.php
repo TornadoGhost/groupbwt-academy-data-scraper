@@ -216,21 +216,7 @@
                 setSelectValue(id, '', startFetch)
             }
 
-            function setSelectValue(id, value, startFetch) {
-                if (id === 'retailer') {
-                    retailerId = value;
-                } else if (id === 'product') {
-                    productId = value;
-                } else if (id === 'mpn') {
-                    mpnData = value;
-                } else if (id === 'user') {
-                    userId = value;
-                }
-
-                if (startFetch) {
-                    getMetrics(startDate, endDate, retailerId, productId, mpnData, userId);
-                }
-            }
+            getMetrics();
         });
 
         function getMetrics(startDate = '', endDate = '', retailers = [], products = [], userId = '') {
