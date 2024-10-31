@@ -12,6 +12,9 @@
 {{-- Content body: main page content --}}
 
 @section('content_body')
+    <a href="{{ route('products.create') }}">
+        <x-adminlte-button class="mb-2" label="Create product" theme="primary"/>
+    </a>
     @php
         $heads = [
             'id',
