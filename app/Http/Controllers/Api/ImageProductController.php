@@ -23,7 +23,7 @@ class ImageProductController extends Controller
 
     public function store(ImageProductRequest $request): JsonResponse
     {
-        $product = $this->productService->findById($request->validated('product_id'));
+        $product = $this->productService->find($request->validated('product_id'));
         $images = [];
         foreach ($request->validated('images') as $image) {
             $path = $this->imageService->saveImage($image);
