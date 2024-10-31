@@ -34,14 +34,14 @@ abstract class BaseCrudService implements BaseCrudServiceInterface
         return $this->repository()->create($attributes);
     }
 
-    public function update($uid, $attributes = [])
+    public function update(int $id, array $attributes = [])
     {
-        return $this->repository()->update($uid, $attributes);
+        return $this->repository()->update($id, $attributes);
     }
 
-    public function delete($uid)
+    public function delete($id)
     {
-        return $this->repository()->delete($uid);
+        return $this->repository()->delete($id);
     }
 
     abstract protected function getRepositoryClass();

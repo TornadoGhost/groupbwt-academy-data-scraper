@@ -15,18 +15,52 @@ class ScrapedDataService extends BaseCrudService implements ScrapedDataServiceIn
         return ScrapedDataRepositoryInterface::class;
     }
 
-    public function avgRating(int $productId = 0, string $mpn = '', int $retailerId = 0, string $startDate = '', string $endDate = '', int $userId = 0): Collection
+    public function avgRating(
+        array $products = [],
+        array $retailers = [],
+        string $startDate = '',
+        string $endDate = '',
+        int $userId = 0
+    ): Collection
     {
-        return $this->repository()->avgRating($productId, $mpn, $retailerId, $startDate, $endDate, $userId);
+        return $this->repository()->avgRating(
+            $products,
+            $retailers,
+            $startDate,
+            $endDate,
+            $userId
+        );
     }
 
-    public function avgPrice(int $productId = 0, string $mpn = '', int $retailerId = 0, string $startDate = '', string $endDate = '', int $userId = 0): Collection
+    public function avgPrice(
+        array $products = [],
+        array $retailers = [],
+        string $startDate = '',
+        string $endDate = '',
+        int $userId = 0
+    ): Collection
     {
-        return $this->repository()->avgPrice($productId, $mpn, $retailerId, $startDate, $endDate, $userId);
+        return $this
+            ->repository()
+            ->avgPrice(
+                $products,
+                $retailers,
+                $startDate,
+                $endDate,
+                $userId
+            );
     }
 
-    public function avgImages(int $productId = 0, string $mpn = '', int $retailerId = 0, string $startDate = '', string $endDate = '', int $userId = 0): Collection
+    public function avgImages(
+        array $products = [],
+        array $retailers = [],
+        string $startDate = '',
+        string $endDate = '',
+        int $userId = 0
+    ): Collection
     {
-        return $this->repository()->avgImages($productId, $mpn, $retailerId, $startDate, $endDate, $userId);
+        return $this
+            ->repository()
+            ->avgImages($products, $retailers, $startDate, $endDate, $userId);
     }
 }
