@@ -87,31 +87,48 @@ class ScrapedDataRepository extends BaseRepository implements ScrapedDataReposit
         });
     }
 
-    public function getMetricData(Builder $query, int $productId = 0, string $mpn = '', int $retailerId = 0, string $startDate = '', string $endDate = '', int $userId = 0): Collection
+    protected function getMetricData(
+        Builder $query,
+        array   $products = [],
+        array   $retailers = [],
+        string  $startDate = '',
+        string  $endDate = '',
+        int     $userId = 0
+    ): Collection
     {
         $startDateFormatted = Carbon::createFromFormat('Y-m-d', $startDate)->startOfDay();
 
         if ($startDate && !$endDate) {
-            $query->where('created_at', 'like', $startDateFormatted->format('Y-m-d') . '%');
+            $query
+                ->where(
+                    'created_at',
+                    'like',
+                    $startDateFormatted->format('Y-m-d') . '%');
         } else if ($startDate && $endDate) {
-            $endDateFormatted = Carbon::createFromFormat('Y-m-d', $endDate)->endOfDay()->format('Y-m-d H:i:s');
-            $query->whereBetween('created_at', [$startDateFormatted->format('Y-m-d H:i:s'), $endDateFormatted]);
+            $endDateFormatted =
+                Carbon::createFromFormat('Y-m-d', $endDate)
+                    ->endOfDay()
+                    ->format('Y-m-d H:i:s');
+            $query
+                ->whereBetween('created_at', [
+                    $startDateFormatted->format('Y-m-d H:i:s'), $endDateFormatted
+                ]);
         }
 
         if ($userId) {
             $query->where('user_id', $userId);
         }
 
-        if ($productId && $mpn) {
-            $query->where('product_id', $productId)->where('product_id', $this->getProduct($mpn)->id);
-        } else if ($productId) {
-            $query->where('product_id', $productId);
-        } else if ($mpn) {
-            $query->where('product_id', $this->getProduct($mpn)->id);
+        if (!empty($retailers)) {
+            $query->whereIn('retailer_id', $retailers);
+        } else {
+            $query->whereIn('retailer_id', $this->getUserRetailersId());
         }
 
-        if ($retailerId) {
-            $query->where('retailer_id', $retailerId);
+        if (!empty($products)) {
+            $query->whereIn('product_id', $products);
+        } else {
+            $query->whereIn('product_id', $this->getUserProductsId());
         }
 
         $query->groupBy('retailer_id');
@@ -119,32 +136,94 @@ class ScrapedDataRepository extends BaseRepository implements ScrapedDataReposit
         return $query->get();
     }
 
-    protected function getAvgMetricData(Expression $select, int $productId = 0, string $mpn = '', int $retailerId = 0, string $startDate = '', string $endDate = '', int $userId = 0, bool $isAvgImages = false): Collection
+    protected function getAvgMetricData(
+        Expression $select,
+        array      $products = [],
+        array      $retailers = [],
+        string     $startDate = '',
+        string     $endDate = '',
+        int        $userId = 0,
+        bool       $isAvgImages = false
+    ): Collection
     {
         $query = $this->model()->query();
 
         if ($isAvgImages) {
-            $query->leftJoin('scraped_data_images', 'scraped_data.id', '=', 'scraped_data_images.scraped_data_id');
+            $query
+                ->leftJoin(
+                    'scraped_data_images',
+                    'scraped_data.id', '=', 'scraped_data_images.scraped_data_id');
         }
 
-        $query->with('retailer:id,name')->select('retailer_id', $select);
+        $query
+            ->with('retailer:id,name')
+            ->select('retailer_id', $select);
 
-        return $this->getMetricData($query, $productId, $mpn, $retailerId, $startDate, $endDate, $userId);
+        return $this
+            ->getMetricData(
+                $query,
+                $products,
+                $retailers,
+                $startDate,
+                $endDate,
+                $userId
+            );
     }
 
-    public function avgRating(int $productId = 0, string $mpn = '', int $retailerId = 0, string $startDate = '', string $endDate = '', int $userId = 0): Collection
+    public function avgRating(
+        array  $products = [],
+        array  $retailers = [],
+        string $startDate = '',
+        string $endDate = '',
+        int    $userId = 0
+    ): Collection
     {
-        return $this->getAvgMetricData(DB::raw('AVG(avg_rating) as average_product_rating'), $productId, $mpn, $retailerId, $startDate, $endDate, $userId);
+        return $this
+            ->getAvgMetricData(
+                DB::raw('AVG(avg_rating) as average_product_rating'),
+                $products,
+                $retailers,
+                $startDate,
+                $endDate,
+                $userId
+            );
     }
 
-    public function avgPrice(int $productId = 0, string $mpn = '', int $retailerId = 0, string $startDate = '', string $endDate = '', int $userId = 0): Collection
+    public function avgPrice(
+        array  $products = [],
+        array  $retailers = [],
+        string $startDate = '',
+        string $endDate = '',
+        int    $userId = 0
+    ): Collection
     {
-        return $this->getAvgMetricData(DB::raw('AVG(price) as average_product_price'), $productId, $mpn, $retailerId, $startDate, $endDate, $userId);
+        return $this
+            ->getAvgMetricData(
+                DB::raw('AVG(price) as average_product_price'),
+                $products,
+                $retailers,
+                $startDate,
+                $endDate,
+                $userId);
     }
 
-    public function avgImages(int $productId = 0, string $mpn = '', int $retailerId = 0, string $startDate = '', string $endDate = '', int $userId = 0): Collection
+    public function avgImages(
+        array  $products = [],
+        array  $retailers = [],
+        string $startDate = '',
+        string $endDate = '',
+        int    $userId = 0
+    ): Collection
     {
-        return $this->getAvgMetricData(DB::raw('COUNT(scraped_data_images.id) / COUNT(DISTINCT scraped_data.id) as average_images_per_product'), $productId, $mpn, $retailerId, $startDate, $endDate, $userId, true);
+        return $this
+            ->getAvgMetricData(
+                DB::raw('COUNT(scraped_data_images.id) / COUNT(DISTINCT scraped_data.id) as average_images_per_product'),
+                $products,
+                $retailers,
+                $startDate,
+                $endDate,
+                $userId,
+                true);
     }
 
     protected function getProduct(string $mpn): mixed
