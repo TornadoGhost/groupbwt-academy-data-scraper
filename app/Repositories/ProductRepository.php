@@ -62,22 +62,19 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         });
     }
 
-    public function find($uid)
+    public function find(int $id): Model
     {
         if (auth()->user()->isAdmin) {
             return $this->model
                 ->with('retailers')
                 ->with('images')
-                ->where('manufacturer_part_number', $uid)
-                ->firstOrFail();
+                ->findOrFail($id);
         }
 
         return $this->model
             ->with('retailers')
             ->with('images')
-            ->where('manufacturer_part_number', $uid)
-            ->where('user_id', auth()->id())
-            ->firstOrFail();
+            ->findOrFail($id);
     }
 
     public function findByMpn(string $mpn): Product
