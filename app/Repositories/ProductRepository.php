@@ -44,9 +44,11 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
                 'user_id' => auth()->user()->id,
             ]);
             foreach ($attributes['retailers'] as $retailer) {
-                $product->retailers()->attach($retailer['retailer_id'], [
-                    'product_url' => $retailer['product_url']
-                ]);
+                if ($retailer['product_url']) {
+                    $product->retailers()->attach($retailer['retailer_id'], [
+                        'product_url' => $retailer['product_url']
+                    ]);
+                }
             }
 
             if ($attributes['images'] ?? null) {
