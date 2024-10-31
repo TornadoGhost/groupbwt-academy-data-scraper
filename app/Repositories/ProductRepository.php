@@ -80,20 +80,22 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             ->firstOrFail();
     }
 
-    public function findById(int $id): Product
+    public function findByMpn(string $mpn): Product
     {
         if (auth()->user()->isAdmin) {
             return $this->model
                 ->with('retailers')
                 ->with('images')
-                ->firstOrFail($id);
+                ->where('manufacturer_part_number', $mpn)
+                ->firstOrFail();
         }
 
         return $this->model()
             ->with('retailers')
             ->with('images')
             ->where('user_id', auth()->id())
-            ->findOrFail($id);
+            ->where('manufacturer_part_number', $mpn)
+            ->findOrFail($mpn);
     }
 
     public function update($uid, $attributes)
