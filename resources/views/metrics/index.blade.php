@@ -200,17 +200,7 @@
                     products = products.filter(id => id !== e.params.data.id)
                     getMetrics(startDate, endDate, retailers, products, userId);
                 });
-                const resetRetailer = document.getElementById(`reset-button-${id}`);
-                resetRetailer.addEventListener('click', function () {
-                    resetSelectValue(id, startFetch);
-                });
-            }
 
-            function resetSelectValue(id, startFetch) {
-                const firstValue = getFirstSelectElemValue(id);
-                $(`#${id}`).val(firstValue).trigger('change');
-                setSelectValue(id, '', startFetch)
-            }
 
             getMetrics();
         });
