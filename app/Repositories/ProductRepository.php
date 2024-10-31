@@ -134,8 +134,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     {
         $product = $this->model
             ->with('images')
-            ->where('manufacturer_part_number', $uid)
-            ->first();
+            ->findOrFail($id);
 
         $images = $product->images;
 
