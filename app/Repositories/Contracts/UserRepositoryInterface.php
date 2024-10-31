@@ -4,5 +4,5 @@ namespace App\Repositories\Contracts;
 
 interface UserRepositoryInterface extends BaseRepositoryInterface
 {
-    public function findByEmail($email);
+    public function findByEmail(string $email);
 }
