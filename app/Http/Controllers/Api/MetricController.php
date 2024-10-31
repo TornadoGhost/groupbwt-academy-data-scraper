@@ -54,4 +54,18 @@ class MetricController extends Controller
 
         return $this->successResponse("Metrics data received", data: $mergedData);
     }
+
+    public function getProducts(): JsonResponse
+    {
+        $products = $this->productService->productsForMetrics($this->userId);
+
+        return $this->successResponse("Metrics products data received", data: MetricProductResource::collection($products));
+    }
+
+    public function getRetailers(): JsonResponse
+    {
+        $retailers = $this->retailerService->retailersForMetrics($this->userId);
+
+        return $this->successResponse("Metrics retailers data received", data: MetricRetailerResource::collection($retailers));
+    }
 }
