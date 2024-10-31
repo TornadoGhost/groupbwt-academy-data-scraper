@@ -9,4 +9,5 @@ interface RetailerServiceInterface extends BaseCrudServiceInterface
     public function restore(int $uid);
     public function findWithUsers(int $id);
     public function list();
+    public function retailersForMetrics(int $userId);
 }
