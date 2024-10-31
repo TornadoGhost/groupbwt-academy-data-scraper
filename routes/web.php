@@ -16,7 +16,8 @@ Route::middleware(['auth'])->group(function () {
     Route::controller(ProductController::class)->group(function () {
         Route::get('/products', 'index')->name('products.index');
         Route::get('/products/create', 'create')->name('products.create');
-        Route::get('/products/{mpn}', 'show')->name('products.show');
+        Route::get('/products/{id}', 'show')->name('products.show');
+        Route::get('/products/{id}/edit', 'edit')->name('products.show');
     });
     Route::controller(RetailerController::class)->group(function () {
         Route::get('/retailers', 'index')->name('retailers.index');
