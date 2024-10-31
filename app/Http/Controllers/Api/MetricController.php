@@ -4,7 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MetricRequest;
+use App\Http\Resources\MetricProductResource;
+use App\Http\Resources\MetricRetailerResource;
 use App\Services\Contracts\MetricServiceInterface;
+use App\Services\Contracts\ProductServiceInterface;
+use App\Services\Contracts\RetailerServiceInterface;
 use App\Services\Contracts\ScrapedDataServiceInterface;
 use App\Services\Contracts\ScrapingSessionServiceInterface;
 use App\Traits\JsonResponseHelper;
@@ -14,20 +18,23 @@ use Illuminate\Http\JsonResponse;
 class MetricController extends Controller
 {
     use JsonResponseHelper;
+    protected readonly int $userId;
 
     public function __construct(
         protected ScrapedDataServiceInterface $scrapedDataService,
         protected ScrapingSessionServiceInterface $scrapingSessionService,
         protected MetricServiceInterface $metricService,
+        protected ProductServiceInterface $productService,
+        protected RetailerServiceInterface $retailerService,
     )
     {
+        $this->userId = auth()->id();
     }
 
-    public function __invoke(MetricRequest $request): JsonResponse
+    public function index(MetricRequest $request): JsonResponse
     {
-        $productId = $request->product_id ?? 0;
-        $mpn = $request->manufacturer_part_number ?? 0;
-        $retailerId = $request->retailer_id ?? 0;
+        $products = $request->products ?? [];
+        $retailers = $request->retailers ?? [];
         $startDate = $request->start_date ?? Carbon::parse($this->scrapingSessionService->getLatestScrapingSession())->format('Y-m-d');
         $endDate = $request->end_date ?? '';
 
@@ -37,9 +44,9 @@ class MetricController extends Controller
             $userId = auth()->id();
         }
 
-        $avgRating = $this->scrapedDataService->avgRating($productId, $mpn, $retailerId, $startDate, $endDate, $userId);
-        $avgPrice = $this->scrapedDataService->avgPrice($productId, $mpn, $retailerId, $startDate, $endDate, $userId);
-        $avgImages = $this->scrapedDataService->avgImages($productId, $mpn, $retailerId, $startDate, $endDate, $userId);
+        $avgRating = $this->scrapedDataService->avgRating($products, $retailers, $startDate, $endDate, $userId);
+        $avgPrice = $this->scrapedDataService->avgPrice($products, $retailers, $startDate, $endDate, $userId);
+        $avgImages = $this->scrapedDataService->avgImages($products, $retailers, $startDate, $endDate, $userId);
         $avgPriceMap = $avgPrice->keyBy('retailer_id')->toArray();
         $avgImagesMap = $avgImages->keyBy('retailer_id')->toArray();
 
