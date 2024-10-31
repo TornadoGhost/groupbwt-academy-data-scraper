@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Repositories\Contracts\ProductRepositoryInterface;
 use App\Services\Contracts\ImageServiceInterface;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +18,8 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     {
         parent::__construct();
     }
-    public function all()
+
+    public function all(): Collection
     {
         if (auth()->user()->isAdmin) {
             $model = $this->model()
@@ -34,7 +36,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         return $this->getLatestData($model);
     }
 
-    public function create($attributes)
+    public function create(array $attributes): Model
     {
         return DB::transaction(function () use ($attributes) {
             $product = $this->model()->create([
@@ -130,7 +132,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         });
     }
 
-    public function delete($uid)
+    public function delete(int $id): bool
     {
         $product = $this->model
             ->with('images')
@@ -151,7 +153,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         return Product::class;
     }
 
-    protected function getLatestData($model)
+    protected function getLatestData($model): Collection
     {
         return $model
             ->latest('created_at')
