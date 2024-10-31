@@ -13,7 +13,7 @@
 
 @section('content_body')
     <div id="filters" class="container mb-2">
-        <div class="row row-cols-4 gap-1">
+        <div class="row row-cols-3 gap-1">
             <div class="col">
                 <x-adminlte-date-range name="drPlaceholder" placeholder="Select a date range..." label="Date">
                     <x-slot name="prependSlot">
@@ -147,7 +147,11 @@
         }seedRetailers();
 
         $(document).ready(function () {
-            let startDate = '', endDate = '', retailerId = '', productId = '', mpnData = '', userId = '';
+            let startDate = '',
+                endDate = '',
+                retailers = [],
+                products = [],
+                userId = '';
             const dateRangeInput = document.getElementById('drPlaceholder');
             const today = moment('{{ $firstDate }}');
             const lastDate = moment('{{ $lastDate }}');
@@ -169,28 +173,36 @@
                 startDate = firstDay;
                 endDate = lastDay;
 
-                getMetrics(startDate, endDate, retailerId, productId, mpnData, userId);
+                getMetrics(startDate, endDate, retailers, products, userId);
             });
 
-
-            changeFirstSelectElem('retailer');
-            changeFirstSelectElem('product');
-            changeFirstSelectElem('mpn');
-            changeFirstSelectElem('user');
-
-            const resetAll = document.getElementById('reset-button-all');
-            resetAll.addEventListener('click', function () {
-                const selectsIds = ['retailer', 'product', 'mpn', 'user'];
-                selectsIds.forEach(id => {
-                    resetSelectValue(id, '', false)
+            $(`#retailers`)
+                .on('select2:select', function (e) {
+                    retailers.push(e.params.data.id);
+                    getMetrics(startDate, endDate, retailers, products, userId);
+                })
+                .on('select2:clear', function () {
+                    retailers = [];
+                    getMetrics(startDate, endDate, retailers, products, userId);
+                })
+                .on('select2:unselect', function (e) {
+                    retailers = retailers.filter(id => id !== e.params.data.id)
+                    getMetrics(startDate, endDate, retailers, products, userId);
                 });
 
-                getMetrics(startDate, endDate, retailerId, productId, mpnData, userId);
-            });
-
-            function changeFirstSelectElem(id, startFetch = true) {
-                $(`#${id}`).on('select2:select', function (e) {
-                    setSelectValue(id, e.params.data.id, startFetch);
+            $(`#products`)
+                .on('select2:select', function (e) {
+                    products.push(e.params.data.id);
+                    console.log(products)
+                    getMetrics(startDate, endDate, retailers, products, userId);
+                })
+                .on('select2:clear', function () {
+                    products = [];
+                    getMetrics(startDate, endDate, retailers, products, userId);
+                })
+                .on('select2:unselect', function (e) {
+                    products = products.filter(id => id !== e.params.data.id)
+                    getMetrics(startDate, endDate, retailers, products, userId);
                 });
                 const resetRetailer = document.getElementById(`reset-button-${id}`);
                 resetRetailer.addEventListener('click', function () {
@@ -221,11 +233,7 @@
             }
         });
 
-        function getFirstSelectElemValue(id) {
-            return $(`#${id} option:first`).val();
-        }
-
-        function getMetrics(startDate = '', endDate = '', retailerId = '', productId = '', mpn = '', userId = '') {
+        function getMetrics(startDate = '', endDate = '', retailers = [], products = [], userId = '') {
             if (controller) {
                 controller.abort('Filter changed');
             }
@@ -243,10 +251,9 @@
 
             const signal = controller.signal;
             mainFetch(
-                `metrics?product_id=${productId}
-                &manufacturer_part_number=${mpn}
-                &retailer_id=${retailerId}
-                &user_id=${userId}
+                `metrics?` + retailers.map(id => `retailers[]=${id}`).join("&")
+                + products.map(id => `&products[]=${id}`).join("&") +
+                `&user_id=${userId}
                 &start_date=${startDate}
                 &end_date=${endDate}`,
                 'GET', null, {}, signal)
