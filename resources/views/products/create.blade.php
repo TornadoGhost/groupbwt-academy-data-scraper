@@ -49,28 +49,14 @@
                 </div>
             </div>
         </div>
-        @php
-            $config = [
-                "placeholder" => "Select multiple options...",
-                "allowClear" => true,
-            ];
-        @endphp
-        <div class="input-group flex-column" id="retailers"></div>
-        <span class="invalid-feedback" role="alert">
-             <strong></strong>
-        </span>
-        <x-adminlte-button class="mb-3" theme="info" id="add-retailers" label="Add retailer"/>
-        <div class="row col-md-6">
-            <x-adminlte-input-file id="product-images" name="images[]" label="Upload images"
-                                   placeholder="Choose multiple images..." igroup-size="md" legend="Choose"
-                                   multiple>
-                <x-slot name="prependSlot">
-                    <div class="input-group-text text-primary">
-                        <i class="fas fa-file-upload"></i>
-                    </div>
-                </x-slot>
-            </x-adminlte-input-file>
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label>Retailers</label>
+                <div class="input-group" id="retailers"></div>
+            </div>
         </div>
+        <label>Images</label>
+        <input id="input-b5" name="images[]" type="file" class="mb-2" multiple>
         <x-adminlte-button class="d-block btn-flat" id="save-button" type="submit" label="Save" theme="success"
                            icon="fas fa-lg fa-save"/>
     </form>
@@ -94,52 +80,6 @@
     <script type="module">
         import {mainFetch} from "{{ asset('js/mainFetch.js') }}";
 
-        let counter = 0;
-
-        const retailersData = await getData();
-        const options = retailersData.map(retailer =>
-            `<option value="${retailer.id}">${retailer.name}</option>`
-        ).join('');
-
-        const addRetailersBtn = document.getElementById('add-retailers');
-        addRetailersBtn.addEventListener('click', function () {
-            const element = `
-                    <div class="d-flex align-items-center" data-retailer>
-                    <x-adminlte-select2 id="retailers-select" name="retailers[${counter}][retailer_id]" label="Product URL"
-                                    igroup-size="lg" data-placeholder="Select an option...">
-                    <x-slot name="prependSlot">
-                        <div class="input-group">
-                            <input class="form-control" id="retailers.${counter}.product_url" name="retailers[${counter}][product_url]"
-                                   type="text" placeholder="Enter product url">
-                            <span class="invalid-feedback" role="alert">
-                                <strong></strong>
-                            </span>
-                            <input class="form-control" id="retailers.${counter}.retailer_id" type="hidden">
-                            <span class="invalid-feedback" role="alert">
-                                <strong></strong>
-                            </span>
-                        </div>
-                    </x-slot>
-                    <option selected disabled>Select retailer</option>
-                    ${options}
-                </x-adminlte-select2>
-                <x-adminlte-button id="remove-button" class="btn-sm" type="reset" theme="outline-danger" icon="fas fa-lg fa-trash"/>
-                </div>
-                `;
-            retailers.insertAdjacentHTML('beforeend', element);
-            retailers.classList.remove('is-invalid');
-            addRetailersBtn.classList.remove('btn-danger');
-
-            counter += 1;
-        });
-
-        document.addEventListener('click', function (event) {
-            const removeButton = event.target.closest('#remove-button');
-            if (removeButton) {
-                removeButton.closest('div[data-retailer]').remove();
-            }
-        })
-
         const submitButton = document.getElementById('save-button');
         submitButton.addEventListener('click', function (event) {
             event.preventDefault();
@@ -160,10 +100,6 @@
                     } else {
                         document.getElementById('modal-open-btn').click();
                         form.reset();
-                        const resetButtons = document.querySelectorAll('button[type=reset]');
-                        resetButtons.forEach((button) => {
-                            button.click();
-                        });
                     }
                 });
         });
@@ -175,8 +111,11 @@
                     retailersData = response.data;
                 });
 
-            return retailersData;
+            `;
+            footer.insertAdjacentHTML("afterbegin", button)
         }
+
+        addReturnButton();
 
         function addValidationMessage(id, message) {
             const element = document.getElementById(id);
@@ -186,7 +125,6 @@
             }
         }
 
-        removeValidationMessage();
 
         function removeValidationMessage() {
             document.querySelectorAll('input').forEach(input => {
@@ -195,5 +133,61 @@
                 });
             })
         }
+
+        removeValidationMessage();
+
+        async function getRetailers() {
+            let data;
+            await mainFetch('retailers', 'GET')
+                .then(response => {
+                    if (response?.status === 'Success') {
+                        data = response.data;
+                    }
+                })
+            return data;
+        }
+
+        async function setRetailersData() {
+            const retailers = await getRetailers();
+            const retailersForm = document.getElementById('retailers');
+            for (let i = 0; i < retailers.length; i++) {
+                retailersForm.insertAdjacentHTML("beforeend", `
+                    <div class="input-group mb-2">
+                        <div class="input-group col-md-6 pl-0">
+                        <input class="form-control" id="retailers.${i}.product_url" name="retailers[${i}][product_url]"
+                        type="text" placeholder="Enter product url">
+                                <span class="invalid-feedback" role="alert">
+                                    <strong></strong>
+                                </span>
+                        </div>
+                    <input disabled class="form-control" type="text" value="${retailers[i]['name']}" >
+                    <input type="hidden" name="retailers[${i}][retailer_id]" value="${retailers[i]['id']}">
+                                <span class="invalid-feedback" role="alert">
+                                    <strong></strong>
+                                </span>
+                    </div>`);
+            }
+        }
+
+        setRetailersData();
+
+        $(document).ready(function () {
+            // $("#input-b5").fileinput({showCaption: false, dropZoneEnabled: false});
+            $("#input-b5").fileinput({
+                /*initialPreview: [
+                    "https://example.com/image1.jpg",
+                    "https://example.com/image2.jpg"
+                ],
+                initialPreviewAsData: true, // дозволяє показувати зображення як дані, а не текст
+                initialPreviewConfig: [
+                    {caption: "Image 1", key: 1, url: "/site/file-delete", extra: {id: 1}},
+                    {caption: "Image 2", key: 2, url: "/site/file-delete", extra: {id: 2}}
+                ],*/
+                // deleteUrl: "/site/file-delete", // загальний URL для видалення, якщо не задано у initialPreviewConfig
+                overwriteInitial: false, // зберігає попередні зображення
+                showRemove: false, // приховує загальну кнопку видалення
+                showUpload: false, // приховує загальну кнопку завантаження
+            });
+        });
     </script>
 @endpush
