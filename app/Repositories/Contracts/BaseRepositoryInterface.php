@@ -6,11 +6,11 @@ interface BaseRepositoryInterface
 {
     public function all();
 
-    public function find(string $uid);
+    public function find(int $id);
 
     public function create(array $attributes);
 
-    public function update(string $uid, array $attributes);
+    public function update(int $id, array $attributes);
 
-    public function delete(string $uid);
+    public function delete(int $id);
 }
