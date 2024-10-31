@@ -154,6 +154,28 @@ class ScrapedDataRepository extends BaseRepository implements ScrapedDataReposit
             ->firstOrFail();
     }
 
+    protected function getUserRetailersId(): array
+    {
+        $userRetailers = $this->retailerService->all();
+        $retailersId = [];
+        foreach ($userRetailers as $retailer) {
+            $retailersId[] = $retailer->id;
+        }
+
+        return $retailersId;
+    }
+
+    protected function getUserProductsId(): array
+    {
+        $userProducts = $this->productService->productsForMetrics(auth()->id());
+        $productsId = [];
+        foreach ($userProducts as $product) {
+            $productsId[] = $product->id;
+        }
+
+        return $productsId;
+    }
+
     protected function getModelClass(): string
     {
         return ScrapedData::class;
