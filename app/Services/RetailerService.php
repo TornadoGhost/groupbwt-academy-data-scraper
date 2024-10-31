@@ -33,6 +33,10 @@ class RetailerService extends BaseCrudService implements RetailerServiceInterfac
     {
         return $this->repository()->list();
     }
+    public function retailersForMetrics(int $userId): Collection
+    {
+        return $this->repository()->retailersForMetrics($userId);
+    }
 
     protected function getRepositoryClass()
     {
