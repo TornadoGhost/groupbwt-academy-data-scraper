@@ -113,6 +113,17 @@ class RetailerRepository extends BaseRepository implements RetailerRepositoryInt
         return $this->model->with('users')->findOrFail($id);
     }
 
+    public function retailersForMetrics(int $userId): Collection
+    {
+        return $this->model()
+            ->whereRelation('users', 'id', $userId)
+            ->get([
+                    'id',
+                    'name',
+                ]
+            );
+    }
+
     protected function getModelClass(): string
     {
         return Retailer::class;
