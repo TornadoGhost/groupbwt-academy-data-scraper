@@ -104,12 +104,12 @@
                 });
         });
 
-        async function getData() {
-            let retailersData;
-            await mainFetch('retailers', 'GET')
-                .then((response) => {
-                    retailersData = response.data;
-                });
+        function addReturnButton() {
+            const modal = document.getElementById('modalMin');
+            const footer = modal.querySelector('.modal-footer');
+            const button = `
+
+                    <a href="{{route('products.index')}}"><button type="button" class="btn btn-default bg-green">Back to products</button></a>
 
             `;
             footer.insertAdjacentHTML("afterbegin", button)
