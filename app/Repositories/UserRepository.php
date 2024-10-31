@@ -4,11 +4,13 @@ namespace App\Repositories;
 
 use App\Models\User;
 use App\Repositories\Contracts\UserRepositoryInterface;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
 {
-    public function all()
+    public function all(): Collection
     {
         $userId = auth()->user()->id;
 
@@ -19,7 +21,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
             ->get();
     }
 
-    public function create($attributes)
+    public function create($attributes): Model
     {
         return $this->model()->create([
             'email' => $attributes['email'],
@@ -30,21 +32,21 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         ]);
     }
 
-    public function findByEmail($email)
+    public function findByEmail(string $email): Model
     {
         return $this->model()->where('email', $email)->firstOrFail();
     }
 
-    public function delete($uid)
+    public function delete(int $id): bool
     {
-        $user = $this->model()->findOrFail($uid);
+        $user = $this->model()->findOrFail($id);
         $userToken = $user->token();
 
         if ($userToken) {
             $userToken->revoke();
         }
 
-        return $user->delete($uid);
+        return $user->delete($id);
     }
 
     protected function getModelClass(): string
