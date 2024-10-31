@@ -31,7 +31,13 @@ Route::middleware('auth:api')->group(function () {
     });
 
     Route::get('retailers/{retailer_id}/users', [RetailerController::class, 'getWithUsers']);
-    Route::get('metrics', MetricController::class);
+
+    Route::controller(MetricController::class)->group(function() {
+        Route::get('metrics', 'index');
+        Route::get('metrics/products', 'getProducts');
+        Route::get('metrics/retailers', 'getRetailers');
+    });
+
     Route::controller(ImageProductController::class)->group(function() {
         Route::post('/images', 'store');
         Route::delete('/images/{id}', 'destroy');
