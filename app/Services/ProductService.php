@@ -16,6 +16,11 @@ class ProductService extends BaseCrudService implements ProductServiceInterface
 
     public function findByMpn(string $mpn): Product
     {
-        return $this->repository()->findById($id);
+        return $this->repository()->findByMpn($mpn);
+    }
+
+    public function productsForMetrics(int $userId): Collection
+    {
+        return $this->repository()->productsForMetrics($userId);
     }
 }
