@@ -26,7 +26,7 @@ class StoreProductRequest extends FormRequest
             'pack_size' => ['required', 'string', 'min:3', 'max:20'],
             'retailers' => ['required', 'array'],
             'retailers.*.retailer_id' => ['required', 'distinct', 'exists:retailers,id'],
-            'retailers.*.product_url' => ['required', 'string', 'min:5', 'max:255'],
+            'retailers.*.product_url' => ['nullable', 'string', 'min:5', 'max:255'],
             'images' => ['array'],
             'images.*' => ['image', 'mimes:jpg,jpeg,png', 'max:2048'],
         ];
