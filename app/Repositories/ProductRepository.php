@@ -143,4 +143,15 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             ->latest('id')
             ->get();
     }
+
+    public function productsForMetrics(int $userId): Collection
+    {
+        return $this->model()
+            ->where('user_id', $userId)
+            ->get(
+            ['title',
+            'manufacturer_part_number',
+            'id']
+        );
+    }
 }
