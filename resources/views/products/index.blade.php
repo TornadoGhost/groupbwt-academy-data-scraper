@@ -100,14 +100,14 @@
                             "data": null,
                             "render": function () {
                                 return `
+                            <button id="product-show" class="btn btn-xs btn-default text-teal mx-1 shadow" title="Details">
+                               <i class="fa fa-lg fa-fw fa-eye"></i>
+                            </button>
                             <button id="product-edit" class="btn btn-xs btn-default text-primary mx-1 shadow" title="Edit">
                                 <i class="fa fa-lg fa-fw fa-pen"></i>
                             </button>
                             <button id="product-delete" class="btn btn-xs btn-default text-danger mx-1 shadow" title="Delete">
                                 <i class="fa fa-lg fa-fw fa-trash"></i>
-                            </button>
-                            <button id="product-images" class="btn btn-xs btn-default text-danger mx-1 shadow" title="Images" data-toggle="modal" data-target="#productImages">
-                                <i class="fa fa-lg fa-fw fa-image"></i>
                             </button>
                         `;
                             },
@@ -117,6 +117,39 @@
                     ],
                 });
 
+                table.on('draw', function() {
+                    const showButtons = document.querySelectorAll('button[id=product-show]');
+                    showButtons.forEach(elem => {
+                        elem.addEventListener('click', function (event) {
+                            const id = getRowData(event.target.closest('tr[class=odd]')).id;
+                            window.location.href = `products/${id}`;
+                        });
+                    });
+                    const removeButtons = document.querySelectorAll('button[id=product-delete]');
+                    removeButtons.forEach(elem => {
+                        elem.addEventListener('click', function (event) {
+                            document.getElementById('modal-delete-btn').click();
+                            modalRemoveProductAccept(event.target.closest('tr[class=odd]'));
+                            document.removeEventListener('click', modalRemoveProductAccept);
+                        });
+                    });
+                    const editButtons = document.querySelectorAll('button[id=product-edit]');
+                    editButtons.forEach(elem => {
+                        elem.addEventListener('click', function (event) {
+                            const id = getIdFromRow(event.target.closest('tr[class=odd]'));
+                            window.location.href = `products/${id}/edit`;
+                        });
+                    });
+                });
+
+                const showButtons = document.querySelectorAll('button[id=product-show]');
+                showButtons.forEach(elem => {
+                    elem.addEventListener('click', function (event) {
+                        const id = getRowData(event.target.closest('tr[class=odd]')).id;
+                        window.location.href = `products/${id}`;
+                    });
+                })
+
                 const removeButtons = document.querySelectorAll('button[id=product-delete]');
                 removeButtons.forEach(elem => {
                     elem.addEventListener('click', function (event) {
@@ -125,37 +158,20 @@
                         document.removeEventListener('click', modalRemoveProductAccept);
                     });
                 });
+
                 const editButtons = document.querySelectorAll('button[id=product-edit]');
                 editButtons.forEach(elem => {
                     elem.addEventListener('click', function (event) {
-                        const mpn = getMpnForRow(event.target.closest('tr[class=odd]'));
-                        window.location.href = `products/${mpn}`;
-                    });
-                })
-                const productImagesButtons = document.querySelectorAll('button[id=product-images]');
-                productImagesButtons.forEach(elem => {
-                    elem.addEventListener('click', function (event) {
-                        const data = getRowData(event.target.closest('tr[class=odd]'));
-                        const modalBody = getModalBody();
-                        const productImages = data.images;
-                        modalBody.innerHTML = '<div class="container d-flex justify-content-center flex-column"></div>';
-
-                        productImages.forEach(img => {
-                            const elem = addProductImage(img.id, img.path);
-                            putProductImageInBody(modalBody, elem);
-                        });
-                        removeImage();
-                        document.removeEventListener('click', removeImage);
-                        addImage();
-                        document.removeEventListener('click', addImage);
+                        const id = getRowData(event.target.closest('tr[class=odd]')).id;
+                        window.location.href = `products/${id}/edit`;
                     });
                 })
 
                 function modalRemoveProductAccept(element) {
                     document.addEventListener('click', function (event) {
                         if (event.target === document.getElementById('delete-btn')) {
-                            const mpn = getMpnForRow(element);
-                            mainFetch(`products/${mpn}`, 'delete')
+                            const id = getIdFromRow(element);
+                            mainFetch(`products/${id}`, 'delete')
                                 .then(response => {
                                     if (response?.status === 'Error') {
                                         const errorModal = document.getElementById('errors-modal');
@@ -170,68 +186,12 @@
                     })
                 }
 
-                function removeImage() {
-                    document.addEventListener('click', function (event) {
-                        const deleteBtn = document.getElementById('delete-image');
-                        if (event.target === deleteBtn || (event.target === deleteBtn.firstElementChild)) {
-                            const parent = event.target.closest('div.d-flex');
-                            const imageId = parent.querySelector('input[type=hidden]').value;
-                            mainFetch(`images/${imageId}`, 'DELETE')
-                                .then(response => {
-                                    if (response.status === 'Success') {
-                                        parent.remove();
-                                        console.log('Image deleted');
-                                    }
-                                })
-                        }
-                    });
-                }
-
-                function addImage() {
-                    document.addEventListener('click', function (event) {
-                        const addBtn = document.getElementById('add-image');
-                        if (event.target === addBtn) {
-                            const productData = getRowData(event.target.closest('tr[class=odd]'));
-                            const images = document.getElementById('image-file');
-                            const data = new FormData();
-                            data.append('product_id', productData.id);
-                            if (images.files.length > 0) {
-                                for (let i = 0; i < images.files.length; i++) {
-                                    data.append('images[]', images.files[i]);
-                                }
-                            }
-                            mainFetch('images', 'POST', data)
-                                .then(response => {
-                                    if (response.status === 'Success') {
-                                        response.data.forEach(image => {
-                                            const modalBody = getModalBody();
-                                            const elem = addProductImage(image.id, image.path);
-                                            putProductImageInBody(modalBody, elem);
-                                        });
-                                    }
-                                })
-                        }
-                    });
-                }
-
-                function getModalBody() {
-                    return document.getElementById('productImages').getElementsByClassName('modal-body')[0];
-                }
-
-                function putProductImageInBody(modalBody, elem) {
-                    modalBody.getElementsByClassName('container')[0].insertAdjacentHTML('beforeend', elem);
-                }
-
-                function addProductImage(imageId, imagePath) {
-                    return `<div class="d-flex justify-content-center flex-column mb-2 position-relative d-inline-block">
-                                                  <button id="delete-image" type="button" class="btn btn-xs btn-default text-primary position-absolute top-0 end-0 mt-2 mr-2" aria-label="Close" style="top: 0; right: 0; transform: translate(50%, -50%);"><i class="bi bi-x"></i></button>
-                                                  <input type="hidden" name="image_path" value="${imageId}"/>
-                                                  <img src="${imagePath}" class="img-fluid">
-                                                </div>`;
-                }
-
                 function getMpnForRow(element) {
                     return getRowData(element).manufacturer_part_number;
+                }
+
+                function getIdFromRow(element) {
+                    return getRowData(element).id;
                 }
 
                 function getRowData(element) {
@@ -251,3 +211,109 @@
         }
     </script>
 @endpush
+
+
+
+{{--
+<button id="product-images" class="btn btn-xs btn-default text-danger mx-1 shadow" title="Images" data-toggle="modal" data-target="#productImages">
+    <i class="fa fa-lg fa-fw fa-image"></i>
+</button>--}}
+
+{{--const productImagesButtons = document.querySelectorAll('button[id=product-images]');
+productImagesButtons.forEach(elem => {
+elem.addEventListener('click', function (event) {
+const data = getRowData(event.target.closest('tr[class=odd]'));
+const modalBody = getModalBody();
+const productImages = data.images;
+modalBody.innerHTML = '<div class="container d-flex justify-content-center flex-column"></div>';
+
+productImages.forEach(img => {
+const elem = addProductImage(img.id, img.path);
+putProductImageInBody(modalBody, elem);
+});
+removeImage();
+document.removeEventListener('click', removeImage);
+addImage();
+document.removeEventListener('click', addImage);
+});
+})--}}
+
+{{--
+function addProductImage(imageId, imagePath) {
+return `<div class="d-flex justify-content-center flex-column mb-2 position-relative d-inline-block">
+    <button id="delete-image" type="button" class="btn btn-xs btn-default text-primary position-absolute top-0 end-0 mt-2 mr-2" aria-label="Close" style="top: 0; right: 0; transform: translate(50%, -50%);"><i class="bi bi-x"></i></button>
+    <input type="hidden" name="image_path" value="${imageId}"/>
+    <img src="${imagePath}" class="img-fluid">
+</div>`;
+}--}}
+{{--
+const productImagesButtons = document.querySelectorAll('button[id=product-images]');
+productImagesButtons.forEach(elem => {
+elem.addEventListener('click', function (event) {
+const data = getRowData(event.target.closest('tr[class=odd]'));
+const modalBody = getModalBody();
+const productImages = data.images;
+modalBody.innerHTML = '<div class="container d-flex justify-content-center flex-column"></div>';
+
+productImages.forEach(img => {
+const elem = addProductImage(img.id, img.path);
+putProductImageInBody(modalBody, elem);
+});
+removeImage();
+document.removeEventListener('click', removeImage);
+addImage();
+document.removeEventListener('click', addImage);
+});
+})--}}
+{{--
+function removeImage() {
+document.addEventListener('click', function (event) {
+const deleteBtn = document.getElementById('delete-image');
+if (event.target === deleteBtn || (event.target === deleteBtn.firstElementChild)) {
+const parent = event.target.closest('div.d-flex');
+const imageId = parent.querySelector('input[type=hidden]').value;
+mainFetch(`images/${imageId}`, 'DELETE')
+.then(response => {
+if (response.status === 'Success') {
+parent.remove();
+console.log('Image deleted');
+}
+})
+}
+});
+}
+
+function addImage() {
+document.addEventListener('click', function (event) {
+const addBtn = document.getElementById('add-image');
+if (event.target === addBtn) {
+const productData = getRowData(event.target.closest('tr[class=odd]'));
+const images = document.getElementById('image-file');
+const data = new FormData();
+data.append('product_id', productData.id);
+if (images.files.length > 0) {
+for (let i = 0; i < images.files.length; i++) {
+data.append('images[]', images.files[i]);
+}
+}
+mainFetch('images', 'POST', data)
+.then(response => {
+if (response.status === 'Success') {
+response.data.forEach(image => {
+const modalBody = getModalBody();
+const elem = addProductImage(image.id, image.path);
+putProductImageInBody(modalBody, elem);
+});
+}
+})
+}
+});
+}--}}
+{{--
+function getModalBody() {
+return document.getElementById('productImages').getElementsByClassName('modal-body')[0];
+}
+
+function putProductImageInBody(modalBody, elem) {
+modalBody.getElementsByClassName('container')[0].insertAdjacentHTML('beforeend', elem);
+}--}}
