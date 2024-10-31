@@ -5,10 +5,12 @@ namespace App\Repositories;
 use App\Models\ScrapingSession;
 use App\Repositories\Contracts\ScrapingSessionRepositoryInterface;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 
 class ScrapingSessionRepository extends BaseRepository implements ScrapingSessionRepositoryInterface
 {
-    public function all()
+    public function all(): Collection
     {
         return $this->model()
             ->with('retailer')
@@ -17,7 +19,7 @@ class ScrapingSessionRepository extends BaseRepository implements ScrapingSessio
             ->get();
     }
 
-    public function create($attributes)
+    public function create($attributes): Model
     {
         $creatDay = Carbon::parse($attributes['started_at'])->format('Y-m-d');
         $exist = $this->model()->where('started_at', 'like', $creatDay . '%')->first();
