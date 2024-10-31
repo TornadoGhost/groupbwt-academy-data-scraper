@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Repositories\Contracts\BaseRepositoryInterface;
 use App\Traits\JsonResponseHelper;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
@@ -19,12 +20,12 @@ abstract class BaseRepository implements BaseRepositoryInterface
         $this->model = app($this->getModelClass());
     }
 
-    public function model()
+    public function model(): Model
     {
         return $this->model;
     }
 
-    public function all()
+    public function all(): Collection
     {
         return $this->model()
             ->orderByDesc('created_at')
@@ -32,28 +33,28 @@ abstract class BaseRepository implements BaseRepositoryInterface
             ->get();
     }
 
-    public function find($uid)
+    public function find(int $id): Model
     {
-        return $this->model()->findOrFail($uid);
+        return $this->model()->findOrFail($id);
     }
 
-    public function create($attributes)
+    public function create(array $attributes): Model
     {
         return $this->model()->create($attributes);
     }
 
-    public function update($uid, $attributes)
-    {
-        $record = $this->model()->findOrFail($uid);
-        $record->update($attributes);
+        public function update(int $id, array $attributes): Model
+        {
+            $record = $this->model()->findOrFail($id);
+            $record->update($attributes);
 
-        return $record;
+            return $record;
+        }
+
+    public function delete(int $id): bool
+    {
+        return $this->model()->findOrFail($id)->delete($id);
     }
 
-    public function delete($uid)
-    {
-        return $this->model()->findOrFail($uid)->delete($uid);
-    }
-
-    abstract protected function getModelClass();
+    abstract protected function getModelClass(): string;
 }
