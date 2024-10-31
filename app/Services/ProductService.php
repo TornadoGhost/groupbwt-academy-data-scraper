@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Product;
 use App\Repositories\Contracts\ProductRepositoryInterface;
 use App\Services\Contracts\ProductServiceInterface;
+use Illuminate\Database\Eloquent\Collection;
 
 class ProductService extends BaseCrudService implements ProductServiceInterface
 {
@@ -13,7 +14,7 @@ class ProductService extends BaseCrudService implements ProductServiceInterface
         return ProductRepositoryInterface::class;
     }
 
-    public function findById(int $id): Product
+    public function findByMpn(string $mpn): Product
     {
         return $this->repository()->findById($id);
     }
