@@ -309,31 +309,13 @@ return [
         // Sidebar items:
         [
             'text' => 'Products',
-            'icon' => 'fas fa-fw fa-share',
-            'submenu' => [
-                [
-                    'text' => 'Products list',
-                    'url' => 'products',
-                ],
-                [
-                    'text' => 'Creat product',
-                    'url' => 'products/create',
-                ],
-            ],
+            'url' => 'products',
+            'icon' => 'far fa-fw fa-file',
         ],
         [
             'text' => 'Retailers',
-            'icon' => 'fas fa-fw fa-share',
-            'submenu' => [
-                [
-                    'text' => 'Retailers list',
-                    'url' => 'retailers',
-                ],
-                [
-                    'text' => 'Creat retailer',
-                    'url' => 'retailers/create',
-                ],
-            ],
+            'url' => 'retailers',
+            'icon' => 'far fa-fw fa-file',
         ],
         [
             'text' => 'Users',
