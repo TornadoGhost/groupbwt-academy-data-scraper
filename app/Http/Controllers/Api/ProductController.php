@@ -36,9 +36,9 @@ class ProductController extends Controller
         return $this->successResponse('Product created', 201, ProductResource::make($product));
     }
 
-    public function show(string $mpn): JsonResponse
+    public function show(int $id): JsonResponse
     {
-        $product = $this->productService->find($mpn);
+        $product = $this->productService->find($id);
 
         if (auth()->user()->cannot('view', $product)) {
             return $this->unauthorizedResponse();
@@ -47,7 +47,7 @@ class ProductController extends Controller
         return $this->successResponse("Product received", data: ProductResource::make($product));
     }
 
-    public function update(UpdateProductRequest $request, string $mpn): JsonResponse
+    public function update(UpdateProductRequest $request, int $id): JsonResponse
     {
         $product = $this->productService->find($mpn);
 
@@ -55,20 +55,20 @@ class ProductController extends Controller
             return $this->unauthorizedResponse();
         }
 
-        $product = $this->productService->update($mpn, $request->validated());
+        $product = $this->productService->update($id, $request->validated());
 
         return $this->successResponse("Product updated", data: ProductResource::make($product));
     }
 
-    public function destroy(string $mpn): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
-        $product = $this->productService->find($mpn);
+        $product = $this->productService->find($id);
 
         if (auth()->user()->cannot('delete', $product)) {
             return $this->unauthorizedResponse();
         }
 
-        $this->productService->delete($mpn);
+        $this->productService->delete($id);
 
         return $this->successResponse('Product deleted');
     }
