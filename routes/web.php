@@ -36,7 +36,6 @@ Route::middleware(['auth'])->group(function () {
     });
     Route::get('/metrics', [MetricController::class, 'index'])->name('metrics.index');
 
-
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
