@@ -85,10 +85,6 @@
                 @endif
             @endif
         </div>
-        <button type="button" id="reset-button-all" class="btn btn-secondary btn-sm" style="margin-left: 10px;">
-            <span class="mr-2">Reset all filters</span>
-            <i class="fas fa-undo"></i>
-        </button>
     </div>
     <div class="container">
         <div id="spinner" class="d-none align-items-center">
