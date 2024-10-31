@@ -8,6 +8,7 @@
 @section('content_header_title', 'Home')
 @section('content_header_subtitle', 'Products')
 @section('content_header_subtitle_subtitle', 'Update')
+@section('plugins.inputFileKrajee', true)
 
 {{-- Content body: main page content --}}
 
@@ -17,7 +18,7 @@
             <div class="form-group col-md-6">
                 <label for="title">Title</label>
                 <div class="input-group">
-                    <input class="form-control" id="title" name="title"
+                    <input disabled class="form-control" id="title" name="title"
                            type="text" value="{{ $product['title'] }}" placeholder="Enter title name of product">
                     <span class="invalid-feedback" role="alert">
                         <strong></strong>
@@ -29,7 +30,7 @@
             <div class="form-group col-md-6">
                 <label for="manufacturer_part_number">Manufacturer part number</label>
                 <div class="input-group">
-                    <input class="form-control" id="manufacturer_part_number" name="manufacturer_part_number"
+                    <input disabled class="form-control" id="manufacturer_part_number" name="manufacturer_part_number"
                            type="text" value="{{ $product['manufacturer_part_number'] }}"
                            placeholder="Enter product manufacturer part number">
                     <span class="invalid-feedback" role="alert">
@@ -42,7 +43,7 @@
             <div class="form-group col-md-6">
                 <label for="pack_size">Pack size</label>
                 <div class="input-group">
-                    <input class="form-control" id="pack_size" name="pack_size"
+                    <input disabled class="form-control" id="pack_size" name="pack_size"
                            type="text" value="{{ $product['pack_size'] }}" placeholder="Enter product pack size">
                     <span class="invalid-feedback" role="alert">
                         <strong></strong>
@@ -50,57 +51,13 @@
                 </div>
             </div>
         </div>
-        @php
-            $config = [
-                "placeholder" => "Select multiple options...",
-                "allowClear" => true,
-            ];
-        @endphp
-        <div class="input-group flex-column" id="retailers">
-            @if($product)
-                @foreach($product->retailers as $key => $retailer)
-                    <div class="d-flex align-items-center" data-retailer>
-                        <x-adminlte-select2 id="retailers-select-{{$key+10000}}" name='retailers[{{$key+10000}}][retailer_id]'
-                                            label="Product URL"
-                                            igroup-size="lg" data-placeholder="Select an option...">
-                            <x-slot name="prependSlot">
-                                <div class="input-group">
-                                    <input class="form-control" id="retailers.{{ $key+10000 }}.product_url"
-                                           name="retailers[{{ $key+10000 }}][product_url]"
-                                           type="text" placeholder="Enter product url"
-                                           value="{{ $retailer->pivot->product_url }}">
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong></strong>
-                                    </span>
-                                    <input class="form-control" id="retailers.${counter}.retailer_id" type="hidden">
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong></strong>
-                                    </span>
-                                </div>
-                            </x-slot>
-                            <option disabled>Select retailer</option>;
-                            @foreach($retailers as $r)
-                                <option @if($retailer->name === $r->name)
-                                            selected
-                                        @endif @if(!in_array($r->id, $availableRetailersId))
-                                    disabled
-                                @endif value="{{ $r->id }}">
-                                    {{ $r->name }}
-                                </option>
-                            @endforeach
-                        </x-adminlte-select2>
-                        <x-adminlte-button id="remove-button" class="btn-sm" type="reset" theme="outline-danger"
-                                           icon="fas fa-lg fa-trash"/>
-                    </div>
-                @endforeach
-            @endif
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label>Retailers</label>
+                <div class="input-group" id="retailers"></div>
+            </div>
         </div>
-        <span class="invalid-feedback" role="alert">
-             <strong></strong>
-        </span>
-        <x-adminlte-button class="mb-3" theme="info" id="add-retailers" label="Add retailer"/>
-        <x-adminlte-button class="d-block btn-flat" id="save-button" type="button" label="Save" theme="success"
-                           icon="fas fa-lg fa-save"/>
+        <input id="input-b5" name="images[]" type="file" class="mb-2" multiple>
     </form>
     <x-adminlte-modal id="modalMin" title="Success" theme="green">
         <p>Product updated.</p>
@@ -121,103 +78,71 @@
 @push('js')
     <script type="module">
         import {mainFetch} from "{{ asset('js/mainFetch.js') }}";
-        import {updatePrepareData} from "{{ asset('js/updatePrepareData.js') }}";
 
-        let counter = 0;
+        const product = await getProduct('{{ $product->id }}');
 
-        const retailersData = await getData();
-        const options = retailersData.map(retailer =>
-            `<option value="${retailer.id}">${retailer.name}</option>`
-        ).join('');
-
-        const addRetailersBtn = document.getElementById('add-retailers');
-        addRetailersBtn.addEventListener('click', function () {
-            const element = `
-    <div class="d-flex align-items-center" data-retailer>
-        <x-adminlte-select2 id="retailers-select" name="retailers[${counter}][retailer_id]" label="Product URL"
-                            igroup-size="lg" data-placeholder="Select an option...">
-            <x-slot name="prependSlot">
-                <div class="input-group">
-                    <input class="form-control" id="retailers.${counter}.product_url"
-                           name="retailers[${counter}][product_url]"
-                           type="text" placeholder="Enter product url">
-                    <span class="invalid-feedback" role="alert">
-                                <strong></strong>
-                            </span>
-                    <input class="form-control" id="retailers.${counter}.retailer_id" type="hidden">
-                    <span class="invalid-feedback" role="alert">
-                                <strong></strong>
-                            </span>
-                </div>
-            </x-slot>
-            <option>Select retailer</option>
-            ${options}
-        </x-adminlte-select2>
-        <x-adminlte-button id="remove-button" class="btn-sm" type="reset" theme="outline-danger"
-                           icon="fas fa-lg fa-trash"/>
-    </div>
-    `;
-            retailers.insertAdjacentHTML('beforeend', element);
-            retailers.classList.remove('is-invalid');
-            addRetailersBtn.classList.remove('btn-danger');
-
-            counter += 1;
-        });
-
-        document.addEventListener('click', function (event) {
-            const removeButton = event.target.closest('#remove-button');
-            if (removeButton) {
-                removeButton.closest('div[data-retailer]').remove();
-            }
-        })
-
-        const submitButton = document.getElementById('save-button');
-        submitButton.addEventListener('click', function (event) {
-            event.preventDefault();
-
-            const form = document.getElementById('product-update');
-            const data = updatePrepareData(form);
-
-            mainFetch('products/{{ $product->manufacturer_part_number }}', 'PATCH', data.toString())
-                .then(response => {
-                    if (response.errors) {
-                        const errors = response.errors;
-                        const errorInputName = Object.entries(errors);
-                        errorInputName.forEach(value => {
-                            addValidationMessage(value[0], value[1][0])
-                        })
-                    } else {
-                        document.getElementById('modal-open-btn').click();
-                    }
-                });
-        });
-
-        async function getData() {
-            let retailersData;
+        async function getRetailers() {
+            let data;
             await mainFetch('retailers', 'GET')
-                .then((response) => {
-                    retailersData = response.data;
-                });
-
-            return retailersData;
+                .then(response => {
+                    if (response?.status === 'Success') {
+                        data = response.data;
+                    }
+                })
+            return data;
         }
 
-        function addValidationMessage(id, message) {
-            const element = document.getElementById(id);
-            if (element) {
-                element.classList.add('is-invalid');
-                element.nextElementSibling.children[0].innerHTML = message;
-            }
+        async function getProduct(id) {
+            let data;
+            await mainFetch(`products/${id}`, 'GET')
+                .then(response => {
+                    if (response?.status === 'Success') {
+                        data = response.data;
+                    }
+                })
+            return data;
         }
 
-        removeValidationMessage();
+        async function setRetailersData() {
+            const retailers = await getRetailers();
+            const retailersForm = document.getElementById('retailers');
+            retailers.forEach((retailer, i) => {
+                const existingRetailer = product.retailers.find(pr => pr.name === retailer.name);
+                const productUrl = existingRetailer ? existingRetailer.product_url : '';
+                retailersForm.insertAdjacentHTML("beforeend", `
+                <div class="input-group mb-2">
+                    <div class="input-group col-md-6 pl-0">
+                        <input disabled class="form-control" id="retailers.${i}.product_url" name="retailers[${i}][product_url]" value="${productUrl}"
+                        type="text" placeholder="Enter product url">
+                        <span class="invalid-feedback" role="alert">
+                            <strong></strong>
+                        </span>
+                    </div>
+                    <input disabled class="form-control" type="text" value="${retailer.name}" >
+                    <input type="hidden" name="retailers[${i}][retailer_id]" value="${retailer.id}">
+                    <span class="invalid-feedback" role="alert">
+                        <strong></strong>
+                    </span>
+                </div>
+    `);
+            });
+        }setRetailersData();
 
-        function removeValidationMessage() {
-            document.querySelectorAll('input').forEach(input => {
-                input.addEventListener('keypress', function (event) {
-                    event.target.classList.remove('is-invalid');
-                });
-            })
-        }
+        $(document).ready(async function () {
+            const baseUrl = 'http://localhost/';
+            const imagesPath = product.images.map(item => `${baseUrl}${item.path}`);
+            const imagesId = product.images.map(item => item.id);
+            $("#input-b5").fileinput({
+                initialPreview: imagesPath,
+                initialPreviewAsData: true,
+                initialPreviewConfig: imagesId.map((id, index) => ({
+                    caption: `Image ${index + 1}`,
+                    key: id, // Використання ID для ключа
+                })),
+
+                showRemove: false, // Показує кнопку видалення
+                showUpload: false, // Приховує загальну кнопку завантаження
+            });
+        });
     </script>
 @endpush
