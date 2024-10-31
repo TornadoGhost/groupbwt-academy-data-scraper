@@ -25,13 +25,17 @@ class ProductController extends Controller
         return view('products.create');
     }
 
-    public function show($mpn): View
+    public function show(int $id): View
     {
-        $product = $this->productService->find($mpn);
-        $retailers = $this->retailerService->list();
-        $availableRetailers = $this->retailerService->all()->toArray();
-        $availableRetailersId = array_column($availableRetailers, 'id');
+        $product = $this->productService->find($id);
 
-        return view('products.show', compact('product', 'retailers', 'availableRetailersId'));
+        return view('products.show', compact('product'));
+    }
+
+    public function edit(int $id): View
+    {
+        $product = $this->productService->find($id);
+
+        return view('products.edit', compact('product'));
     }
 }
