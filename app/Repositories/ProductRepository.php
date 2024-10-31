@@ -97,16 +97,31 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             ->findOrFail($mpn);
     }
 
-    public function update($uid, $attributes)
+    public function update(int $id, array $attributes): Model
     {
         $product = $this->model
-            ->where('manufacturer_part_number', $uid)
             ->where('user_id', auth()->id())
-            ->firstOrFail();
+            ->findOrFail($id);
+        $retailers = $attributes['retailers'];
 
-        return DB::transaction(function () use ($product, $uid, $attributes) {
+        $filteredRetailers = array_filter($retailers, function($item) {
+            return $item['product_url'] !== null;
+        });
+
+        $attributes['retailers'] = $filteredRetailers;
+
+        return DB::transaction(function () use ($product, $filteredRetailers, $attributes) {
             if (isset($attributes['retailers'])) {
                 $product->retailers()->sync($attributes['retailers']);
+            }
+
+            if ($attributes['images'] ?? null) {
+                foreach ($attributes['images'] as $image) {
+                    $path = $this->imageService->saveImage($image);
+                    $product->images()->create([
+                        'path' => $path
+                    ]);
+                }
             }
 
             $product->update($attributes);
