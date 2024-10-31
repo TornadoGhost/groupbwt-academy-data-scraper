@@ -4,5 +4,6 @@ namespace App\Repositories\Contracts;
 
 interface ProductRepositoryInterface extends BaseRepositoryInterface
 {
-    public function findById(int $id);
+    public function findByMpn(string $mpn);
+    public function productsForMetrics(int $userId);
 }
