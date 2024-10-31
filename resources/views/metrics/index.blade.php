@@ -26,66 +26,43 @@
                     <script>$(() => $("#drPlaceholder").val(''))</script>
                 @endpush
             </div>
-            @if(!empty($retailers))
-                <div class="col">
-                    <div class="form-group">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <label for="retailer">Retailers</label>
-                            <button type="button" id="reset-button-retailer"
-                                    class="btn btn-secondary btn-sm rounded-circle p-0"
-                                    style="width: 24px; height: 24px;" title="Reset retailer">
-                                <i class="fas fa-undo" style="font-size: 14px;"></i>
-                            </button>
-                        </div>
-                        <x-adminlte-select2 id="retailer" name="retailer">
-                            <option selected>Select retailer...</option>
-                            @foreach($retailers as $retailer)
-                                <option value="{{ $retailer->id }}">{{ $retailer->name }}</option>
-                            @endforeach
-                        </x-adminlte-select2>
-                    </div>
+            <div class="col">
+                <div class="form-group">
+                    @php
+                        $config = [
+                            "placeholder" => "Select multiple options...",
+                            "allowClear" => true,
+                        ];
+                    @endphp
+                    <x-adminlte-select2 id="retailers" name="retailers[]" igroup-size="md" label="Retailers"
+                                        :config="$config" multiple>
+                        <x-slot name="prependSlot">
+                            <div class="input-group-text bg-gradient-red">
+                                <i class="fas fa-tag"></i>
+                            </div>
+                        </x-slot>
+                    </x-adminlte-select2>
                 </div>
-            @endif
-            @if(!empty($products))
-                <div class="col">
-                    <div class="form-group">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <label for="product">Products</label>
-                            <button type="button" id="reset-button-product"
-                                    class="btn btn-secondary btn-sm rounded-circle p-0"
-                                    style="width: 24px; height: 24px;" title="Reset product">
-                                <i class="fas fa-undo" style="font-size: 14px;"></i>
-                            </button>
-                        </div>
-                        <x-adminlte-select2 id="product" name="product">
-                            <option selected>Select product...</option>
-                            @foreach($products as $product)
-                                <option value="{{ $product->id }}">{{ $product->title }} ({{ $product->id }})</option>
-                            @endforeach
-                        </x-adminlte-select2>
-                    </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    @php
+                        $config = [
+                            "placeholder" => "Select multiple options...",
+                            "allowClear" => true,
+                        ];
+                    @endphp
+                    <x-adminlte-select2 id="products" name="products[]" igroup-size="md" label="Products"
+                                        :config="$config" multiple>
+                        <x-slot name="prependSlot">
+                            <div class="input-group-text bg-gradient-red">
+                                <i class="fas fa-tag"></i>
+                            </div>
+                        </x-slot>
+                    </x-adminlte-select2>
                 </div>
-                <div class="col">
-                    <div class="form-group">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <label for="product">Manufacturer part number</label>
-                            <button type="button" id="reset-button-mpn"
-                                    class="btn btn-secondary btn-sm rounded-circle p-0"
-                                    style="width: 24px; height: 24px;" title="Reset mpn">
-                                <i class="fas fa-undo" style="font-size: 14px;"></i>
-                            </button>
-                        </div>
-                        <x-adminlte-select2 id="mpn" name="mpn">
-                            <option selected>Select manufacturer part number...</option>
-                            @foreach($products as $product)
-                                <option
-                                    value="{{ $product->manufacturer_part_number }}">{{ $product->manufacturer_part_number }}</option>
-                            @endforeach
-                        </x-adminlte-select2>
-                    </div>
-                </div>
-            @endif
-            @if(auth()->user()->isAdmin)
+            </div>
+            {{--@if(auth()->user()->isAdmin)
                 @if($users)
                     <div class="col">
                         <div class="form-group">
