@@ -24,6 +24,7 @@ Steps to start the project:
   `.env` you will find PASSPORT_PERSONAL_ACCESS_CLIENT_ID="client-id-value"
   PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET="unhashed-client-secret-value" and put data accordingly
 - ./vendor/bin/sail artisan storage:link
+- ./vendor/bin/sail composer require maatwebsite/excel
 
 ## Additional
 
