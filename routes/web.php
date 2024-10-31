@@ -21,7 +21,7 @@ Route::middleware(['auth'])->group(function () {
     });
     Route::controller(RetailerController::class)->group(function () {
         Route::get('/retailers', 'index')->name('retailers.index');
-        Route::get('/retailers/create', 'create')->name('retailers.create');
+        Route::get('/retailers/create', 'create')->name('retailers.create')->middleware(AuthenticateAdmin::class);
         Route::get('/retailers/{id}', 'show')->name('retailers.show');
     });
     Route::controller(UserController::class)->middleware(AuthenticateAdmin::class)->group(function () {
