@@ -119,6 +119,33 @@
 
         let controller = new AbortController();
 
+        async function getMetricsData(tableName) {
+            let data;
+            await mainFetch(`metrics/${tableName}`, 'GET').then(response => {
+                data = response.data
+            });
+
+            return data;
+        }
+
+        async function seedProducts() {
+            const productsList = await getMetricsData('products');
+            productsList.forEach(elem => {
+                products.insertAdjacentHTML('beforeend',
+                    `<option value="${elem.id}">${elem.title} (${elem.manufacturer_part_number})</option>`
+                );
+            })
+        }seedProducts();
+
+        async function seedRetailers() {
+            const retailersList = await getMetricsData('retailers');
+            retailersList.forEach(elem => {
+                retailers.insertAdjacentHTML('beforeend',
+                    `<option value="${elem.id}">${elem.name}</option>`
+                );
+            })
+        }seedRetailers();
+
         $(document).ready(function () {
             let startDate = '', endDate = '', retailerId = '', productId = '', mpnData = '', userId = '';
             const dateRangeInput = document.getElementById('drPlaceholder');
