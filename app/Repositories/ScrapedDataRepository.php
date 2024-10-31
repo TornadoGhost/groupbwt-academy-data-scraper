@@ -5,21 +5,28 @@ namespace App\Repositories;
 use App\Models\Product;
 use App\Models\ScrapedData;
 use App\Repositories\Contracts\ScrapedDataRepositoryInterface;
+use App\Services\Contracts\ProductServiceInterface;
+use App\Services\Contracts\RetailerServiceInterface;
 use App\Services\ImageService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Facades\DB;
 
 class ScrapedDataRepository extends BaseRepository implements ScrapedDataRepositoryInterface
 {
-    public function __construct(protected ImageService $imageService)
+    public function __construct(
+        protected ImageService $imageService,
+        protected RetailerServiceInterface $retailerService,
+        protected ProductServiceInterface $productService,
+    )
     {
         parent::__construct();
     }
 
-    public function all()
+    public function all(): Collection
     {
         if (auth()->user()->isAdmin) {
             return $this->model()
@@ -36,12 +43,12 @@ class ScrapedDataRepository extends BaseRepository implements ScrapedDataReposit
             ->get();
     }
 
-    public function find($uid)
+    public function find(int $id): Model
     {
-        return $this->model()->with('scrapedDataImages')->findOrFail($uid);
+        return $this->model()->with('scrapedDataImages')->findOrFail($id);
     }
 
-    public function create($attributes)
+    public function create($attributes): Model
     {
         $product = $this->getProduct($attributes['mpn']);
 
@@ -73,11 +80,11 @@ class ScrapedDataRepository extends BaseRepository implements ScrapedDataReposit
         });
     }
 
-    public function delete($uid)
+    public function delete(int $id): bool
     {
         $scrapedData = $this->model
             ->with('scrapedDataImages')
-            ->findOrFail($uid);
+            ->findOrFail($id);
 
         return DB::transaction(function () use ($scrapedData) {
             foreach ($scrapedData->scrapedDataImages as $image) {
