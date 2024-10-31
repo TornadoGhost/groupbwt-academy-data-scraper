@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 class RetailerRepository extends BaseRepository implements RetailerRepositoryInterface
 {
 
-    public function all()
+    public function all(): Collection
     {
         if (auth()->user()->isAdmin) {
             return $this->model()
@@ -30,12 +30,12 @@ class RetailerRepository extends BaseRepository implements RetailerRepositoryInt
         return $this->model()->all();
     }
 
-    public function delete($uid)
+    public function delete(int $id): bool
     {
         $retailer = $this->model()
             ->with('users')
             ->where('isActive', 1)
-            ->findOrFail($uid);
+            ->findOrFail($id);
 
         return DB::transaction(function () use ($retailer) {
             $retailer->isActive = 0;
@@ -49,12 +49,12 @@ class RetailerRepository extends BaseRepository implements RetailerRepositoryInt
         });
     }
 
-    public function restore($uid)
+    public function restore(int $id): bool
     {
         $retailer = $this->model()
             ->with('users')
             ->where('isActive', 0)
-            ->findOrFail($uid);
+            ->findOrFail($id);
 
 
         return DB::transaction(function () use ($retailer) {
@@ -72,7 +72,7 @@ class RetailerRepository extends BaseRepository implements RetailerRepositoryInt
         });
     }
 
-    public function grandAccess(int $retailer_id, array $users_id)
+    public function grandAccess(int $retailer_id, array $users_id): bool
     {
         $retailer = $this->model
             ->findOrFail($retailer_id);
@@ -91,7 +91,7 @@ class RetailerRepository extends BaseRepository implements RetailerRepositoryInt
         });
     }
 
-    public function revokeAccess(int $retailer_id, array $users_id)
+    public function revokeAccess(int $retailer_id, array $users_id): bool
     {
         $retailer = $this->model->findOrFail($retailer_id);
 
