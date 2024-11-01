@@ -30,7 +30,7 @@ class RetailerRepository extends BaseRepository implements RetailerRepositoryInt
         return $this->model()->all();
     }
 
-    public function delete(int $id): bool
+    public function delete(int $id): null
     {
         $retailer = $this->model()
             ->with('users')
