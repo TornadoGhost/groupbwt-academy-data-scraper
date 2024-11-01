@@ -34,5 +34,21 @@ trait JsonResponseHelper
             'status' => 'Error',
             'message' => $message,
         ], $code);
+    protected function errorResponse($message = 'Operation failed', $code = 400, $errors = ''): JsonResponse
+    {
+        if ($errors) {
+            $response = response()->json([
+                'status' => 'Error',
+                'message' => $message,
+                'data' => $errors,
+            ], $code);
+        } else {
+            $response = response()->json([
+                'status' => 'Error',
+                'message' => $message,
+            ], $code);
+        }
+
+        return $response;
     }
 }
