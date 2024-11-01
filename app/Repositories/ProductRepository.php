@@ -132,7 +132,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         });
     }
 
-    public function delete(int $id): bool
+    public function delete(int $id): null
     {
         $product = $this->model
             ->with('images')
