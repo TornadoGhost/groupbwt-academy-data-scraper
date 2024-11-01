@@ -43,15 +43,15 @@ abstract class BaseRepository implements BaseRepositoryInterface
         return $this->model()->create($attributes);
     }
 
-        public function update(int $id, array $attributes): Model
-        {
-            $record = $this->model()->findOrFail($id);
-            $record->update($attributes);
+    public function update(int $id, array $attributes): Model
+    {
+        $record = $this->model()->findOrFail($id);
+        $record->update($attributes);
 
-            return $record;
-        }
+        return $record;
+    }
 
-    public function delete(int $id): bool
+    public function delete(int $id): null
     {
         return $this->model()->findOrFail($id)->delete($id);
     }
