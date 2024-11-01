@@ -12,9 +12,27 @@
 {{-- Content body: main page content --}}
 
 @section('content_body')
-    <a href="{{ route('products.create') }}">
-        <x-adminlte-button class="mb-2" label="Create product" theme="primary"/>
-    </a>
+    <div class="btn-group">
+        <a href="{{ route('products.create') }}">
+            <x-adminlte-button class="mb-2 mr-1" label="Create product" theme="primary"/>
+        </a>
+        <div id="import-block">
+            <form id="import-form">
+                <x-adminlte-input-file id="import-file" name="csv_file" accept=".csv"
+                                       placeholder="Choose csv import file..." igroup-size="md" legend="Choose">
+                    <x-slot name="appendSlot">
+                        <x-adminlte-button type="submit" id="import-btn" theme="primary" label="Upload"/>
+                    </x-slot>
+                    <x-slot name="prependSlot">
+                        <div class="input-group-text text-primary">
+                            <i class="fas fa-file-upload"></i>
+                        </div>
+                    </x-slot>
+                </x-adminlte-input-file>
+                <p class="d-none text-danger m-0" id="input-file-error"></p>
+            </form>
+        </div>
+    </div>
     @php
         $heads = [
             'id',
@@ -32,15 +50,6 @@
     @endphp
     <x-adminlte-datatable id="table2" :heads="$heads" head-theme="dark" :config="$config"
                           striped bordered compressed beautify with-buttons hoverable/>
-    <x-adminlte-modal id="productImages" title="Product Images" size="lg" theme="teal" v-centered static-backdrop
-                      scrollable>
-        <p></p>
-        <x-slot name="footerSlot">
-            <x-adminlte-input-file id="image-file" name="image-file" multiple/>
-            <x-adminlte-button id="add-image" class="mr-auto" theme="success" label="Add"/>
-            <x-adminlte-button theme="danger" label="Close" data-dismiss="modal"/>
-        </x-slot>
-    </x-adminlte-modal>
     <x-adminlte-modal id="modalMin" title="Warning" theme="red">
         <p>Are you sure, you want to delete?</p>
         <x-slot name="footerSlot">
@@ -117,7 +126,7 @@
                     ],
                 });
 
-                table.on('draw', function() {
+                table.on('draw', function () {
                     const showButtons = document.querySelectorAll('button[id=product-show]');
                     showButtons.forEach(elem => {
                         elem.addEventListener('click', function (event) {
@@ -174,10 +183,7 @@
                             mainFetch(`products/${id}`, 'delete')
                                 .then(response => {
                                     if (response?.status === 'Error') {
-                                        const errorModal = document.getElementById('errors-modal');
-                                        const modalBody = errorModal.getElementsByClassName('modal-body')[0];
-                                        modalBody.innerHTML = response.message;
-                                        document.getElementById('error-modal-button').click();
+                                        setErrorModalWindow(response.message);
                                     } else {
                                         table.row(element).remove().draw();
                                     }
@@ -204,10 +210,92 @@
             }
 
             initTable();
+
+            function importData(formId) {
+                const btn = document.getElementById(formId);
+                btn.addEventListener('submit', function (e) {
+                    e.preventDefault();
+
+                    const formData = new FormData(e.target);
+                    mainFetch('products/import', 'POST', formData)
+                        .then(response => {
+                            if (response.status === 'Success') {
+                                $('#table2').DataTable().clear().destroy();
+                                initTable();
+                                removeInputError();
+
+                                const input = e.target.querySelector('#import-file');
+                                input.value = '';
+                                input.nextElementSibling.innerHTML = 'Choose csv import file...';
+
+                                const successAlert =
+                                    `<x-adminlte-alert id="success-alert" class="position-absolute top-0 end-0 m-3 bg-green" style="right: 0;" icon="fa fa-lg fa-thumbs-up" title="Done" dismissable>
+                                        Your data was imported!
+                                    </x-adminlte-alert>`;
+
+                                showAlert(successAlert, 'content-wrapper');
+                                destroyAlert('success-alert', 5000);
+                            } else if (response.status === 'Error' && response.data) {
+                                removeInputError();
+
+                                const block = document.createElement('div');
+                                response.data.forEach(elem => {
+                                    elem.errors.forEach(error => {
+                                        const errorMessage = document.createElement('p');
+                                        errorMessage.textContent = `row-${elem.row} x ${error}`;
+                                        block.appendChild(errorMessage);
+                                    })
+                                });
+
+                                setErrorModalWindow(block);
+                            } else if (response.errors) {
+                                const inputErrorMessage = document.getElementById('input-file-error');
+                                inputErrorMessage.previousElementSibling.classList.add('mb-0');
+                                inputErrorMessage.classList.remove('d-none');
+                                inputErrorMessage.innerHTML = response.errors['csv_file'];
+                            }
+                        })
+                        .catch(errors => {
+                            console.log(errors);
+                        })
+                });
+            }
+
+            importData('import-form');
         });
+
+        function removeInputError() {
+            const inputErrorMessage = document.getElementById('input-file-error');
+            if (!inputErrorMessage.classList.contains('d-none')) {
+                inputErrorMessage.classList.add('d-none');
+            }
+        }
 
         function getProductId(button) {
             return button.closest('tr[class=odd]').firstElementChild.textContent;
+        }
+
+        function showAlert(element, place) {
+            const div = document.getElementsByClassName(place)[0];
+            div.classList.add('position-relative');
+            div.insertAdjacentHTML('afterbegin', element);
+        }
+
+        function destroyAlert(alertId, timer) {
+            setInterval(function () {
+                const alertToRemove = document.getElementById(alertId);
+                if (alertToRemove) {
+                    alertToRemove.remove();
+                }
+            }, timer);
+        }
+
+        function setErrorModalWindow(body) {
+            const errorModal = document.getElementById('errors-modal');
+            const modalBody = errorModal.getElementsByClassName('modal-body')[0];
+            modalBody.innerHTML = '';
+            modalBody.appendChild(body);
+            document.getElementById('error-modal-button').click();
         }
     </script>
 @endpush
@@ -317,3 +405,12 @@ return document.getElementById('productImages').getElementsByClassName('modal-bo
 function putProductImageInBody(modalBody, elem) {
 modalBody.getElementsByClassName('container')[0].insertAdjacentHTML('beforeend', elem);
 }--}}
+{{--<x-adminlte-modal id="productImages" title="Product Images" size="lg" theme="teal" v-centered static-backdrop
+                  scrollable>
+    <p></p>
+    <x-slot name="footerSlot">
+        <x-adminlte-input-file id="image-file" name="image-file" multiple/>
+        <x-adminlte-button id="add-image" class="mr-auto" theme="success" label="Add"/>
+        <x-adminlte-button theme="danger" label="Close" data-dismiss="modal"/>
+    </x-slot>
+</x-adminlte-modal>--}}
