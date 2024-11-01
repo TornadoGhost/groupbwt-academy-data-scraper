@@ -28,12 +28,17 @@ trait JsonResponseHelper
         ], $code);
     }
 
-    protected function errorResponse($message = 'Operation failed', $code = 400): JsonResponse
+    protected function successResponseWithPagination($resource, $message = 'Operation successful', $code = 200): JsonResponse
     {
         return response()->json([
-            'status' => 'Error',
+            'status' => 'Success',
             'message' => $message,
+            'data' => $resource->resolve(),
+            'links' => $resource->response()->getData()->links,
+            'meta' => $resource->response()->getData()->meta,
         ], $code);
+    }
+
     protected function errorResponse($message = 'Operation failed', $code = 400, $errors = ''): JsonResponse
     {
         if ($errors) {
