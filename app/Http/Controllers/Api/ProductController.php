@@ -72,4 +72,17 @@ class ProductController extends Controller
 
         return $this->successResponse('Product deleted');
     }
+    public function import(ProductImportRequest $request): JsonResponse
+    {
+        try {
+            Excel::import(new ProductsImport, $request->validated('csv_file'));
+
+            return $this->successResponse('CSV data imported successfully', 201);
+
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+
+            return $this->errorResponse('Validation errors', 422, $failures);
+        }
+    }
 }
