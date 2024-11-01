@@ -23,22 +23,24 @@ Route::middleware('auth:api')->group(function () {
         'scraped-data' => ScrapedDataController::class,
     ]);
 
-    Route::patch('/retailers/{id}/restore', [RetailerController::class, 'restore']);
+    Route::controller(RetailerController::class)->group(function () {
+        Route::patch('/retailers/{id}/restore', 'restore');
+        Route::get('retailers/{retailer_id}/users', 'getWithUsers');
+    });
 
-    Route::controller(RetailerAccessController::class)->group(function() {
+    Route::controller(RetailerAccessController::class)->group(function () {
         Route::patch('/retailers/{retailer_id}/grand-access', 'grandAccess');
         Route::patch('/retailers/{retailer_id}/revoke-access', 'revokeAccess');
     });
 
-    Route::get('retailers/{retailer_id}/users', [RetailerController::class, 'getWithUsers']);
 
-    Route::controller(MetricController::class)->group(function() {
+    Route::controller(MetricController::class)->group(function () {
         Route::get('metrics', 'index');
         Route::get('metrics/products', 'getProducts');
         Route::get('metrics/retailers', 'getRetailers');
     });
 
-    Route::controller(ImageProductController::class)->group(function() {
+    Route::controller(ImageProductController::class)->group(function () {
         Route::post('/images', 'store');
         Route::delete('/images/{id}', 'destroy');
     });
