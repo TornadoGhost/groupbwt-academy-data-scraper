@@ -43,6 +43,8 @@ Route::middleware('auth:api')->group(function () {
         Route::delete('/images/{id}', 'destroy');
     });
 
+    Route::post('products/import', [ProductController::class, 'import']);
+
     Route::post('logout', [AuthController::class, 'logout']);
 });
 
