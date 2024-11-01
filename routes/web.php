@@ -11,7 +11,8 @@ use App\Http\Middleware\AuthenticateAdmin;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/', [HomeController::class, 'index'])->name('home');
+//    Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::redirect('/', '/products');
 
     Route::controller(ProductController::class)->group(function () {
         Route::get('/products', 'index')->name('products.index');
