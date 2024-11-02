@@ -8,7 +8,7 @@ use App\Repositories\Contracts\RegionRepositoryInterface;
 class RegionRepository extends BaseRepository implements RegionRepositoryInterface
 {
 
-    protected function getModelClass()
+    protected function getModelClass(): string
     {
         return Region::class;
     }
