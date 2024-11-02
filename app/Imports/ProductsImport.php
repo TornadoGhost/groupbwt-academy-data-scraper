@@ -3,13 +3,15 @@
 namespace App\Imports;
 
 use App\Models\Product;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 
-class ProductsImport implements ToModel, WithValidation, WithHeadingRow, WithChunkReading
+class ProductsImport implements ToModel, WithValidation, WithHeadingRow, WithBatchInserts, ShouldQueue
 {
     public function model(array $row): Product|null
     {
@@ -47,8 +49,8 @@ class ProductsImport implements ToModel, WithValidation, WithHeadingRow, WithChu
         ];
     }
 
-    public function chunkSize(): int
+    public function batchSize(): int
     {
-        return 1000;
+        return 100;
     }
 }
