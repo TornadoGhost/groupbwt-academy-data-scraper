@@ -25,6 +25,7 @@ Steps to start the project:
   PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET="unhashed-client-secret-value" and put data accordingly
 - ./vendor/bin/sail artisan storage:link
 - ./vendor/bin/sail composer require maatwebsite/excel
+- ./vendor/bin/sail artisan queue:work
 
 ## Additional
 
