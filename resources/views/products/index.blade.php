@@ -16,12 +16,12 @@
         <a href="{{ route('products.create') }}">
             <x-adminlte-button class="mb-2 mr-1" label="Create product" theme="primary"/>
         </a>
-        <div id="import-block">
+        <div class="mr-1" id="import-block">
             <form id="import-form">
                 <x-adminlte-input-file id="import-file" name="csv_file" accept=".csv"
-                                       placeholder="Choose csv import file..." igroup-size="md" legend="Choose">
+                                       placeholder="Choose csv file..." igroup-size="md" legend="Choose">
                     <x-slot name="appendSlot">
-                        <x-adminlte-button type="submit" id="import-btn" theme="primary" label="Upload"/>
+                        <x-adminlte-button type="submit" id="import-btn" theme="primary" label="Import"/>
                     </x-slot>
                     <x-slot name="prependSlot">
                         <div class="input-group-text text-primary">
@@ -31,6 +31,9 @@
                 </x-adminlte-input-file>
                 <p class="d-none text-danger m-0" id="input-file-error"></p>
             </form>
+        </div>
+        <div>
+            <x-adminlte-button id="export-btn" label="Export products" theme="primary"/>
         </div>
     </div>
     @php
@@ -217,7 +220,7 @@
                     e.preventDefault();
 
                     const formData = new FormData(e.target);
-                    mainFetch('products/import', 'POST', formData)
+                    mainFetch('import/products', 'POST', formData)
                         .then(response => {
                             if (response.status === 'Success') {
                                 $('#table2').DataTable().clear().destroy();
@@ -260,7 +263,6 @@
                         })
                 });
             }
-
             importData('import-form');
         });
 
@@ -297,6 +299,20 @@
             modalBody.appendChild(body);
             document.getElementById('error-modal-button').click();
         }
+
+        function exportButton() {
+            const btn = document.getElementById('export-btn');
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                mainFetch('export/products', 'GET')
+                    .then(response => {
+                       console.log(response)
+                    })
+                    .catch(errors => {
+                        console.log(errors)
+                    })
+            });
+        }exportButton();
     </script>
 @endpush
 
