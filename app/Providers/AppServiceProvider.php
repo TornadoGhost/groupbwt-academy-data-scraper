@@ -3,6 +3,10 @@
 namespace App\Providers;
 
 use App\Models\User;
+use App\Services\Contracts\MetricServiceInterface;
+use App\Services\Contracts\NotificationServiceInterface;
+use App\Services\MetricService;
+use App\Services\NotificationService;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -24,9 +28,14 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Paginator::useBootstrap();
+
         // Gates
         Gate::define('isAdmin', function (User $user) {
             return $user->isAdmin;
         });
+
+        //Services
+        $this->app->singleton(MetricServiceInterface::class, MetricService::class);
+        $this->app->singleton(NotificationServiceInterface::class, NotificationService::class);
     }
 }
