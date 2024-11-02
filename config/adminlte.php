@@ -303,8 +303,21 @@ return [
 
     'menu' => [
         // Navbar items:
+
         [
+            'type' => 'navbar-notification',
+            'id' => 'my-notification',                // An ID attribute (required).
+            'icon' => 'fas fa-bell',                  // A font awesome icon (required).
+            'route' => 'exportTables.index',            // The url to access all notifications/elements (required).
+            'topnav_right' => true,                   // Or "topnav => true" to place on the left (required).
+            'dropdown_mode' => true,                  // Enables the dropdown mode (optional).
+            'dropdown_flabel' => 'All exports',
+            'update_cfg' => [
+                'route' => 'notifications.get',         // The url to periodically fetch new data (optional).
+                'period' => 5,                       // The update period for get new data (in seconds, optional).
+            ],
         ],
+
 
         // Sidebar items:
         [
@@ -350,6 +363,11 @@ return [
         [
             'text' => 'Metrics',
             'url' => 'metrics',
+            'icon' => 'far fa-fw fa-file',
+        ],
+        [
+            'text' => 'Exports files',
+            'url' => 'export-tables',
             'icon' => 'far fa-fw fa-file',
         ],
         /*['header' => 'labels'],
@@ -556,7 +574,7 @@ return [
             ],
         ],
         'inputFileKrajee' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
