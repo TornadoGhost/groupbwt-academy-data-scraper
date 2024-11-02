@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\Web\ExportTableController;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\AuthController;
 use App\Http\Controllers\Web\MetricController;
+use App\Http\Controllers\Web\NotificationController;
 use App\Http\Controllers\Web\ProductController;
 use App\Http\Controllers\Web\RegionController;
 use App\Http\Controllers\Web\RetailerController;
@@ -12,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth'])->group(function () {
 //    Route::get('/', [HomeController::class, 'index'])->name('home');
-    Route::redirect('/', '/products');
+    Route::redirect('/', '/products')->name('home');
 
     Route::controller(ProductController::class)->group(function () {
         Route::get('/products', 'index')->name('products.index');
@@ -36,6 +38,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/regions/{id}', 'show')->name('regions.show');
     });
     Route::get('/metrics', [MetricController::class, 'index'])->name('metrics.index');
+
+    Route::controller(ExportTableController::class)->group(function () {
+        Route::get('/export-tables', 'index')->name('exportTables.index');
+    });
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
