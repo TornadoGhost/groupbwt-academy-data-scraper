@@ -43,6 +43,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/export-tables', 'index')->name('exportTables.index');
     });
 
+    Route::get('/notifications/get', [NotificationController::class, 'get'])->name('notifications.get');
+
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
