@@ -1,0 +1,49 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Requests\DownloadExportTableRequest;
+use App\Http\Resources\ExportTableResource;
+use App\Services\Contracts\ExportTableServiceInterface;
+use App\Traits\JsonResponseHelper;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
+class ExportTableController
+{
+    use JsonResponseHelper;
+
+    public function __construct(
+        protected ExportTableServiceInterface $exportTableService
+    )
+    {
+    }
+
+    public function index(): JsonResponse
+    {
+        $files = $this->exportTableService->getExportedFiles(auth()->id());
+
+        return $this->successResponse('Exported files received', data: ExportTableResource::collection($files));
+    }
+
+    public function store(Request $request): JsonResponse
+    {
+        $result = $this->exportTableService->create(auth()->id(), $request->get('file_name'), $request->get('path'));
+
+        return $this->successResponse('Export file stored', data: $result);
+    }
+
+    public function download(DownloadExportTableRequest $request)
+    {
+        $path = '/excel/export/' . auth()->id() . '/products/' . $request->get('file_name') . '.xlsx';
+
+        if (!Storage::exists($path)) {
+            return $this->errorResponse('File not found', 404);
+        }
+
+        Storage::download($path, $request->get('file_name'), [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        ]);
+    }
+}
