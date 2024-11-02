@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ExportTableController;
 use App\Http\Controllers\Api\ImageProductController;
 use App\Http\Controllers\Api\MetricController;
 use App\Http\Controllers\Api\ProductController;
@@ -45,7 +46,16 @@ Route::middleware('auth:api')->group(function () {
         Route::delete('/images/{id}', 'destroy');
     });
 
-    Route::post('products/import', [ProductController::class, 'import']);
+    Route::controller(ProductController::class)->group(function () {
+        Route::post('import/products', 'import');
+        Route::get('export/products', 'export');
+    });
+
+    Route::controller(ExportTableController::class)->group(function () {
+        Route::get('/export-tables', 'index');
+//        Route::post('/export-tables', 'store');
+        Route::post('/export-tables/download', 'download');
+    });
 
     Route::post('logout', [AuthController::class, 'logout']);
 });
