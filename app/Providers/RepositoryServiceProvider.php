@@ -2,39 +2,37 @@
 
 namespace App\Providers;
 
+use App\Repositories\Contracts\ExportTableRepositoryInterface;
 use App\Repositories\Contracts\ImageProductRepositoryInterface;
 use App\Repositories\Contracts\ProductRepositoryInterface;
 use App\Repositories\Contracts\RegionRepositoryInterface;
 use App\Repositories\Contracts\RetailerRepositoryInterface;
 use App\Repositories\Contracts\ScrapedDataRepositoryInterface;
 use App\Repositories\Contracts\ScrapingSessionRepositoryInterface;
-use App\Repositories\Contracts\SessionStatusRepositoryInterface;
 use App\Repositories\Contracts\UserRepositoryInterface;
+use App\Repositories\ExportTableRepository;
 use App\Repositories\ImageProductRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\RegionRepository;
 use App\Repositories\RetailerRepository;
 use App\Repositories\ScrapedDataRepository;
 use App\Repositories\ScrapingSessionRepository;
-use App\Repositories\SessionStatusRepository;
 use App\Repositories\UserRepository;
+use App\Services\Contracts\ExportTableServiceInterface;
 use App\Services\Contracts\ImageServiceInterface;
-use App\Services\Contracts\MetricServiceInterface;
 use App\Services\Contracts\ProductServiceInterface;
 use App\Services\Contracts\RegionServiceInterface;
 use App\Services\Contracts\RetailerServiceInterface;
 use App\Services\Contracts\ScrapedDataServiceInterface;
 use App\Services\Contracts\ScrapingSessionServiceInterface;
-use App\Services\Contracts\SessionStatusServiceInterface;
 use App\Services\Contracts\UserServiceInterface;
+use App\Services\ExportTableService;
 use App\Services\ImageService;
-use App\Services\MetricService;
 use App\Services\ProductService;
 use App\Services\RegionService;
 use App\Services\RetailerService;
 use App\Services\ScrapedDataService;
 use App\Services\ScrapingSessionService;
-use App\Services\SessionStatusService;
 use App\Services\UserService;
 use Illuminate\Support\ServiceProvider;
 
@@ -66,7 +64,8 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->singleton(ImageServiceInterface::class, ImageService::class);
         $this->app->singleton(ImageProductRepositoryInterface::class, ImageProductRepository::class);
 
-        $this->app->singleton(MetricServiceInterface::class, MetricService::class);
+        $this->app->singleton(ExportTableRepositoryInterface::class, ExportTableRepository::class);
+        $this->app->singleton(ExportTableServiceInterface::class, ExportTableService::class);
     }
 
     /**
