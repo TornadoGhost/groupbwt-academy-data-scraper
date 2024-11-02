@@ -64,8 +64,13 @@ class User extends Authenticatable
         return $this->hasMany(Product::class);
     }
 
-    public function scraped_data(): HasMany
+    public function scrapedData(): HasMany
     {
         return $this->hasMany(ScrapedData::class);
+    }
+
+    public function exportTables(): HasMany
+    {
+        return $this->hasMany(ExportTable::class);
     }
 }
