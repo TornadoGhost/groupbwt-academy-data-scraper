@@ -39,6 +39,7 @@ Route::middleware('auth:api')->group(function () {
         Route::get('metrics', 'index');
         Route::get('metrics/products', 'getProducts');
         Route::get('metrics/retailers', 'getRetailers');
+        Route::get('metrics/export', 'export');
     });
 
     Route::controller(ImageProductController::class)->group(function () {
