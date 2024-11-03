@@ -12,7 +12,9 @@ class ProductsExportReady extends Notification
 {
     use Queueable;
 
-    public function __construct()
+    public function __construct(
+        public string $prefix,
+    )
     {
 
     }
@@ -25,7 +27,8 @@ class ProductsExportReady extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'message' => 'Products export completed.',
+            'status' => 'success',
+            'message' => "{$this->prefix} export completed.",
         ];
     }
 }
