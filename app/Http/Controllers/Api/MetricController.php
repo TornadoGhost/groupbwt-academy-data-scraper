@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exports\MetricsExport;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\MetricExportRequest;
 use App\Http\Requests\MetricRequest;
 use App\Http\Resources\MetricProductResource;
 use App\Http\Resources\MetricRetailerResource;
+use App\Jobs\NotifyUserOfCompletedExport;
+use App\Jobs\SaveExportTableData;
+use App\Services\Contracts\ExportTableServiceInterface;
 use App\Services\Contracts\MetricServiceInterface;
 use App\Services\Contracts\ProductServiceInterface;
 use App\Services\Contracts\RetailerServiceInterface;
@@ -26,6 +31,7 @@ class MetricController extends Controller
         protected MetricServiceInterface $metricService,
         protected ProductServiceInterface $productService,
         protected RetailerServiceInterface $retailerService,
+        protected ExportTableServiceInterface  $exportTableService,
     )
     {
         $this->userId = auth()->id();
@@ -67,5 +73,26 @@ class MetricController extends Controller
         $retailers = $this->retailerService->retailersForMetrics($this->userId);
 
         return $this->successResponse("Metrics retailers data received", data: MetricRetailerResource::collection($retailers));
+    }
+
+    public function export(MetricExportRequest $request)
+    {
+        $fileData = $this->exportTableService->setPath('metrics');
+        $startDate = $request->start_date ?? Carbon::parse($this->scrapingSessionService->getLatestScrapingSession())->format('Y-m-d');
+        $endDate = $request->end_date ?? '';
+
+        (new MetricsExport($this->scrapedDataService, $this->metricService, $startDate, $endDate))
+            ->store($fileData['filePath'])
+            ->chain([
+                new NotifyUserOfCompletedExport(request()->user(), 'Metrics'),
+                new SaveExportTableData($fileData['fileName'], $fileData['filePath'], request()->user(), $this->exportTableService)
+            ]);
+
+        /*(new ProductsExport($this->productService,))->store($filePath)->chain([
+            new NotifyUserOfCompletedExport(request()->user()),
+            new SaveExportTableData($fileName, $filePath, request()->user(), $this->exportTableService)
+        ]);*/
+
+        return $this->successResponse('Metrics exportation started');
     }
 }
