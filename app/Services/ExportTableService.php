@@ -25,4 +25,15 @@ class ExportTableService implements ExportTableServiceInterface
     {
         return $this->repository->create($userId, $fileName, $filePath);
     }
+
+    public function setPath(string $prefix): array
+    {
+        $fileName = "{$prefix}_" . md5(now());
+        $filePath = 'excel/export/' . auth()->id() . "/{$prefix}/" . $fileName . '.xlsx';
+
+        return [
+            'fileName' => $fileName,
+            'filePath' => $filePath,
+        ];
+    }
 }

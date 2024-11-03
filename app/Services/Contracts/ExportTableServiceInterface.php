@@ -6,4 +6,5 @@ interface ExportTableServiceInterface
 {
     public function getExportedFiles($userId);
     public function create(string $userId, string $fileName, string $filePath);
+    public function setPath(string $prefix);
 }
