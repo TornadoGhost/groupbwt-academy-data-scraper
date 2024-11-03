@@ -39,6 +39,7 @@
             'Currency',
             'Logo',
             'Created At',
+            ['label' => 'Actions', 'no-export' => true, 'width' => 5],
             ];
         @endphp
     @endif
@@ -175,6 +176,18 @@
                                 <i class="fa fa-lg fa-fw fa-universal-access"></i>
                             </button>
                         `;
+                            },
+                            "orderable": false,
+                            "searchable": false
+                        },
+                        @else
+                        {
+                            "data": null,
+                            "render": function () {
+                                return `
+                            <button id="export-download" class="btn btn-xs btn-default text-danger mx-1 shadow" title="Export">
+                                <i class="fa fa-fw fa-table text-success"></i>
+                            </button>`;
                             },
                             "orderable": false,
                             "searchable": false
