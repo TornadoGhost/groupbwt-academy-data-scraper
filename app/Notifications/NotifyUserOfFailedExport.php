@@ -32,6 +32,7 @@ class NotifyUserOfFailedExport extends Notification
     public function toArray(object $notifiable): array
     {
         return [
+            'status' => 'Error',
             'message' => 'The export you requested failed.',
             'errors' => $this->errors,
         ];
