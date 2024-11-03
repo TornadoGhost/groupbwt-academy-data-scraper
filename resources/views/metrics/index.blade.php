@@ -4,14 +4,16 @@
 @section('adminlte_css_pre')
 @stop
 
-@section('subtitle', 'Welcome')
-@section('content_header_title', 'Home')
-@section('content_header_subtitle', 'Welcome')
+@section('subtitle', 'Metrics')
+@section('content_header_title', 'Metrics')
 @section('plugins.daterangepicker', true)
 
 {{-- Content body: main page content --}}
 
 @section('content_body')
+    <div style="text-align: end">
+        <x-adminlte-button id="export-btn" label="Export metrics" theme="primary"/>
+    </div>
     <div id="filters" class="container mb-2">
         <div class="row row-cols-3 gap-1">
             <div class="col">
@@ -201,6 +203,20 @@
                     getMetrics(startDate, endDate, retailers, products, userId);
                 });
 
+            function exportButton() {
+                const btn = document.getElementById('export-btn');
+                btn.addEventListener('click', function(e) {
+                    // e.stopPropagation();
+                    const path = `metrics/export?start_date=${startDate}&end_date=${endDate}`
+                    mainFetch(path, 'GET')
+                        .then(response => {
+                            console.log(response)
+                        })
+                        .catch(errors => {
+                            console.log(errors)
+                        })
+                });
+            }exportButton();
 
             getMetrics();
         });
