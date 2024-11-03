@@ -12,7 +12,6 @@ use App\Imports\ProductsImport;
 use App\Jobs\NotifyUserOfCompletedExport;
 use App\Jobs\SaveExportTableData;
 use App\Models\Product;
-use App\Models\User;
 use App\Notifications\ProductsExportReady;
 use App\Services\Contracts\ExportTableServiceInterface;
 use App\Services\Contracts\ProductServiceInterface;
@@ -28,7 +27,6 @@ class ProductController extends Controller
     public function __construct
     (
         protected ProductServiceInterface $productService,
-        protected User $user,
         protected ExportTableServiceInterface $exportTableService,
     )
     {
@@ -132,7 +130,7 @@ class ProductController extends Controller
         $fileName = 'products_' . md5(now());
         $filePath = 'excel/export/' . auth()->id() . '/products/' . $fileName . '.xlsx';
         (new ProductsExport($this->productService,))->store($filePath)->chain([
-            new NotifyUserOfCompletedExport(request()->user()),
+            new NotifyUserOfCompletedExport(request()->user(), 'Products'),
             new SaveExportTableData($fileName, $filePath, request()->user(), $this->exportTableService)
         ]);
 
