@@ -84,7 +84,7 @@
                             "data": null,
                             "render": function () {
                                 return `
-                            <button id="export-download" class="btn btn-xs btn-default text-danger mx-1 shadow" title="Delete">
+                            <button id="export-download" class="btn btn-xs btn-default text-danger mx-1 shadow" title="Download">
                                 <i class="fa fa-lg fa-fw fa-download text-success"></i>
                             </button>
                             <button id="export-delete" class="btn btn-xs btn-default text-danger mx-1 shadow" title="Delete">
