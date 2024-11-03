@@ -3,22 +3,24 @@
 namespace App\Imports;
 
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 
-class ProductsImport implements ToModel, WithValidation, WithHeadingRow, WithBatchInserts, ShouldQueue
+class ProductsImport implements ToModel, WithBatchInserts, WithChunkReading, WithValidation
 {
     public function model(array $row): Product|null
     {
         return new Product([
-            'title' => $row['title'],
-            'manufacturer_part_number' => $row['manufacturer_part_number'],
-            'pack_size' => $row['pack_size'],
+            'title' => $row[0],
+            'manufacturer_part_number' => $row[1],
+            'pack_size' => $row[2],
             'user_id' => auth()->id(),
         ]);
     }
@@ -50,6 +52,11 @@ class ProductsImport implements ToModel, WithValidation, WithHeadingRow, WithBat
     }
 
     public function batchSize(): int
+    {
+        return 100;
+    }
+
+    public function chunkSize(): int
     {
         return 100;
     }
