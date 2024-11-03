@@ -223,8 +223,6 @@
                     mainFetch('import/products', 'POST', formData)
                         .then(response => {
                             if (response.status === 'Success') {
-                                $('#table2').DataTable().clear().destroy();
-                                initTable();
                                 removeInputError();
 
                                 const input = e.target.querySelector('#import-file');
@@ -233,7 +231,7 @@
 
                                 const successAlert =
                                     `<x-adminlte-alert id="success-alert" class="position-absolute top-0 end-0 m-3 bg-green" style="right: 0;" icon="fa fa-lg fa-thumbs-up" title="Done" dismissable>
-                                        Your data was imported!
+                                        Import started! Waiting please.
                                     </x-adminlte-alert>`;
 
                                 showAlert(successAlert, 'content-wrapper');
