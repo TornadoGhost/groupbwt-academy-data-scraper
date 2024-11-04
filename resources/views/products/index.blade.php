@@ -157,7 +157,7 @@
                 const showButtons = document.querySelectorAll('button[id=product-show]');
                 showButtons.forEach(elem => {
                     elem.addEventListener('click', function (event) {
-                        const id = getRowData(event.target.closest('tr[class=odd]')).id;
+                        const id = getRowData(event.target.closest('tr')).id;
                         window.location.href = `products/${id}`;
                     });
                 })
