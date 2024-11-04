@@ -223,6 +223,7 @@
                     ],
                 });
 
+                @if(Auth::user()->isAdmin)
                 const removeButtons = document.querySelectorAll('button[id=delete-row]');
                 removeButtons.forEach(elem => {
                     elem.addEventListener('click', function (event) {
