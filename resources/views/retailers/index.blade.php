@@ -65,6 +65,20 @@
     </x-adminlte-modal>
     <x-adminlte-button class="d-none" id="error-modal-button" label="Error" data-toggle="modal"
                        data-target="#errors-modal"/>
+    <x-adminlte-modal id="export-modal" title="Export scraped data" theme="green">
+        <p>Select the day for which you want to retrieve the scraped data</p>
+        <x-adminlte-date-range id="scraped-date" name="date" label="Date" igroup-size="sm">
+            <x-slot name="appendSlot">
+                <div class="input-group-text bg-dark">
+                    <i class="fas fa-calendar-day"></i>
+                </div>
+            </x-slot>
+        </x-adminlte-date-range>
+        <x-slot name="footerSlot">
+            <x-adminlte-button id="export-close-btn" class="mr-auto" theme="danger" label="Close" data-dismiss="modal"/>
+            <x-adminlte-button id="export-btn" theme="success" label="Export" data-dismiss="modal"/>
+        </x-slot>
+    </x-adminlte-modal>
     <x-adminlte-modal id="retailer-access" title="Grand Access" size="md" theme="teal"
                       icon="fas fa-bolt" v-centered static-backdrop>
         <form id="grand-access-users">
