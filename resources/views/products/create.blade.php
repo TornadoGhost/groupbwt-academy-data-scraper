@@ -56,7 +56,7 @@
         </div>
         <label>Images</label>
         <input id="input-b5" name="images[]" type="file" class="mb-2" multiple>
-        <x-adminlte-button class="d-block btn-flat" id="save-button" type="submit" label="Save" theme="success"
+        <x-adminlte-button class="d-block btn-flat rounded mt-2" id="save-button" type="submit" label="Save" theme="success"
                            icon="fas fa-lg fa-save"/>
     </form>
     <x-adminlte-modal id="modalMin" title="Success" theme="green">
