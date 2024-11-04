@@ -58,8 +58,20 @@
         logout.addEventListener('click', function () {
             mainFetch('logout', 'POST');
         });
+
+        const notification = document.getElementById('my-notification');
+        document.addEventListener('click', function(event) {
+            if (event.target === notification || event.target.closest('#my-notification') === notification) {
+                mainFetch('notifications/mark-all-read', 'PATCH').then(response => {
+                    if (response.status === 'Success') {
+                        notification.querySelector('span.badge.navbar-badge').remove();
+                    }
+                })
+
+            }
+        });
     </script>
-@endpush
+ @endpush
 
 {{-- Add common CSS customizations --}}
 
