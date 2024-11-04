@@ -85,7 +85,6 @@ class ProductController extends Controller
 
     public function update(UpdateProductRequest $request, int $id): JsonResponse
     {
-        dd($request->images);
         $product = $this->productService->find($id);
 
         if (auth()->user()->cannot('update', $product)) {
