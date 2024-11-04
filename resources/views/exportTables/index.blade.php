@@ -113,10 +113,11 @@
                 downloadButtons.forEach(elem => {
                     elem.addEventListener('click', function (event) {
                         const header = {'Content-Type': 'application/json'};
+                        const filePath = getRowData(event).path;
                         mainFetch(
                             'export-tables/download',
                             'POST',
-                            JSON.stringify({'file_name': getRowData().file_name}),
+                            JSON.stringify({'file_path': filePath}),
                             header,
                             null,
                             false
@@ -132,7 +133,7 @@
                                 const a = document.createElement('a');
                                 a.style.display = 'none';
                                 a.href = url;
-                                a.download = `${getRowData().file_name}.xlsx`;
+                                a.download = `${getRowData(event).file_name}.xlsx`;
                                 document.body.appendChild(a);
                                 a.click();
                                 window.URL.revokeObjectURL(url);
@@ -143,19 +144,21 @@
                     });
                 });
 
+                //TODO rework, delete event keep stacking after each call
                 const removeButtons = document.querySelectorAll('button[id=export-delete]');
                 removeButtons.forEach(elem => {
                     elem.addEventListener('click', function (event) {
                         document.getElementById('modal-delete-btn').click();
-                        modalRemoveExportAccept(event.target.closest('tr[class=odd]'));
+                        modalRemoveExportAccept(event.target.closest('tr'));
                         document.removeEventListener('click', modalRemoveExportAccept);
                     });
                 });
 
+                //TODO rework, delete event keep stacking after each call
                 function modalRemoveExportAccept(element) {
                     document.addEventListener('click', function (event) {
                         if (event.target === document.getElementById('delete-btn')) {
-                            const id = getIdFromRow(element);
+                            const id = table.row(element).data().id;
                             mainFetch(`export-tables/${id}`, 'delete')
                                 .then(response => {
                                     if (response?.status === 'Error') {
@@ -168,12 +171,8 @@
                     })
                 }
 
-                function getIdFromRow(element) {
-                    return getRowData(element).id;
-                }
-
-                function getRowData(element) {
-                    return table.row(element).data();
+                function getRowData(event) {
+                    return table.row(event.target.closest('tr')).data();
                 }
             }
 
