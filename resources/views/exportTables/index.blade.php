@@ -5,9 +5,7 @@
 @stop
 
 @section('subtitle', 'Exported Files')
-@section('content_header_title', 'Home')
-@section('content_header_subtitle', 'Exported files')
-@section('content_header_subtitle_subtitle', 'All')
+@section('content_header_title', 'Exported files')
 
 {{-- Content body: main page content --}}
 
