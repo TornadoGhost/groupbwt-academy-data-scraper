@@ -206,7 +206,7 @@
                             "orderable": false,
                             "searchable": false
                         },
-                        @else
+                            @else
                         {
                             "data": null,
                             "render": function () {
@@ -214,7 +214,7 @@
                             <button class="btn btn-xs btn-default text-danger mx-1 shadow" id="export" data-toggle="modal"
                                 data-target="#export-modal" title="Export scraped data">
                                 <i class="fa fa-fw fa-table text-success"></i>
-                            </button>`;
+                            </button>`
                             },
                             "orderable": false,
                             "searchable": false
