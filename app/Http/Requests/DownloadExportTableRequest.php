@@ -10,7 +10,7 @@ class DownloadExportTableRequest extends FormRequest
     public function authorize(): bool
     {
         $get = ExportTable::where('user_id', auth()->id())
-            ->where('file_name', $this->input('file_name'))
+            ->where('path', $this->input('file_path'))
             ->get();
 
         if (!$get->isEmpty()) {
@@ -23,7 +23,7 @@ class DownloadExportTableRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file_name' => ['required','string'],
+            'file_path' => ['required','string'],
         ];
     }
 }
