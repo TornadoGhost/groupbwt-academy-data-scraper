@@ -5,9 +5,8 @@
 @stop
 
 @section('subtitle', 'Create products')
-@section('content_header_title', 'Home')
-@section('content_header_subtitle', 'Products')
-@section('content_header_subtitle_subtitle', 'Create')
+@section('content_header_title', 'Products')
+@section('content_header_subtitle', 'Create')
 
 {{-- Content body: main page content --}}
 
