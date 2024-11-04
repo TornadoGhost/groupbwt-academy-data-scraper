@@ -7,12 +7,14 @@ use App\Models\ScrapedData;
 use App\Repositories\Contracts\ScrapedDataRepositoryInterface;
 use App\Services\Contracts\ProductServiceInterface;
 use App\Services\Contracts\RetailerServiceInterface;
+use App\Services\Contracts\ScrapingSessionServiceInterface;
 use App\Services\ImageService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Expression;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 
 class ScrapedDataRepository extends BaseRepository implements ScrapedDataRepositoryInterface
@@ -21,6 +23,7 @@ class ScrapedDataRepository extends BaseRepository implements ScrapedDataReposit
         protected ImageService $imageService,
         protected RetailerServiceInterface $retailerService,
         protected ProductServiceInterface $productService,
+        protected ScrapingSessionServiceInterface $scrapingSessionService,
     )
     {
         parent::__construct();
@@ -35,10 +38,8 @@ class ScrapedDataRepository extends BaseRepository implements ScrapedDataReposit
                 ->get();
         }
 
-        $userId = auth()->id();
-
         return $this->model()
-            ->where('user_id', $userId)
+            ->where('user_id', auth()->id())
             ->latest('session_id')
             ->get();
     }
@@ -260,6 +261,16 @@ class ScrapedDataRepository extends BaseRepository implements ScrapedDataReposit
         }
 
         return $productsId;
+    }
+
+    public function scrapedDataByRetailer(int $retailerId, string $date): Collection|null
+    {
+        return $this->model()
+            ->with('product')
+            ->where('retailer_id', $retailerId)
+            ->where('user_id', auth()->id())
+            ->where('created_at','like', $date . '%')
+            ->get();
     }
 
     protected function getModelClass(): string
