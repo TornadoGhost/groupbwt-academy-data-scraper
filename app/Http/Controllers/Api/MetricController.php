@@ -75,7 +75,7 @@ class MetricController extends Controller
         return $this->successResponse("Metrics retailers data received", data: MetricRetailerResource::collection($retailers));
     }
 
-    public function export(MetricExportRequest $request)
+    public function export(MetricExportRequest $request): JsonResponse
     {
         $fileData = $this->exportTableService->setPath('metrics');
         $startDate = $request->start_date ?? Carbon::parse($this->scrapingSessionService->getLatestScrapingSession())->format('Y-m-d');
@@ -87,11 +87,6 @@ class MetricController extends Controller
                 new NotifyUserOfCompletedExport(request()->user(), 'Metrics'),
                 new SaveExportTableData($fileData['fileName'], $fileData['filePath'], request()->user(), $this->exportTableService)
             ]);
-
-        /*(new ProductsExport($this->productService,))->store($filePath)->chain([
-            new NotifyUserOfCompletedExport(request()->user()),
-            new SaveExportTableData($fileName, $filePath, request()->user(), $this->exportTableService)
-        ]);*/
 
         return $this->successResponse('Metrics exportation started');
     }
