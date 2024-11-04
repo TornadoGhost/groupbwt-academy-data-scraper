@@ -37,7 +37,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         return $this->model()->where('email', $email)->firstOrFail();
     }
 
-    public function delete(int $id): null
+    public function delete(int $id): bool
     {
         $user = $this->model()->findOrFail($id);
         $userToken = $user->token();

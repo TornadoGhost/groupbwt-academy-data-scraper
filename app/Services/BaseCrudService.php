@@ -39,7 +39,7 @@ abstract class BaseCrudService implements BaseCrudServiceInterface
         return $this->repository()->update($id, $attributes);
     }
 
-    public function delete($id)
+    public function delete($id): bool
     {
         return $this->repository()->delete($id);
     }

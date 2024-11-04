@@ -30,7 +30,7 @@ class RetailerRepository extends BaseRepository implements RetailerRepositoryInt
         return $this->model()->all();
     }
 
-    public function delete(int $id): null
+    public function delete(int $id): bool
     {
         $retailer = $this->model()
             ->with('users')
@@ -122,6 +122,11 @@ class RetailerRepository extends BaseRepository implements RetailerRepositoryInt
                     'name',
                 ]
             );
+    }
+
+    public function getNameById(int $retailerId): string|null
+    {
+        return $this->model()->query()->find($retailerId)->name;
     }
 
     protected function getModelClass(): string

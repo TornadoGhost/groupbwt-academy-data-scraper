@@ -51,7 +51,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
         return $record;
     }
 
-    public function delete(int $id): null
+    public function delete(int $id): bool
     {
         return $this->model()->findOrFail($id)->delete($id);
     }
