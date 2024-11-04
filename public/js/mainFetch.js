@@ -17,7 +17,6 @@ export function mainFetch(path, method, body, headers, signal, jsonResponse = tr
 
     if (method === 'PATCH') {
         options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
-        console.log(options.headers['Content-Type'])
     }
 
     if (signal) {
