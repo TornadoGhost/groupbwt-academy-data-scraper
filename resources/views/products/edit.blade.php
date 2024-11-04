@@ -57,8 +57,9 @@
                 <div class="input-group" id="retailers"></div>
             </div>
         </div>
-        <input id="input-b5" name="images[]" type="file" class="mb-2" multiple>
-        <x-adminlte-button class="d-block btn-flat" id="save-button" type="button" label="Save" theme="success"
+        <input id="input-b5" name="images[]" type="file" class="mb-2">
+        <x-adminlte-button class="d-block btn-flat rounded mt-2" id="save-button" type="button" label="Save"
+                           theme="success"
                            icon="fas fa-lg fa-save"/>
     </form>
     <x-adminlte-modal id="modalMin" title="Success" theme="green">
