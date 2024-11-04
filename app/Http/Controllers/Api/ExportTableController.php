@@ -37,17 +37,21 @@ class ExportTableController
         return $this->successResponse('Export file stored', data: $result);
     }
 
-    public function download(DownloadExportTableRequest $request)
+    public function download(DownloadExportTableRequest $request): Application|Response|JsonResponse|ResponseFactory
     {
-        $path = '/excel/export/' . auth()->id() . '/products/' . $request->get('file_name') . '.xlsx';
-
-        if (!Storage::exists($path)) {
+        if (!$this->exportTableService->checkFileExistence($request->validated('file_path'))) {
             return $this->errorResponse('File not found', 404);
         }
 
-        Storage::download($path, $request->get('file_name'), [
-            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        ]);
+        $fileContent = $this->exportTableService->getFile($request->validated('file_path'));
+        $fileName = $request->get('file_name') ?? 'export.xlsx';
+
+        return response($fileContent)
+            ->header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            ->header('Content-Disposition', 'attachment; filename="' . $fileName . '"')
+            ->header('Content-Length', strlen($fileContent));
+    }
+
     public function destroy(int $id): JsonResponse
     {
         $data = $this->exportTableService->show($id);
