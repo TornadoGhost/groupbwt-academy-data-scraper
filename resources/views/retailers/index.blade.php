@@ -6,9 +6,7 @@
 @stop
 
 @section('subtitle', 'Retailers list')
-@section('content_header_title', 'Home')
-@section('content_header_subtitle', 'Retailers')
-@section('content_header_subtitle_subtitle', 'All')
+@section('content_header_title', 'Retailers')
 @section('plugins.bootstrap-bs', true)
 
 {{-- Content body: main page content --}}
