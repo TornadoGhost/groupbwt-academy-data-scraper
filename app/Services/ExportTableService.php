@@ -7,6 +7,7 @@ use App\Repositories\Contracts\ExportTableRepositoryInterface;
 use App\Repositories\ExportTableRepository;
 use App\Services\Contracts\ExportTableServiceInterface;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Storage;
 
 class ExportTableService implements ExportTableServiceInterface
 {
