@@ -138,6 +138,19 @@
         }
 
         $(document).ready(function () {
+            const today = moment('{{ $firstDate }}');
+            const lastDate = moment('{{ $lastDate }}')
+            $('#scraped-date').daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                cancelButtonClasses: "btn-danger",
+                locale: {format: "YYYY-MM-DD"},
+                startDate: lastDate,
+                endDate: lastDate,
+                minDate: today,
+                maxDate: lastDate,
+            });
+
             async function initTable() {
                 const table = new DataTable('#table2', {
                     "data": await getTableData(),
