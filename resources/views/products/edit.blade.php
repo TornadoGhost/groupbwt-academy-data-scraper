@@ -4,10 +4,9 @@
 @section('adminlte_css_pre')
 @stop
 
-@section('subtitle', 'Update product')
-@section('content_header_title', 'Home')
-@section('content_header_subtitle', 'Products')
-@section('content_header_subtitle_subtitle', 'Update')
+@section('subtitle', 'Edit product')
+@section('content_header_title', 'Products')
+@section('content_header_subtitle', 'Edit')
 @section('plugins.inputFileKrajee', true)
 
 {{-- Content body: main page content --}}
