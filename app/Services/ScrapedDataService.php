@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Collection;
 
 class ScrapedDataService extends BaseCrudService implements ScrapedDataServiceInterface
 {
-
-
     protected function getRepositoryClass(): string
     {
         return ScrapedDataRepositoryInterface::class;
@@ -62,5 +60,9 @@ class ScrapedDataService extends BaseCrudService implements ScrapedDataServiceIn
         return $this
             ->repository()
             ->avgImages($products, $retailers, $startDate, $endDate, $userId);
+    }
+
+    public function scrapedDataByRetailer(int $retailerId, string $date) {
+        return $this->repository()->scrapedDataByRetailer($retailerId, $date);
     }
 }
