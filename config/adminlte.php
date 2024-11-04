@@ -308,13 +308,13 @@ return [
             'type' => 'navbar-notification',
             'id' => 'my-notification',                // An ID attribute (required).
             'icon' => 'fas fa-bell',                  // A font awesome icon (required).
-            'route' => 'exportTables.index',            // The url to access all notifications/elements (required).
+            'route' => 'exportTables.index',          // The url to access all notifications/elements (required).
             'topnav_right' => true,                   // Or "topnav => true" to place on the left (required).
             'dropdown_mode' => true,                  // Enables the dropdown mode (optional).
             'dropdown_flabel' => 'All exports',
             'update_cfg' => [
                 'route' => 'notifications.get',         // The url to periodically fetch new data (optional).
-                'period' => 5,                       // The update period for get new data (in seconds, optional).
+                'period' => 30,                       // The update period for get new data (in seconds, optional).
             ],
         ],
 
