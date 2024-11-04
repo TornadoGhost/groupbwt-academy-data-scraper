@@ -26,6 +26,16 @@ class ExportTableService implements ExportTableServiceInterface
         return $this->repository->create($userId, $fileName, $filePath);
     }
 
+    public function show(int $id): ExportTable
+    {
+        return $this->repository->show($id);
+    }
+
+    public function delete(int $id): bool
+    {
+        return $this->repository->delete($id);
+    }
+
     public function setPath(string $prefix): array
     {
         $fileName = "{$prefix}_" . md5(now());
