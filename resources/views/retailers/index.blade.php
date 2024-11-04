@@ -285,6 +285,30 @@
                         }
                     })
                 }
+                @endif
+
+                // Get retailer id after pressing action button 'export'
+                let retailerId = null;
+                document.addEventListener('click', function (event) {
+                    if (event.target?.id === 'export' || event.target.parentNode.id === 'export') {
+                        retailerId = table.row(getRow(event)).data().id;
+                    }
+                })
+
+                function exportScrapedData() {
+                    const exportBtn = document.getElementById('export-btn');
+                    exportBtn.addEventListener('click', function () {
+                        const date = document.getElementById('scraped-date');
+                        const body = JSON.stringify({retailer_id: retailerId, date: date.value});
+                        const header = {'Content-Type': 'application/json'};
+                        mainFetch('scraped-data/export-retailer', 'POST', body, header)
+                            .then(response => {
+                                console.log(response);
+                            })
+                    });
+                }
+
+                exportScrapedData();
 
                 function getRow(element) {
                     return element.target.closest('tr');
