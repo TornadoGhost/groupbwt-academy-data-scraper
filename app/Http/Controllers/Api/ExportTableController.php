@@ -6,8 +6,11 @@ use App\Http\Requests\DownloadExportTableRequest;
 use App\Http\Resources\ExportTableResource;
 use App\Services\Contracts\ExportTableServiceInterface;
 use App\Traits\JsonResponseHelper;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 
 class ExportTableController
@@ -45,5 +48,21 @@ class ExportTableController
         Storage::download($path, $request->get('file_name'), [
             'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         ]);
+    public function destroy(int $id): JsonResponse
+    {
+        $data = $this->exportTableService->show($id);
+
+        if (!$this->exportTableService->checkFileExistence($data->path)) {
+            return $this->errorResponse('File not found', 404);
+        }
+
+        $res = Storage::delete($data->path);
+
+        if ($res) {
+            $this->exportTableService->delete($id);
+            return $this->successResponse('File deleted');
+        }else {
+            return $this->errorResponse('File deleted, but file in database was not deleted', 20);
+        }
     }
 }
