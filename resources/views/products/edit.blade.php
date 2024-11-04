@@ -193,21 +193,65 @@
                 initialPreviewAsData: true,
                 initialPreviewConfig: imagesId.map((id, index) => ({
                     caption: `Image ${index + 1}`,
-                    key: id, // Використання ID для ключа
+                    key: id,
                 })),
-                showRemove: false, // Показує кнопку видалення
-                showUpload: false, // Приховує загальну кнопку завантаження
-            });
-            const deleteImageButtons = document.querySelectorAll('button[type=button][title="Remove file"]');
-            deleteImageButtons.forEach(item => {
-                item.addEventListener('click', function(event) {
-                    const imageId = event.target.closest('button').getAttribute('data-key');
-                    const elem = event.target.closest('div.krajee-default');
-                    elem.remove();
-                    mainFetch(`images/${imageId}`, 'DELETE')
-                        .then(response => console.log(response))
-                });
+                showRemove: false,
+                showUpload: false,
+                showClose: false,
+                overwriteInitial: false,
+                maxFileCount: 10
+            }).on('fileloaded', function (event, file, previewId, index, reader) {
+                const formData = new FormData();
+                formData.append('product_id', {{ $product->id }});
+                formData.append('images[]', file);
+
+                mainFetch('images', 'POST', formData, null, null, false);
+                    // .then(response => {
+                    //     const imageId = response.data[0].id;
+                    //
+                    //     const currentPreview = test.fileinput('getPreview');
+                    //     const currentConfig = test.fileinput('getPreviewConfig');
+                    //
+                    //     currentPreview.push(reader.result);
+                    //     currentConfig.push({
+                    //         caption: `Image ${currentConfig.length + 1}`,
+                    //         key: imageId
+                    //     });
+                    //
+                    //     $("#input-b5").fileinput('destroy');
+                    //     $("#input-b5").fileinput({
+                    //         initialPreview: currentPreview,
+                    //         initialPreviewAsData: true,
+                    //         initialPreviewConfig: currentConfig,
+                    //         showRemove: false,
+                    //         showUpload: false,
+                    //         showClose: false,
+                    //         overwriteInitial: false,
+                    //         maxFileCount: 25
+                    //     });
+
+                        // updateDeleteButtons();
+                    // })
             })
+
+
+            function updateDeleteButtons() {
+                const deleteImageButtons = document.querySelectorAll('button[type=button][title="Remove file"]');
+                deleteImageButtons.forEach(item => {
+                    item.addEventListener('click', async function (event) {
+                        const imageId = event.target.closest('button').getAttribute('data-key');
+                        const elem = event.target.closest('div.krajee-default');
+                        elem.remove();
+
+                        try {
+                            const response = await mainFetch(`images/${imageId}`, 'DELETE');
+                            console.log("Image deleted:", response);
+                        } catch (error) {
+                            console.error("Error deleting image:", error);
+                        }
+                    });
+                });
+            }updateDeleteButtons();
         });
     </script>
 @endpush
