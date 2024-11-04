@@ -10,4 +10,5 @@ interface RetailerRepositoryInterface extends BaseRepositoryInterface
     public function findWithUsers(int $id);
     public function list();
     public function retailersForMetrics(int $userId);
+    public function getNameById(int $retailerId);
 }
