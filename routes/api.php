@@ -54,7 +54,6 @@ Route::middleware('auth:api')->group(function () {
 
     Route::controller(ExportTableController::class)->group(function () {
         Route::get('/export-tables', 'index');
-//        Route::post('/export-tables', 'store');
         Route::post('/export-tables/download', 'download');
         Route::delete('/export-tables/{id}', 'destroy');
     });
