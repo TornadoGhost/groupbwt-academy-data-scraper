@@ -4,17 +4,23 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Web\App;
+use App\Traits\JsonResponseHelper;
+use Illuminate\Http\JsonResponse;
 
 class NotificationController extends Controller
 {
-    public function show()
+    use JsonResponseHelper;
+    public function markAllAsRead(): JsonResponse
     {
-//        $user = User::find(1);
+        auth()->user()->unreadNotifications->markAsRead();
 
-        /*foreach ($user->notifications as $notification) {
-             $notification->type;
-        }*/
+        return $this->successResponse('All notifications marked as read');
+    }
 
-//        return response()->json($user->notifications);
+    public function deleteAll(): JsonResponse
+    {
+        auth()->user()->notifications()->delete();
+
+        return $this->successResponse('All notifications deleted');
     }
 }
