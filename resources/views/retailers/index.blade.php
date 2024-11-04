@@ -8,6 +8,7 @@
 @section('subtitle', 'Retailers list')
 @section('content_header_title', 'Retailers')
 @section('plugins.bootstrap-bs', true)
+@section('plugins.daterangepicker', true)
 
 {{-- Content body: main page content --}}
 
