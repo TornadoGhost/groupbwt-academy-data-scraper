@@ -57,7 +57,7 @@
                 <div class="input-group" id="retailers"></div>
             </div>
         </div>
-        <input id="input-b5" name="images[]" type="file" class="mb-2" multiple>
+        <input disabled id="input-b5" name="images[]" type="file" class="mb-2" multiple>
     </form>
     <x-adminlte-modal id="modalMin" title="Success" theme="green">
         <p>Product updated.</p>
