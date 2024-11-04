@@ -80,7 +80,7 @@ class ScrapedDataRepository extends BaseRepository implements ScrapedDataReposit
         });
     }
 
-    public function delete(int $id): null
+    public function delete(int $id): bool
     {
         $scrapedData = $this->model
             ->with('scrapedDataImages')
