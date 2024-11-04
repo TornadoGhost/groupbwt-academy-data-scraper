@@ -137,11 +137,12 @@
                 initialPreviewAsData: true,
                 initialPreviewConfig: imagesId.map((id, index) => ({
                     caption: `Image ${index + 1}`,
-                    key: id, // Використання ID для ключа
+                    key: id,
                 })),
 
-                showRemove: false, // Показує кнопку видалення
-                showUpload: false, // Приховує загальну кнопку завантаження
+                showRemove: false,
+                showUpload: false,
+                showClose: false,
             });
         });
     </script>
