@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exports\ScrapedDataByRetailerExport;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ExportScrapedDataByRetailerRequest;
 use App\Http\Requests\StoreScrapedDataRequest;
 use App\Http\Requests\UpdateScrapedDataRequest;
 use App\Http\Resources\ScrapedDataResource;
+use App\Jobs\NotifyUserOfCompletedExport;
+use App\Jobs\SaveExportTableData;
 use App\Models\ScrapedData;
+use App\Services\Contracts\ExportTableServiceInterface;
+use App\Services\Contracts\RetailerServiceInterface;
 use App\Services\Contracts\ScrapedDataServiceInterface;
 use App\Traits\JsonResponseHelper;
 use Illuminate\Http\JsonResponse;
@@ -17,7 +23,11 @@ class ScrapedDataController extends Controller
 {
     use JsonResponseHelper;
 
-    public function __construct(protected ScrapedDataServiceInterface $scrapedDataService)
+    public function __construct(
+        protected ScrapedDataServiceInterface $scrapedDataService,
+        protected ExportTableServiceInterface $exportTableService,
+        protected RetailerServiceInterface $retailerService,
+    )
     {
     }
 
@@ -27,6 +37,7 @@ class ScrapedDataController extends Controller
             return $this->unauthorizedResponse();
         }
 
+        //TODO rework with paginate() instead of get(), because with get() method you can't get response with this amount of data
         $scrapedData = $this->scrapedDataService->all();
 
         return $this->successResponse('Scraped data list received', data: ScrapedDataResource::collection($scrapedData));
@@ -74,5 +85,27 @@ class ScrapedDataController extends Controller
         $this->scrapedDataService->delete($id);
 
         return $this->successResponse("Scraped data deleted");
+    }
+
+    public function exportByRetailer(ExportScrapedDataByRetailerRequest $request): JsonResponse
+    {
+        $fileData = $this->exportTableService->setPath("scraped_data_retailer{$request->validated('retailer_id')}");
+
+        (new ScrapedDataByRetailerExport(
+            $request->validated('retailer_id'),
+            $request->validated('date'),
+            $this->scrapedDataService,
+        ))
+            ->store($fileData['filePath'])->chain([
+                new NotifyUserOfCompletedExport(request()->user(), "Scraped Data"),
+                new SaveExportTableData(
+                    $fileData['fileName'],
+                    $fileData['filePath'],
+                    request()->user(),
+                    $this->exportTableService
+                ),
+            ]);
+
+        return $this->successResponse('Products exportation started');
     }
 }
