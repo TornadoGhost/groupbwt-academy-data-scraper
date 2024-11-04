@@ -64,7 +64,7 @@ class MetricsExport implements FromCollection, WithHeadings, WithColumnWidths, S
             'A' => 28,
             'B' => 20,
             'C' => 20,
-            'D' => 24,
+            'D' => 25,
         );
     }
 }
