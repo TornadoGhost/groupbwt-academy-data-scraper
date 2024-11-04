@@ -57,6 +57,9 @@ Route::middleware('auth:api')->group(function () {
         Route::post('/export-tables/download', 'download');
         Route::delete('/export-tables/{id}', 'destroy');
     });
+
+    Route::controller(ScrapedDataController::class)->group(function () {
+        Route::post('/scraped-data/export-retailer', 'exportByRetailer');
     });
 
     Route::post('logout', [AuthController::class, 'logout']);
