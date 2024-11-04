@@ -19,7 +19,7 @@
         </a>
         @php
             $heads = [
-                'id',
+                'Id',
                 'Name',
                 'Reference',
                 'Currency',
@@ -32,7 +32,7 @@
     @else
         @php
             $heads = [
-            'id',
+            'Id',
             'Name',
             'Reference',
             'Currency',
