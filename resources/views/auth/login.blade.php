@@ -1,6 +1,6 @@
 @extends('adminlte::auth.login')
 
-@section('subtitle', 'Login')
+@section('title', 'Login')
 @section('adminlte_css_pre')
 @stop
 
