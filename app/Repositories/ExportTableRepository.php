@@ -25,4 +25,14 @@ class ExportTableRepository implements ExportTableRepositoryInterface
             'user_id' => $userId,
         ]);
     }
+
+    public function show(int $id): ExportTable
+    {
+        return $this->exportTable->findOrFail($id);
+    }
+
+    public function delete(int $id): bool
+    {
+        return $this->exportTable->findOrFail($id)->delete();
+    }
 }
