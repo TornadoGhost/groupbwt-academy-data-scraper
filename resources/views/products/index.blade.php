@@ -174,7 +174,7 @@
                 const editButtons = document.querySelectorAll('button[id=product-edit]');
                 editButtons.forEach(elem => {
                     elem.addEventListener('click', function (event) {
-                        const id = getRowData(event.target.closest('tr[class=odd]')).id;
+                        const id = getRowData(event.target.closest('tr')).id;
                         window.location.href = `products/${id}/edit`;
                     });
                 })
