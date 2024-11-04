@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ExportTableController;
 use App\Http\Controllers\Api\ImageProductController;
 use App\Http\Controllers\Api\MetricController;
+use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\RegionController;
 use App\Http\Controllers\Api\RetailerAccessController;
@@ -60,6 +61,11 @@ Route::middleware('auth:api')->group(function () {
 
     Route::controller(ScrapedDataController::class)->group(function () {
         Route::post('/scraped-data/export-retailer', 'exportByRetailer');
+    });
+
+    Route::controller(NotificationController::class)->group(function () {
+        Route::patch('/notifications/mark-all-read', 'markAllAsRead');
+        Route::delete('/notifications/delete-all', 'deleteAll');
     });
 
     Route::post('logout', [AuthController::class, 'logout']);
