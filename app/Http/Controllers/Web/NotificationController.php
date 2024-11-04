@@ -18,10 +18,10 @@ class NotificationController extends Controller
     public function get(Request $request): array
     {
         $notifications = auth()->user()->notifications;
-
+        $unreadNotifications = auth()->user()->unreadNotifications;
         $dropdownHtml = '';
 
-        foreach ($notifications as $key => $not) {
+        foreach ($unreadNotifications as $key => $not) {
             $icon = "<i class='mr-2 fas fa-fw fa-file text-success'></i>";
 
             $time = "<span class='float-right text-muted text-sm'>"
@@ -40,7 +40,7 @@ class NotificationController extends Controller
         // Return the new notification data.
 
         return [
-            'label' => count($notifications),
+            'label' => count($unreadNotifications),
             'label_color' => 'danger',
             'icon_color' => 'dark',
             'dropdown' => $dropdownHtml,
