@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Services\Contracts\ExportTableServiceInterface;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Contracts\View\View;
 
 class ExportTableController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         return view('exportTables.index');
     }
