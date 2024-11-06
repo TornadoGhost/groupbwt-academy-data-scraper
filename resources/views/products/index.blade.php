@@ -14,21 +14,9 @@
         <a href="{{ route('products.create') }}">
             <x-adminlte-button class="mb-2 mr-1" label="Create product" theme="primary"/>
         </a>
-        <div class="mr-1" id="import-block">
-            <form id="import-form">
-                <x-adminlte-input-file id="import-file" name="csv_file" accept=".csv"
-                                       placeholder="Choose csv file..." igroup-size="md" legend="Choose">
-                    <x-slot name="appendSlot">
-                        <x-adminlte-button type="submit" id="import-btn" theme="primary" label="Import"/>
-                    </x-slot>
-                    <x-slot name="prependSlot">
-                        <div class="input-group-text text-primary">
-                            <i class="fas fa-file-upload"></i>
-                        </div>
-                    </x-slot>
-                </x-adminlte-input-file>
-                <p class="d-none text-danger m-0" id="input-file-error"></p>
-            </form>
+        <div>
+            <x-adminlte-button class="mr-1" id="import-modal-btn" label="Import" theme="primary" data-toggle="modal"
+                               data-target="#import-modal"/>
         </div>
         <div>
             <x-adminlte-button id="export-btn" label="Export products" theme="primary"/>
