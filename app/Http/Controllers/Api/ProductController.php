@@ -99,9 +99,4 @@ class ProductController extends Controller
 
         return $this->successResponse('Products exportation started');
     }
-
-    public function importExampleFile(): JsonResponse
-    {
-        return $this->productService->downloadExampleImportFile();
-    }
 }
