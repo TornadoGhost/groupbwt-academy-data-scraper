@@ -85,17 +85,7 @@ class ProductController extends Controller
 
     public function import(ProductImportRequest $request): JsonResponse
     {
-        try {
-//            Excel::queueImport(new ProductsImport, $request->validated('csv_file'));
-            Excel::import(new ProductsImport, $request->validated('csv_file'));
-
-            return $this->successResponse('CSV data imported successfully', 201);
-
-        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
-            $failures = $e->failures();
-
-            return $this->errorResponse('Validation errors', 422, $failures);
-        }
+        return $this->productService->import($request->validated('csv_file'), $request->user());
     }
 
     public function export(): JsonResponse
