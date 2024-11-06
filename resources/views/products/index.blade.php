@@ -228,12 +228,10 @@
                                 removeInputError();
 
                                 const block = document.createElement('div');
-                                response.data.forEach(elem => {
-                                    elem.errors.forEach(error => {
-                                        const errorMessage = document.createElement('p');
-                                        errorMessage.textContent = `row-${elem.row} x ${error}`;
-                                        block.appendChild(errorMessage);
-                                    })
+                                response.data.forEach(error => {
+                                    const errorMessage = document.createElement('p');
+                                    errorMessage.textContent = `${error}`;
+                                    block.appendChild(errorMessage);
                                 });
 
                                 setErrorModalWindow(block);
