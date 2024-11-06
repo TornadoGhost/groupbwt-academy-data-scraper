@@ -24,6 +24,7 @@ class DownloadExportTableRequest extends FormRequest
     {
         return [
             'file_path' => ['required','string'],
+            'file_name' => ['nullable','string'],
         ];
     }
 }
