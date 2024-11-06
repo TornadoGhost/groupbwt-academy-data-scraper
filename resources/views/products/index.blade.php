@@ -58,6 +58,31 @@
             <x-adminlte-button id="delete-btn" theme="success" label="Delete" data-dismiss="modal"/>
         </x-slot>
     </x-adminlte-modal>
+    <x-adminlte-modal id="import-modal" title="Import products" theme="blue">
+        <a href="{{ route('products.exampleCsv') }}">
+            <x-adminlte-button class="btn-sm mb-2" id="example-scv" label="Download Example"
+                               title="Download example CSV file" theme="primary" type="button"/>
+        </a>
+        <div class="mr-1" id="import-block">
+            <form id="import-form">
+                <x-adminlte-input-file id="import-file" name="csv_file" accept=".csv"
+                                       placeholder="Choose csv file..." igroup-size="md" legend="Choose">
+                    <x-slot name="appendSlot">
+                        <x-adminlte-button type="submit" id="import-btn" theme="primary" label="Import file"/>
+                    </x-slot>
+                    <x-slot name="prependSlot">
+                        <div class="input-group-text text-primary">
+                            <i class="fas fa-file-upload"></i>
+                        </div>
+                    </x-slot>
+                </x-adminlte-input-file>
+                <p class="d-none text-danger m-0" id="input-file-error"></p>
+            </form>
+        </div>
+        <x-slot name="footerSlot">
+            <x-adminlte-button id="close-btn" class="mr-auto" theme="danger" label="Close" data-dismiss="modal"/>
+        </x-slot>
+    </x-adminlte-modal>
     <x-adminlte-button class="d-none" id="modal-delete-btn" label="Delete Product" data-toggle="modal"
                        data-target="#modalMin"/>
     <x-adminlte-modal id="errors-modal" title="Error" theme="red">
@@ -275,26 +300,20 @@
             return button.closest('tr[class=odd]').firstElementChild.textContent;
         }
 
-        function showAlert(element, place) {
-            const div = document.getElementsByClassName(place)[0];
-            div.classList.add('position-relative');
-            div.insertAdjacentHTML('afterbegin', element);
-        }
+        function setModalWindow(title, body, theme = 'red') {
+            const modal = document.getElementById('error-modal');
+            const modalHeader = modal.getElementsByClassName('modal-header')[0];
+            const modalTitle = modal.getElementsByClassName('modal-title')[0];
+            const modalBody = modal.getElementsByClassName('modal-body')[0];
+            const modalFooter = modal.getElementsByClassName('modal-footer')[0];
 
-        function destroyAlert(alertId, timer) {
-            setInterval(function () {
-                const alertToRemove = document.getElementById(alertId);
-                if (alertToRemove) {
-                    alertToRemove.remove();
-                }
-            }, timer);
-        }
-
-        function setErrorModalWindow(body) {
-            const errorModal = document.getElementById('errors-modal');
-            const modalBody = errorModal.getElementsByClassName('modal-body')[0];
+            modalTitle.innerHTML = title;
             modalBody.innerHTML = '';
             modalBody.appendChild(body);
+
+            modalHeader.classList.add(`bg-${theme}`);
+            modalFooter.querySelector('button.btn.btn-default').classList.add(`bg-red`);
+
             document.getElementById('error-modal-button').click();
         }
 
