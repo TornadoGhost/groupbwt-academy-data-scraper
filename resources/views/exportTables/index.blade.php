@@ -99,35 +99,8 @@
                 const downloadButtons = document.querySelectorAll('button[id=export-download]');
                 downloadButtons.forEach(elem => {
                     elem.addEventListener('click', function (event) {
-                        const header = {'Content-Type': 'application/json'};
                         const filePath = getRowData(event).path;
-                        mainFetch(
-                            'export-tables/download',
-                            'POST',
-                            JSON.stringify({'file_path': filePath}),
-                            header,
-                            null,
-                            false
-                        )
-                            .then(response => {
-                                if (!response.ok) {
-                                    throw new Error('Network response was not ok');
-                                }
-                                return response.blob();
-                            })
-                            .then(blob => {
-                                const url = window.URL.createObjectURL(blob);
-                                const a = document.createElement('a');
-                                a.style.display = 'none';
-                                a.href = url;
-                                a.download = `${getRowData(event).file_name}.xlsx`;
-                                document.body.appendChild(a);
-                                a.click();
-                                window.URL.revokeObjectURL(url);
-                            })
-                            .catch(error => {
-                                console.error('Помилка при скачуванні файлу:', error);
-                            });
+                        window.location.href = `export-tables/download?file_path=${filePath}&file_name=test.csv`
                     });
                 });
 
