@@ -125,6 +125,7 @@
     <script type="module">
         import {mainFetch} from "{{ asset('js/mainFetch.js') }}";
         import {updatePrepareData} from "{{ asset('js/updatePrepareData.js') }}";
+        import {exportData} from "{{ asset('js/exportData.js') }}"
 
         async function getTableData() {
             let data;
@@ -287,28 +288,19 @@
                 }
                 @endif
 
-                // Get retailer id after pressing action button 'export'
-                let retailerId = null;
                 document.addEventListener('click', function (event) {
                     if (event.target?.id === 'export' || event.target.parentNode.id === 'export') {
-                        retailerId = table.row(getRow(event)).data().id;
+                        const retailerId = table.row(getRow(event)).data().id;
+                        const date = document.getElementById('scraped-date');
+                        const exportBtn = document.getElementById('export-btn');
+                        const url = `scraped-data/export/export-retailer?retailer_id=${retailerId}&date=${date.value}`;
+                        const successAlert =
+                            `<x-adminlte-alert id="success-alert" class="position-absolute top-0 end-0 m-3 bg-green" style="right: 0; z-index: 999" icon="fa fa-lg fa-thumbs-up" title="Started" dismissable>
+                                        Export started! Wait for a notification when it is ready.
+                                    </x-adminlte-alert>`;
+                        exportData(exportBtn, url, successAlert);
                     }
                 })
-
-                function exportScrapedData() {
-                    const exportBtn = document.getElementById('export-btn');
-                    exportBtn.addEventListener('click', function () {
-                        const date = document.getElementById('scraped-date');
-                        const body = JSON.stringify({retailer_id: retailerId, date: date.value});
-                        const header = {'Content-Type': 'application/json'};
-                        mainFetch('scraped-data/export-retailer', 'POST', body, header)
-                            .then(response => {
-                                console.log(response);
-                            })
-                    });
-                }
-
-                exportScrapedData();
 
                 function getRow(element) {
                     return element.target.closest('tr');
