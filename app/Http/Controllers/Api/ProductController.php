@@ -8,17 +8,13 @@ use App\Http\Requests\ProductImportRequest;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\ProductResource;
-use App\Imports\ProductsImport;
 use App\Jobs\NotifyUserOfCompletedExport;
 use App\Jobs\SaveExportTableData;
 use App\Models\Product;
-use App\Notifications\ProductsExportReady;
 use App\Services\Contracts\ExportTableServiceInterface;
 use App\Services\Contracts\ProductServiceInterface;
 use App\Traits\JsonResponseHelper;
 use Illuminate\Http\JsonResponse;
-use Maatwebsite\Excel\Facades\Excel;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ProductController extends Controller
 {
@@ -34,31 +30,9 @@ class ProductController extends Controller
 
     public function index(): JsonResponse
     {
-        /*$length = $request->input('length') ?? 10;
-        $start = $request->input('start') ?? 0;
-        $search = $request->input('search.value');
-
-        $query = Product::query();
-        if ($search) {
-            $query->where('title', 'like', "%$search%")
-                ->orWhere('manufacturer_part_number', 'like', "%$search%");
-        }
-
-        $total = $query->count();
-        $users = $query->skip($start)->take($length)->get();
-
-        return response()->json([
-            "draw" => intval($request->input('draw')),
-            "recordsTotal" => $total,
-            "recordsFiltered" => $total,
-            "data" => $users,
-        ]);*/
-
-
         $products = $this->productService->all();
 
         return $this->successResponse('Products list received', data: ProductResource::collection($products));
-//        return $this->successResponseWithPagination(ProductResource::collection($products), 'Products retrieved successfully.');
     }
 
     public function store(StoreProductRequest $request): JsonResponse
