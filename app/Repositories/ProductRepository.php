@@ -144,7 +144,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             foreach ($images as $image) {
                 $this->imageService->deleteImageByPath($image->path);
             }
-            $product->delete();
+            return $product->delete();
         });
     }
 
