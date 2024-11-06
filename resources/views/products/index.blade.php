@@ -233,8 +233,9 @@
                                     errorMessage.textContent = `${error}`;
                                     block.appendChild(errorMessage);
                                 });
+                                const title = 'CSV validation errors';
 
-                                setErrorModalWindow(block);
+                                setModalWindow(title, block);
                             } else if (response.errors) {
                                 const inputErrorMessage = document.getElementById('input-file-error');
                                 inputErrorMessage.previousElementSibling.classList.add('mb-0');
