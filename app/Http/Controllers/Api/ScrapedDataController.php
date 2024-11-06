@@ -54,7 +54,7 @@ class ScrapedDataController extends Controller
         return $this->successResponse('Scraped data created', 201, ScrapedDataResource::make($scrapedData));
     }
 
-    public function show(string $id): JsonResponse
+    public function show(int $id): JsonResponse
     {
         $scrapedData = $this->scrapedDataService->find($id);
 
@@ -65,7 +65,7 @@ class ScrapedDataController extends Controller
         return $this->successResponse("Scraped data received", data: ScrapedDataResource::make($scrapedData));
     }
 
-    public function update(UpdateScrapedDataRequest $request, string $id): JsonResponse
+    public function update(UpdateScrapedDataRequest $request, int $id): JsonResponse
     {
         if (auth()->user()->cannot('update', ScrapedData::class)) {
             return $this->unauthorizedResponse();
@@ -76,7 +76,7 @@ class ScrapedDataController extends Controller
         return $this->successResponse("Scraped data updated", data: ScrapedDataResource::make($scrapedData));
     }
 
-    public function destroy(string $id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
         if (auth()->user()->cannot('delete', ScrapedData::class)) {
             return $this->unauthorizedResponse();
