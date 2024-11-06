@@ -131,19 +131,16 @@
                     });
                 });
 
-                //TODO rework, delete event keep stacking after each call
                 const removeButtons = document.querySelectorAll('button[id=export-delete]');
                 removeButtons.forEach(elem => {
                     elem.addEventListener('click', function (event) {
                         document.getElementById('modal-delete-btn').click();
                         modalRemoveExportAccept(event.target.closest('tr'));
-                        document.removeEventListener('click', modalRemoveExportAccept);
                     });
                 });
 
-                //TODO rework, delete event keep stacking after each call
                 function modalRemoveExportAccept(element) {
-                    document.addEventListener('click', function (event) {
+                    const handle = function (event) {
                         if (event.target === document.getElementById('delete-btn')) {
                             const id = table.row(element).data().id;
                             mainFetch(`export-tables/${id}`, 'delete')
@@ -154,8 +151,10 @@
                                         table.row(element).remove().draw();
                                     }
                                 })
+                            document.removeEventListener('click', handle)
                         }
-                    })
+                    };
+                    document.addEventListener('click', handle)
                 }
 
                 function getRowData(event) {
