@@ -11,8 +11,8 @@
 {{-- Content body: main page content --}}
 
 @section('content_body')
-    <div style="text-align: end">
-        <x-adminlte-button id="export-btn" label="Export metrics" theme="primary"/>
+    <div>
+        <x-adminlte-button class="mb-2" id="export-btn" label="Export metrics" theme="primary"/>
     </div>
     <div id="filters" class="container mb-2">
         <div class="row row-cols-3 gap-1">
@@ -64,7 +64,7 @@
                     </x-adminlte-select2>
                 </div>
             </div>
-            {{--@if(auth()->user()->isAdmin)
+            @if(auth()->user()->isAdmin)
                 @if($users)
                     <div class="col">
                         <div class="form-group">
@@ -85,7 +85,7 @@
                         </div>
                     </div>
                 @endif
-            @endif--}}
+            @endif
         </div>
     </div>
     <div class="container">
@@ -114,6 +114,7 @@
 @push('js')
     <script type="module">
         import {mainFetch} from "{{ asset('js/mainFetch.js') }}";
+        import {exportData} from "{{ asset('js/exportData.js') }}";
 
         let controller = new AbortController();
 
@@ -133,7 +134,9 @@
                     `<option value="${elem.id}">${elem.title} (${elem.manufacturer_part_number})</option>`
                 );
             })
-        }seedProducts();
+        }
+
+        seedProducts();
 
         async function seedRetailers() {
             const retailersList = await getMetricsData('retailers');
@@ -142,7 +145,9 @@
                     `<option value="${elem.id}">${elem.name}</option>`
                 );
             })
-        }seedRetailers();
+        }
+
+        seedRetailers();
 
         $(document).ready(function () {
             let startDate = '',
@@ -203,20 +208,14 @@
                     getMetrics(startDate, endDate, retailers, products, userId);
                 });
 
-            function exportButton() {
-                const btn = document.getElementById('export-btn');
-                btn.addEventListener('click', function(e) {
-                    // e.stopPropagation();
-                    const path = `metrics/export?start_date=${startDate}&end_date=${endDate}`
-                    mainFetch(path, 'GET')
-                        .then(response => {
-                            console.log(response)
-                        })
-                        .catch(errors => {
-                            console.log(errors)
-                        })
-                });
-            }exportButton();
+
+            const exportBtn = document.getElementById('export-btn');
+            const url = `metrics/export?start_date=${startDate}&end_date=${endDate}`
+            const successAlert =
+                `<x-adminlte-alert id="success-alert" class="position-absolute top-0 end-0 m-3 bg-green" style="right: 0;" icon="fa fa-lg fa-thumbs-up" title="Started" dismissable>
+                                        Export started! Wait for a notification when it is ready.
+                                    </x-adminlte-alert>`;
+            exportData(exportBtn, url, successAlert)
 
             getMetrics();
         });
