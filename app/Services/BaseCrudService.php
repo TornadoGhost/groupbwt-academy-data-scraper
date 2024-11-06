@@ -24,17 +24,17 @@ abstract class BaseCrudService implements BaseCrudServiceInterface
         return $this->repository()->all();
     }
 
-    public function find($attribute)
+    public function find($id)
     {
-        return $this->repository()->find($attribute);
+        return $this->repository()->find($id);
     }
 
-    public function create($attributes = [])
+    public function create($attributes)
     {
         return $this->repository()->create($attributes);
     }
 
-    public function update(int $id, array $attributes = [])
+    public function update(int $id, array $attributes)
     {
         return $this->repository()->update($id, $attributes);
     }
