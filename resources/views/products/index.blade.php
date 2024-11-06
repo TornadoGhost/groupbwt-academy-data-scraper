@@ -12,14 +12,14 @@
 @section('content_body')
     <div class="btn-group">
         <a href="{{ route('products.create') }}">
-            <x-adminlte-button class="mb-2 mr-1" label="Create product" theme="primary"/>
+            <x-adminlte-button class="mr-1" label="Create" theme="primary"/>
         </a>
         <div>
             <x-adminlte-button class="mr-1" id="import-modal-btn" label="Import" theme="primary" data-toggle="modal"
                                data-target="#import-modal"/>
         </div>
         <div>
-            <x-adminlte-button id="export-btn" label="Export products" theme="primary"/>
+            <x-adminlte-button id="export-btn" label="Export" theme="primary"/>
         </div>
     </div>
     @php
