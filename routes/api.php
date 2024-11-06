@@ -60,7 +60,7 @@ Route::middleware('auth:api')->group(function () {
     });
 
     Route::controller(ScrapedDataController::class)->group(function () {
-        Route::post('/scraped-data/export-retailer', 'exportByRetailer');
+        Route::get('/scraped-data/export/export-retailer', 'exportByRetailer');
     });
 
     Route::controller(NotificationController::class)->group(function () {
