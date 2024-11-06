@@ -48,7 +48,7 @@
     </x-adminlte-modal>
     <x-adminlte-modal id="import-modal" title="Import products" theme="blue">
         <a href="{{ route('products.exampleCsv') }}">
-            <x-adminlte-button class="btn-sm mb-2" id="example-scv" label="Download Example"
+            <x-adminlte-button class="btn-sm mb-2" id="example-scv" label="Download example file"
                                title="Download example CSV file" theme="primary" type="button"/>
         </a>
         <div class="mr-1" id="import-block">
