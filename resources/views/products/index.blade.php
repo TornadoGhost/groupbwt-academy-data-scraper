@@ -10,7 +10,7 @@
 {{-- Content body: main page content --}}
 
 @section('content_body')
-    <div class="btn-group">
+    <div class="btn-group mb-2">
         <a href="{{ route('products.create') }}">
             <x-adminlte-button class="mr-1" label="Create" theme="primary"/>
         </a>
