@@ -53,9 +53,9 @@ class ExportTableService implements ExportTableServiceInterface
         return Storage::exists($path);
     }
 
-    public function getFile(string $path): ?string
+    public function downloadFile(string $path, string $fileName = 'export_file')
     {
-        return Storage::get($path);
+        return Storage::download($path, $fileName);
     }
 
     public function deleteFile(string $path): bool

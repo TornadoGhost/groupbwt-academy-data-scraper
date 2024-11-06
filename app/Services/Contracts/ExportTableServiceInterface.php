@@ -10,5 +10,5 @@ interface ExportTableServiceInterface
     public function show(int $id);
     public function delete(int $id);
     public function checkFileExistence(string $path);
-    public function getFile(string $path);
+    public function downloadFile(string $path, string $fileName);
 }
