@@ -196,23 +196,21 @@
                 })
 
                 function modalRemoveProductAccept(element) {
-                    document.addEventListener('click', function (event) {
+                    const handler = function (event) {
                         if (event.target === document.getElementById('delete-btn')) {
                             const id = getIdFromRow(element);
                             mainFetch(`products/${id}`, 'delete')
                                 .then(response => {
                                     if (response?.status === 'Error') {
-                                        setErrorModalWindow(response.message);
+                                        setModalWindow('Error', response.message);
                                     } else {
                                         table.row(element).remove().draw();
                                     }
-                                })
+                                    document.removeEventListener('click', handler);
+                                });
                         }
-                    })
-                }
-
-                function getMpnForRow(element) {
-                    return getRowData(element).manufacturer_part_number;
+                    };
+                    document.addEventListener('click', handler);
                 }
 
                 function getIdFromRow(element) {
