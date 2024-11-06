@@ -73,11 +73,11 @@
     </x-adminlte-modal>
     <x-adminlte-button class="d-none" id="modal-delete-btn" label="Delete Product" data-toggle="modal"
                        data-target="#modalMin"/>
-    <x-adminlte-modal id="errors-modal" title="Error" theme="red">
+    <x-adminlte-modal id="error-modal" title="Error">
         Error
     </x-adminlte-modal>
     <x-adminlte-button class="d-none" id="error-modal-button" label="Error" data-toggle="modal"
-                       data-target="#errors-modal"/>
+                       data-target="#error-modal"/>
 @stop
 {{-- Push extra CSS --}}
 
