@@ -112,6 +112,6 @@ class ProductService extends BaseCrudService implements ProductServiceInterface
 
     public function downloadExampleImportFile(): StreamedResponse
     {
-        return Storage::download('/excel/import/example.csv');
+        return Storage::download('/excel/import/example.csv', 'import_products_example.csv');
     }
 }
