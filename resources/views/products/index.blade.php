@@ -142,31 +142,6 @@
                     ],
                 });
 
-                table.on('draw', function () {
-                    const showButtons = document.querySelectorAll('button[id=product-show]');
-                    showButtons.forEach(elem => {
-                        elem.addEventListener('click', function (event) {
-                            const id = getRowData(event.target.closest('tr')).id;
-                            window.location.href = `products/${id}`;
-                        });
-                    });
-                    const removeButtons = document.querySelectorAll('button[id=product-delete]');
-                    removeButtons.forEach(elem => {
-                        elem.addEventListener('click', function (event) {
-                            document.getElementById('modal-delete-btn').click();
-                            modalRemoveProductAccept(event.target.closest('tr[class=odd]'));
-                            document.removeEventListener('click', modalRemoveProductAccept);
-                        });
-                    });
-                    const editButtons = document.querySelectorAll('button[id=product-edit]');
-                    editButtons.forEach(elem => {
-                        elem.addEventListener('click', function (event) {
-                            const id = getIdFromRow(event.target.closest('tr[class=odd]'));
-                            window.location.href = `products/${id}/edit`;
-                        });
-                    });
-                });
-
                 const showButtons = document.querySelectorAll('button[id=product-show]');
                 showButtons.forEach(elem => {
                     elem.addEventListener('click', function (event) {
