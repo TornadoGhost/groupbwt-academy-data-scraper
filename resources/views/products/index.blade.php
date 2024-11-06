@@ -177,12 +177,15 @@
 
                 const removeButtons = document.querySelectorAll('button[id=product-delete]');
                 removeButtons.forEach(elem => {
-                    elem.addEventListener('click', function (event) {
+                    const handler = function (event) {
                         document.getElementById('modal-delete-btn').click();
                         modalRemoveProductAccept(event.target.closest('tr[class=odd]'));
-                        document.removeEventListener('click', modalRemoveProductAccept);
-                    });
+                        elem.removeEventListener('click', handler);
+                    };
+                    elem.addEventListener('click', handler);
                 });
+
+
 
                 const editButtons = document.querySelectorAll('button[id=product-edit]');
                 editButtons.forEach(elem => {
