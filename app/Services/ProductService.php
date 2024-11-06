@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\HeadingRowImport;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ProductService extends BaseCrudService implements ProductServiceInterface
 {
@@ -109,7 +110,7 @@ class ProductService extends BaseCrudService implements ProductServiceInterface
         return $validationErrors;
     }
 
-    public function downloadExampleImportFile()
+    public function downloadExampleImportFile(): StreamedResponse
     {
         return Storage::download('/excel/import/example.csv');
     }
