@@ -42,6 +42,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::controller(ExportTableController::class)->group(function () {
         Route::get('/export-tables', 'index')->name('exportTables.index');
+        Route::get('/export-tables/download', 'download')->name('exportTables.downloadFile');
     });
 
     Route::get('/notifications/get', [NotificationController::class, 'get'])->name('notifications.get');
