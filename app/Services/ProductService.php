@@ -2,13 +2,25 @@
 
 namespace App\Services;
 
+use App\Imports\ProductsImport;
 use App\Models\Product;
+use App\Models\User;
 use App\Repositories\Contracts\ProductRepositoryInterface;
 use App\Services\Contracts\ProductServiceInterface;
+use App\Traits\JsonResponseHelper;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\HeadingRowImport;
 
 class ProductService extends BaseCrudService implements ProductServiceInterface
 {
+    use JsonResponseHelper;
+
     protected function getRepositoryClass(): string
     {
         return ProductRepositoryInterface::class;
@@ -22,5 +34,83 @@ class ProductService extends BaseCrudService implements ProductServiceInterface
     public function productsForMetrics(int $userId): Collection
     {
         return $this->repository()->productsForMetrics($userId);
+    }
+
+    public function import(UploadedFile $file, User $user): JsonResponse
+    {
+        $productImport = (new ProductsImport($user));
+        $headings = (new HeadingRowImport)->toArray($file)[0][0];
+        $expectedHeadings = ['title', 'manufacturer_part_number', 'pack_size'];
+
+        $headersValidation = $this->importHeadersValidation($headings, $expectedHeadings);
+        $rowsValidation = $this->importRowsValidation($productImport, $file);
+
+        if (!empty($headersValidation)) {
+            return $this->errorResponse('Wrong headings in CSV file', 422, $headersValidation);
+
+        }
+
+        if (!empty($rowsValidation)) {
+            return $this->errorResponse('Validation error', 422, $rowsValidation);
+        }
+
+        (new ProductsImport(request()->user()))->queue($file);
+
+        return $this->successResponse('CSV data imported successfully', 201);
+    }
+
+    protected function importHeadersValidation(array $headings, array $expectedHeadings): array
+    {
+        $res = array_diff($headings, $expectedHeadings);
+        $errors = [];
+        foreach ($res as $key => $value) {
+            $errors[] = "Wrong header, received '$value', must be '$expectedHeadings[$key]'";
+        }
+
+        return $errors;
+    }
+
+    protected function importRowsValidation(object $productImport, UploadedFile|string $file): array
+    {
+        $rows = Excel::toArray($productImport, $file);
+        $rules = [
+            'title' => ['required', 'string', 'min:3', 'max:100'],
+            'manufacturer_part_number' => [
+                'required',
+                'string',
+                'min:3',
+                'max:50',
+                Rule::unique('products')->where(fn($query) => $query->where('user_id', request()->user()->id)),
+            ],
+            'pack_size' => ['required', 'string', 'min:3', 'max:20'],
+        ];
+        $validationErrors = [];
+        $manufacturerPartNumbers = [];
+
+        foreach ($rows[0] as $index => $row) {
+            $validator = Validator::make($row, $rules);
+
+            $manufacturerPartNumber = $row['manufacturer_part_number'];
+            if (in_array($manufacturerPartNumber, $manufacturerPartNumbers)) {
+                $validationErrors[] = 'Row №' . ($index + 2) . ' - ' . "Duplicate manufacturer_part_number found";
+            } else {
+                $manufacturerPartNumbers[] = $manufacturerPartNumber;
+            }
+
+            if ($validator->fails()) {
+                foreach ($validator->errors()->messages() as $messages) {
+                    foreach ($messages as $message) {
+                        $validationErrors[] = 'Row №' . ($index + 2) . ' - ' . $message;
+                    }
+                }
+            }
+        }
+
+        return $validationErrors;
+    }
+
+    public function downloadExampleImportFile()
+    {
+        return Storage::download('/excel/import/example.csv');
     }
 }
