@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Services\Contracts\ProductServiceInterface;
 use App\Services\Contracts\RetailerServiceInterface;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
@@ -37,5 +36,10 @@ class ProductController extends Controller
         $product = $this->productService->find($id);
 
         return view('products.edit', compact('product'));
+    }
+
+    public function getExampleCsv()
+    {
+        return $this->productService->downloadExampleImportFile();
     }
 }
