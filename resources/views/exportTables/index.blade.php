@@ -96,17 +96,6 @@
                     ],
                 });
 
-                table.on('draw', function () {
-                    const removeButtons = document.querySelectorAll('button[id=export-delete]');
-                    removeButtons.forEach(elem => {
-                        elem.addEventListener('click', function (event) {
-                            document.getElementById('modal-delete-btn').click();
-                            modalRemoveExportAccept(event.target.closest('tr[class=odd]'));
-                            document.removeEventListener('click', modalRemoveExportAccept);
-                        });
-                    });
-                });
-
                 const downloadButtons = document.querySelectorAll('button[id=export-download]');
                 downloadButtons.forEach(elem => {
                     elem.addEventListener('click', function (event) {
