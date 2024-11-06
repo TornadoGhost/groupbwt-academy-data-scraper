@@ -78,6 +78,8 @@
 @push('js')
     <script type="module">
         import {mainFetch} from "{{ asset('js/mainFetch.js') }}";
+        import {showAlert} from "{{ asset('js/showAlert.js') }}";
+        import {exportData} from "{{ asset('js/exportData.js') }}";
 
         async function getTableData() {
             let data;
@@ -296,19 +298,11 @@
             document.getElementById('error-modal-button').click();
         }
 
-        function exportButton() {
-            const btn = document.getElementById('export-btn');
-            btn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                mainFetch('export/products', 'GET')
-                    .then(response => {
-                       console.log(response)
-                    })
-                    .catch(errors => {
-                        console.log(errors)
-                    })
-            });
-        }exportButton();
+        const exportBtn = document.getElementById('export-btn');
+        const successAlert = `<x-adminlte-alert id="success-alert" class="position-absolute top-0 end-0 m-3 bg-green" style="right: 0;" icon="fa fa-lg fa-thumbs-up" title="Started" dismissable>
+                                    Export started! Wait for a notification when it is ready.
+                                </x-adminlte-alert>`;
+        exportData(exportBtn, 'export/products', successAlert);
     </script>
 @endpush
 
