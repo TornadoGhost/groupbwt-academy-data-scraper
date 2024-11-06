@@ -248,6 +248,7 @@
                         })
                 });
             }
+
             importData('import-form');
         });
 
