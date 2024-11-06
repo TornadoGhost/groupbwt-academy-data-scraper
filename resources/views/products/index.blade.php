@@ -223,8 +223,7 @@
                                         Import started! Waiting please.
                                     </x-adminlte-alert>`;
 
-                                showAlert(successAlert, 'content-wrapper');
-                                destroyAlert('success-alert', 5000);
+                                showAlert(successAlert, 'content-wrapper', true, 5000);
                             } else if (response.status === 'Error' && response.data) {
                                 removeInputError();
 
