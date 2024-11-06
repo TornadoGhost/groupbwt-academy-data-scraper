@@ -1,6 +1,6 @@
 import {getCookie} from "./getCookie.js";
 
-export function mainFetch(path, method, body, headers, signal, jsonResponse = true) {
+export function mainFetch(path, method, body = null, headers = null, signal = null, jsonResponse = true) {
     const token = getCookie('laravel_token');
     const options = {
         method: method,
