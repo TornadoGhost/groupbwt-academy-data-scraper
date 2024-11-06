@@ -8,6 +8,7 @@ use App\Repositories\ExportTableRepository;
 use App\Services\Contracts\ExportTableServiceInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ExportTableService implements ExportTableServiceInterface
 {
@@ -53,7 +54,7 @@ class ExportTableService implements ExportTableServiceInterface
         return Storage::exists($path);
     }
 
-    public function downloadFile(string $path, string $fileName = 'export_file')
+    public function downloadFile(string $path, string $fileName = 'export_file'): StreamedResponse
     {
         return Storage::download($path, $fileName);
     }
