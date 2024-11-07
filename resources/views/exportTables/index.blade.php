@@ -98,7 +98,8 @@
                 downloadButtons.forEach(elem => {
                     elem.addEventListener('click', function (event) {
                         const filePath = getRowData(event).path;
-                        window.location.href = `export-tables/download?file_path=${filePath}&file_name=test.csv`
+                        const fileName = getRowData(event).file_name;
+                        window.location.href = `export-tables/download?file_path=${filePath}&file_name=${fileName}.csv`
                     });
                 });
 
