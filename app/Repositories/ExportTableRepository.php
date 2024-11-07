@@ -12,7 +12,7 @@ class ExportTableRepository implements ExportTableRepositoryInterface
     public function __construct(ExportTable $exportTable){
         $this->exportTable = $exportTable;
     }
-    public function getExportedFiles($userId): Collection
+    public function getExportedFiles(int $userId): Collection
     {
         return $this->exportTable->where("user_id", $userId)->get();
     }
