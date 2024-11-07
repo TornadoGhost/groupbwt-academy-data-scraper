@@ -366,7 +366,7 @@ return [
             'icon' => 'far fa-fw fa-file',
         ],
         [
-            'text' => 'Exports files',
+            'text' => 'Exported files',
             'url' => 'export-tables',
             'icon' => 'far fa-fw fa-file',
         ],
