@@ -12,7 +12,6 @@
 @section('content_body')
     @php
         $heads = [
-            'id',
             'File Name',
             'Created',
             ['label' => 'Actions', 'no-export' => true, 'width' => 5],
