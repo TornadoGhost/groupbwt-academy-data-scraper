@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\DownloadExportTableRequest;
+use App\Http\Requests\ExportTableRequest;
 use App\Http\Resources\ExportTableResource;
 use App\Models\ExportTable;
 use App\Services\Contracts\ExportTableServiceInterface;
@@ -27,7 +27,7 @@ class ExportTableController
         return $this->successResponse('Exported files received', data: ExportTableResource::collection($files));
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(ExportTableRequest $request): JsonResponse
     {
         $result = $this->exportTableService->create(auth()->id(), $request->get('file_name'), $request->get('path'));
 
