@@ -2,6 +2,9 @@
 
 namespace App\Services\Contracts;
 
+use App\Models\ExportTable;
+use Illuminate\Http\JsonResponse;
+
 interface ExportTableServiceInterface
 {
     public function getExportedFiles($userId);
@@ -12,4 +15,5 @@ interface ExportTableServiceInterface
     public function checkFileExistence(string $path);
     public function downloadFile(string $path, string $fileName);
     public function getLatestExportedFiles(int $userId);
+    public function deleteFile(ExportTable $file): JsonResponse;
 }
