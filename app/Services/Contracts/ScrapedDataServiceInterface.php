@@ -2,6 +2,9 @@
 
 namespace App\Services\Contracts;
 
+use App\Models\User;
+use Illuminate\Http\JsonResponse;
+
 interface ScrapedDataServiceInterface extends BaseCrudServiceInterface
 {
     public function avgRating(array $products, array $retailers, string $startDate, string $endDate, int $userId);
@@ -10,5 +13,5 @@ interface ScrapedDataServiceInterface extends BaseCrudServiceInterface
 
     public function avgImages(array $products, array $retailers, string $startDate, string $endDate, int $userId);
 
-    public function scrapedDataByRetailer(int $retailerId, string $date);
+    public function exportByRetailer(int $retailer_id, string $date, User $user): JsonResponse;
 }
