@@ -72,7 +72,7 @@
                     "layout": {
                         topStart: 'buttons'
                     },
-                    "order": [[0, 'desc']],
+                    "order": [[1, 'desc']],
                     "columns": [
                         {"data": "id"},
                         {"data": "file_name"},
