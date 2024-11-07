@@ -25,7 +25,7 @@ class ExportTableController
 
     public function index(): JsonResponse
     {
-        $files = $this->exportTableService->getExportedFiles(auth()->id());
+        $files = $this->exportTableService->getLatestExportedFiles(auth()->id());
 
         return $this->successResponse('Exported files received', data: ExportTableResource::collection($files));
     }
