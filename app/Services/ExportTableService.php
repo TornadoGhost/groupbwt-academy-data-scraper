@@ -23,6 +23,11 @@ class ExportTableService implements ExportTableServiceInterface
         return $this->repository->getExportedFiles($userId);
     }
 
+    public function getLatestExportedFiles($userId): Collection
+    {
+        return $this->repository->getLatestExportedFiles($userId);
+    }
+
     public function create(string $userId, string $fileName, string $filePath): ExportTable
     {
         return $this->repository->create($userId, $fileName, $filePath);
