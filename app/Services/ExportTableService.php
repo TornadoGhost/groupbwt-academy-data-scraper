@@ -33,7 +33,7 @@ class ExportTableService implements ExportTableServiceInterface
         return $this->repository->create($userId, $fileName, $filePath);
     }
 
-    public function show(int $id): ExportTable
+    public function findOrFail(int $id): ExportTable
     {
         return $this->repository->show($id);
     }
