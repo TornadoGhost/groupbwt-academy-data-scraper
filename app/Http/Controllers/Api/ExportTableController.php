@@ -4,14 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\DownloadExportTableRequest;
 use App\Http\Resources\ExportTableResource;
+use App\Models\ExportTable;
 use App\Services\Contracts\ExportTableServiceInterface;
 use App\Traits\JsonResponseHelper;
-use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Foundation\Application;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Storage;
 
 class ExportTableController
 {
@@ -37,21 +34,8 @@ class ExportTableController
         return $this->successResponse('Export file stored', data: $result);
     }
 
-    public function destroy(int $id): JsonResponse
+    public function destroy(ExportTable $file): JsonResponse
     {
-        $data = $this->exportTableService->show($id);
-
-        if (!$this->exportTableService->checkFileExistence($data->path)) {
-            return $this->errorResponse('File not found', 404);
-        }
-
-        $res = Storage::delete($data->path);
-
-        if ($res) {
-            $this->exportTableService->delete($id);
-            return $this->successResponse('File deleted');
-        } else {
-            return $this->errorResponse('File deleted, but file in database was not deleted', 20);
-        }
+        return $this->exportTableService->deleteFile($file);
     }
 }
