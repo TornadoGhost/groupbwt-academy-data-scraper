@@ -31,7 +31,7 @@ class ExportTableRepository implements ExportTableRepositoryInterface
         ]);
     }
 
-    public function show(int $id): ExportTable
+    public function findOrFail(int $id): ExportTable
     {
         return $this->exportTable->findOrFail($id);
     }
