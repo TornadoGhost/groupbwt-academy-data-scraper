@@ -55,7 +55,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::controller(ExportTableController::class)->group(function () {
         Route::get('/export-tables', 'index');
-        Route::delete('/export-tables/{id}', 'destroy');
+        Route::delete('/export-tables/{file}', 'destroy');
     });
 
     Route::controller(ScrapedDataController::class)->group(function () {
