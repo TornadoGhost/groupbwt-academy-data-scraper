@@ -89,23 +89,10 @@ class ScrapedDataController extends Controller
 
     public function exportByRetailer(ExportScrapedDataByRetailerRequest $request): JsonResponse
     {
-        $fileData = $this->exportTableService->setPath("scraped_data_retailer{$request->validated('retailer_id')}");
-
-        (new ScrapedDataByRetailerExport(
+        return $this->scrapedDataService->exportByRetailer(
             $request->validated('retailer_id'),
             $request->validated('date'),
-            $this->scrapedDataService,
-        ))
-            ->store($fileData['filePath'])->chain([
-                new NotifyUserOfCompletedExport(request()->user(), "Scraped Data"),
-                new SaveExportTableData(
-                    $fileData['fileName'],
-                    $fileData['filePath'],
-                    request()->user(),
-                    $this->exportTableService
-                ),
-            ]);
-
-        return $this->successResponse('Products exportation started');
+            request()->user()
+        );
     }
 }
