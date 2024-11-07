@@ -77,17 +77,10 @@ class MetricController extends Controller
 
     public function export(MetricExportRequest $request): JsonResponse
     {
-        $fileData = $this->exportTableService->setPath('metrics');
-        $startDate = $request->start_date ?? Carbon::parse($this->scrapingSessionService->getLatestScrapingSession())->format('Y-m-d');
-        $endDate = $request->end_date ?? '';
-
-        (new MetricsExport($this->scrapedDataService, $this->metricService, $startDate, $endDate))
-            ->store($fileData['filePath'])
-            ->chain([
-                new NotifyUserOfCompletedExport(request()->user(), 'Metrics'),
-                new SaveExportTableData($fileData['fileName'], $fileData['filePath'], request()->user(), $this->exportTableService)
-            ]);
-
-        return $this->successResponse('Metrics exportation started');
+        return $this->metricService->exportExcel(
+            $request->validated('start_date'),
+            $request->validated('end_date'),
+            request()->user()
+        );
     }
 }
