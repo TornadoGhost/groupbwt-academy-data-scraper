@@ -12,4 +12,5 @@ interface ProductServiceInterface extends BaseCrudServiceInterface
     public function productsForMetrics(int $userId);
     public function import(UploadedFile $file, User $user);
     public function downloadExampleImportFile();
+    public function exportExcel(User $user);
 }

@@ -2,10 +2,14 @@
 
 namespace App\Services;
 
+use App\Exports\ProductsExport;
 use App\Imports\ProductsImport;
+use App\Jobs\NotifyUserOfCompletedExport;
+use App\Jobs\SaveExportTableData;
 use App\Models\Product;
 use App\Models\User;
 use App\Repositories\Contracts\ProductRepositoryInterface;
+use App\Services\Contracts\ExportTableServiceInterface;
 use App\Services\Contracts\ProductServiceInterface;
 use App\Traits\JsonResponseHelper;
 use Illuminate\Database\Eloquent\Collection;
@@ -21,6 +25,13 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 class ProductService extends BaseCrudService implements ProductServiceInterface
 {
     use JsonResponseHelper;
+
+    public function __construct(
+        protected ExportTableServiceInterface $exportTableService,
+    )
+    {
+        parent::__construct();
+    }
 
     protected function getRepositoryClass(): string
     {
@@ -113,5 +124,17 @@ class ProductService extends BaseCrudService implements ProductServiceInterface
     public function downloadExampleImportFile(): StreamedResponse
     {
         return Storage::download('/excel/import/example.csv', 'import_products_example.csv');
+    }
+
+    public function exportExcel(User $user): JsonResponse
+    {
+        $fileName = 'Product Data';
+        $filePath = 'excel/export/' . $user->id . '/products/' . md5($fileName . now()) . '.xlsx';
+        (new ProductsExport($this))->store($filePath)->chain([
+            new NotifyUserOfCompletedExport($user, 'Products'),
+            new SaveExportTableData($fileName, $filePath, $user, $this->exportTableService)
+        ]);
+
+        return $this->successResponse('Products exportation started');
     }
 }
