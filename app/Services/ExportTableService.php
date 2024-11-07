@@ -43,15 +43,9 @@ class ExportTableService implements ExportTableServiceInterface
         return $this->repository->delete($id);
     }
 
-    public function setPath(string $prefix): array
+    public function setPath(string $fileName, int $userId): string
     {
-        $fileName = "{$prefix}_" . md5(now());
-        $filePath = 'excel/export/' . auth()->id() . "/{$prefix}/" . $fileName . '.xlsx';
-
-        return [
-            'fileName' => $fileName,
-            'filePath' => $filePath,
-        ];
+        return 'excel/export/' . $userId . '/products/' . md5($fileName . now()) . '.xlsx';
     }
 
     public function checkFileExistence(string $path): bool

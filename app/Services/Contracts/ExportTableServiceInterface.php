@@ -6,7 +6,7 @@ interface ExportTableServiceInterface
 {
     public function getExportedFiles($userId);
     public function create(string $userId, string $fileName, string $filePath);
-    public function setPath(string $prefix);
+    public function setPath(string $fileName, int $userId);
     public function show(int $id);
     public function delete(int $id);
     public function checkFileExistence(string $path);
