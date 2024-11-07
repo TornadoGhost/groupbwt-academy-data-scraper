@@ -90,13 +90,6 @@ class ProductController extends Controller
 
     public function export(): JsonResponse
     {
-        $fileName = 'products_' . md5(now());
-        $filePath = 'excel/export/' . auth()->id() . '/products/' . $fileName . '.xlsx';
-        (new ProductsExport($this->productService,))->store($filePath)->chain([
-            new NotifyUserOfCompletedExport(request()->user(), 'Products'),
-            new SaveExportTableData($fileName, $filePath, request()->user(), $this->exportTableService)
-        ]);
-
-        return $this->successResponse('Products exportation started');
+        return $this->productService->exportExcel(request()->user());
     }
 }
