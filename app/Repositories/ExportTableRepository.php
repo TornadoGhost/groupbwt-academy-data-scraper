@@ -17,6 +17,11 @@ class ExportTableRepository implements ExportTableRepositoryInterface
         return $this->exportTable->where("user_id", $userId)->get();
     }
 
+    public function getLatestExportedFiles(int $userId): Collection
+    {
+        return $this->exportTable->where("user_id", $userId)->latest()->get();
+    }
+
     public function create(string $userId, string $fileName, string $filePath): ExportTable
     {
         return $this->exportTable->create([
