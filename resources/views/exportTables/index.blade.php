@@ -74,7 +74,6 @@
                     },
                     "order": [[1, 'desc']],
                     "columns": [
-                        {"data": "id"},
                         {"data": "file_name"},
                         {"data": "created_at"},
                         {
