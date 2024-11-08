@@ -39,8 +39,6 @@ class ScrapedDataByRetailerSheet implements FromCollection, WithHeadings, WithTi
                     'Product 3 star number' => $scrapedData->stars_3,
                     'Product 4 star number' => $scrapedData->stars_4,
                     'Product 5 star number' => $scrapedData->stars_5,
-                    'Retailer name' => $scrapedData->retailer->name,
-                    'Created at' => $scrapedData->created_at->format('Y-m-d H:i'),
                 ];
             });
     }
@@ -59,8 +57,6 @@ class ScrapedDataByRetailerSheet implements FromCollection, WithHeadings, WithTi
             'Product 3 star number',
             'Product 4 star number',
             'Product 5 star number',
-            'Retailer name',
-            'Created at'
         ];
     }
 
@@ -78,8 +74,6 @@ class ScrapedDataByRetailerSheet implements FromCollection, WithHeadings, WithTi
             'I' => 21,
             'J' => 21,
             'K' => 21,
-            'L' => 13,
-            'M' => 16,
         ];
     }
 
