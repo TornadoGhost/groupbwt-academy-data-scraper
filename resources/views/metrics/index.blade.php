@@ -254,13 +254,8 @@
             }
 
             const signal = controller.signal;
-            mainFetch(
-                `metrics?` + retailers.map(id => `retailers[]=${id}`).join("&")
-                + products.map(id => `&products[]=${id}`).join("&") +
-                `&user_id=${userId}
-                &start_date=${startDate}
-                &end_date=${endDate}`,
-                'GET', null, {}, signal)
+            const url = metricsUrl('metrics', startDate, endDate, retailers, products, userId);
+            mainFetch(url, 'GET', null, {}, signal)
                 .then(response => {
                     if (response.status === "Success") {
                         spinner.classList.remove('d-flex');
