@@ -12,7 +12,7 @@
 @section('content_body')
     @php
         $heads = [
-            'File Name',
+            'File',
             'Exported',
             ['label' => 'Actions', 'no-export' => true, 'width' => 5],
         ];
@@ -99,7 +99,7 @@
                     elem.addEventListener('click', function (event) {
                         const filePath = getRowData(event).path;
                         const fileName = getRowData(event).file_name;
-                        window.location.href = `export-tables/download?file_path=${filePath}&file_name=${fileName}.csv`
+                        window.location.href = `export-tables/download?file_path=${filePath}&file_name=${fileName}`
                     });
                 });
 
