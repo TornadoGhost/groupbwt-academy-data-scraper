@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exports;
+namespace App\Exports\Sheets;
 
 use App\Services\Contracts\ScrapedDataServiceInterface;
 use Illuminate\Bus\Queueable;
