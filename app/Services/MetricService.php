@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Exports\Sheets\MetricsWithFiltersSheet;
+use App\Exports\MetricsExport;
 use App\Jobs\NotifyUserOfCompletedExport;
 use App\Jobs\SaveExportTableData;
 use App\Models\User;
@@ -57,7 +57,7 @@ class MetricService implements MetricServiceInterface
         $endDate = $requestData['end_date'] ?? '';
         $userId = $requestData['user_id'] ?? 0;
 
-        (new MetricsWithFiltersSheet(
+        (new MetricsExport(
             $this->scrapedDataService,
             $this,
             $products,
