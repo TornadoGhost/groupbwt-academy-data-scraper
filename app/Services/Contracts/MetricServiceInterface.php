@@ -9,5 +9,5 @@ use Illuminate\Http\JsonResponse;
 interface MetricServiceInterface
 {
     public function getAvgData(Collection $avgRating, array $avgPrice, array $avgImages): Collection|\Illuminate\Support\Collection;
-    public function exportExcel($startDate, $endDate, User $user): JsonResponse;
+    public function exportExcel(array $requestData, User $user): JsonResponse;
 }
