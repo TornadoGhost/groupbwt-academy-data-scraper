@@ -30,7 +30,7 @@ class ProductController extends Controller
 
     public function index(): JsonResponse
     {
-        $products = $this->productService->all();
+        $products = $this->productService->allLatest(request()->user());
 
         return $this->successResponse('Products list received', data: ProductResource::collection($products));
     }
