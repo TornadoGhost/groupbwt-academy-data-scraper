@@ -11,27 +11,48 @@ use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMultipleSheets;
+use Maatwebsite\Excel\Concerns\WithTitle;
 
-class MetricsExport implements FromCollection, WithHeadings, WithColumnWidths, ShouldQueue
+class MetricsExport implements FromCollection, WithHeadings, WithTitle, WithColumnWidths, ShouldQueue
 {
     use Exportable, Queueable;
+
     public function __construct(
         protected ScrapedDataServiceInterface $scrapedDataService,
-        protected MetricServiceInterface $metricService,
-        public string $startDate,
-        public string $endDate = '',
+        protected MetricServiceInterface      $metricService,
+        protected array                       $products,
+        protected array                       $retailers,
+        protected string                      $startDate,
+        protected string                      $endDate,
+        protected int                         $userId,
     )
     {
     }
 
     public function collection(): Collection
     {
-        $avgRating = $this->scrapedDataService
-            ->avgRating(startDate: $this->startDate, endDate: $this->endDate);
-        $avgPrice = $this->scrapedDataService
-            ->avgPrice(startDate: $this->startDate, endDate: $this->endDate);
-        $avgImages = $this->scrapedDataService
-            ->avgImages(startDate: $this->startDate, endDate: $this->endDate);
+        $avgRating = $this->scrapedDataService->avgRating(
+            $this->products,
+            $this->retailers,
+            $this->startDate,
+            $this->endDate,
+            $this->userId,
+        );
+        $avgPrice = $this->scrapedDataService->avgPrice(
+            $this->products,
+            $this->retailers,
+            $this->startDate,
+            $this->endDate,
+            $this->userId,
+        );
+        $avgImages = $this->scrapedDataService->avgImages(
+            $this->products,
+            $this->retailers,
+            $this->startDate,
+            $this->endDate,
+            $this->userId,
+        );
 
         $avgPriceMap = $avgPrice->keyBy('retailer_id')->toArray();
         $avgImagesMap = $avgImages->keyBy('retailer_id')->toArray();
@@ -66,5 +87,10 @@ class MetricsExport implements FromCollection, WithHeadings, WithColumnWidths, S
             'C' => 20,
             'D' => 25,
         );
+    }
+
+    public function title(): string
+    {
+        return 'Metrics';
     }
 }
