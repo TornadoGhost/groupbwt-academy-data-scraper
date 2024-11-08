@@ -155,6 +155,7 @@
                 retailers = [],
                 products = [],
                 userId = '';
+
             const dateRangeInput = document.getElementById('drPlaceholder');
             const today = moment('{{ $firstDate }}');
             const lastDate = moment('{{ $lastDate }}');
