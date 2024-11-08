@@ -284,8 +284,8 @@
             const exportBtn = document.getElementById('export-btn');
             exportBtn.addEventListener('click', function() {
                 const successAlert = `<x-adminlte-alert id="success-alert" class="position-absolute top-0 end-0 m-3 bg-green" style="right: 0;" icon="fa fa-lg fa-thumbs-up" title="Started" dismissable>
-                                    Export started! Wait for a notification when it is ready.
-                                </x-adminlte-alert>`;
+                                        Export started! Wait for a notification.
+                                    </x-adminlte-alert>`;
                 exportData('export/products', successAlert);
             });
         }exportScrapedDataRetailer();
