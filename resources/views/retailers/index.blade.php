@@ -296,7 +296,7 @@
                         const url = `scraped-data/export/export-retailer?retailer_id=${retailerId}&date=${date.value}`;
                         const successAlert =
                             `<x-adminlte-alert id="success-alert" class="position-absolute top-0 end-0 m-3 bg-green" style="right: 0; z-index: 999" icon="fa fa-lg fa-thumbs-up" title="Started" dismissable>
-                                        Export started! Wait for a notification when it is ready.
+                                        Export started! Wait for a notification.
                                     </x-adminlte-alert>`;
                         const handler = function () {
                             exportData(url, successAlert);
@@ -363,7 +363,6 @@
 
                 modalOpenButton.click();
             }
-
 
             function grandAccess(retailerId) {
                 const buttonSave = document.getElementById('grand-access-save');
