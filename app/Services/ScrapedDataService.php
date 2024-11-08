@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Exports\ScrapedDataByRetailerExport;
+use App\Exports\ScrapedDataByRetailerWithFiltersExport;
 use App\Jobs\NotifyUserOfCompletedExport;
 use App\Jobs\SaveExportTableData;
 use App\Models\User;
