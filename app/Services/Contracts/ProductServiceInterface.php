@@ -3,7 +3,7 @@
 namespace App\Services\Contracts;
 
 use App\Models\User;
-use App\Services\Contracts\BaseCrudServiceInterface;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
 
 interface ProductServiceInterface extends BaseCrudServiceInterface
