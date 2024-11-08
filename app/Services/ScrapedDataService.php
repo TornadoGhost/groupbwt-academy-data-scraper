@@ -83,12 +83,13 @@ class ScrapedDataService extends BaseCrudService implements ScrapedDataServiceIn
         return $this->repository()->scrapedDataByRetailer($retailerId, $date);
     }
 
-    public function exportByRetailer(int $retailer_id, string $date, User $user): JsonResponse
+    public function exportByRetailer(int $retailer_id, string $date, User $user, array $filters): JsonResponse
     {
         $retailerName = $this->retailerService->getNameById($retailer_id);
         $fileName = 'Scraped Data - ' . $retailerName;
         $filePath = $this->exportTableService->setPath($fileName, $user->id);
-        (new ScrapedDataByRetailerExport($retailer_id, $date, $this))
+
+        (new ScrapedDataByRetailerWithFiltersExport($retailer_id, $date, $this, $filters, $this->retailerService))
             ->store($filePath)->chain([
                 new NotifyUserOfCompletedExport($user, "Scraped Data"),
                 new SaveExportTableData($fileName, $filePath, $user, $this->exportTableService
