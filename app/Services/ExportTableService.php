@@ -60,7 +60,7 @@ class ExportTableService implements ExportTableServiceInterface
 
     public function downloadFile(string $path, string $fileName = 'export_file'): StreamedResponse
     {
-        return Storage::download($path, $fileName);
+        return Storage::download($path, $fileName . '.xlsx');
     }
 
     public function deleteFile(ExportTable $file): JsonResponse
