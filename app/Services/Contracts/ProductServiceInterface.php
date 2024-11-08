@@ -13,4 +13,6 @@ interface ProductServiceInterface extends BaseCrudServiceInterface
     public function import(UploadedFile $file, User $user);
     public function downloadExampleImportFile();
     public function exportExcel(User $user);
+    public function getNameById(int $id): string;
+    public function allLatest(User $user): Collection;
 }
