@@ -125,7 +125,7 @@
     <script type="module">
         import {mainFetch} from "{{ asset('js/mainFetch.js') }}";
         import {updatePrepareData} from "{{ asset('js/updatePrepareData.js') }}";
-        import {exportData} from "{{ asset('js/exportData.js') }}"
+        import {exportData} from "{{ asset('js/exportData.js') }}";
 
         async function getTableData() {
             let data;
@@ -298,7 +298,11 @@
                             `<x-adminlte-alert id="success-alert" class="position-absolute top-0 end-0 m-3 bg-green" style="right: 0; z-index: 999" icon="fa fa-lg fa-thumbs-up" title="Started" dismissable>
                                         Export started! Wait for a notification when it is ready.
                                     </x-adminlte-alert>`;
-                        exportData(exportBtn, url, successAlert);
+                        const handler = function () {
+                            exportData(url, successAlert);
+                            exportBtn.removeEventListener('click', handler)
+                        }
+                        exportBtn.addEventListener('click', handler)
                     }
                 })
 
