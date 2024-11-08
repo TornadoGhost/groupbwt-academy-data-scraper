@@ -208,14 +208,15 @@
                     getMetrics(startDate, endDate, retailers, products, userId);
                 });
 
-
             const exportBtn = document.getElementById('export-btn');
-            const url = `metrics/export?start_date=${startDate}&end_date=${endDate}`
-            const successAlert =
-                `<x-adminlte-alert id="success-alert" class="position-absolute top-0 end-0 m-3 bg-green" style="right: 0;" icon="fa fa-lg fa-thumbs-up" title="Started" dismissable>
-                                        Export started! Wait for a notification when it is ready.
-                                    </x-adminlte-alert>`;
-            exportData(exportBtn, url, successAlert)
+            exportBtn.addEventListener('click', function () {
+                const successAlert =
+                    `<x-adminlte-alert id="success-alert" class="position-absolute top-0 end-0 m-3 bg-green" style="right: 0;" icon="fa fa-lg fa-thumbs-up" title="Started" dismissable>
+                        Export started! Wait for a notification when it is ready.
+                    </x-adminlte-alert>`;
+                const url = metricsUrl('metrics/export', startDate, endDate, retailers, products, userId);
+                exportData(url, successAlert);
+            })
 
             getMetrics();
         });
