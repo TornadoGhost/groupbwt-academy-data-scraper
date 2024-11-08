@@ -258,6 +258,10 @@
             mainFetch(url, 'GET', null, {}, signal)
                 .then(response => {
                     if (response.status === "Success") {
+                        if (response.data.length !== 0) {
+                            enabledExportBtn();
+                        }
+
                         spinner.classList.remove('d-flex');
                         spinner.classList.add('d-none');
 
