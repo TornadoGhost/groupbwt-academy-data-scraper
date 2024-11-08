@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Product;
+use App\Models\User;
 use App\Repositories\Contracts\ProductRepositoryInterface;
 use App\Services\Contracts\ImageServiceInterface;
 use Illuminate\Database\Eloquent\Collection;
