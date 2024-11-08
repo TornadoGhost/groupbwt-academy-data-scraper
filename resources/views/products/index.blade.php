@@ -207,23 +207,20 @@
                 const btn = document.getElementById(formId);
                 btn.addEventListener('submit', function (e) {
                     e.preventDefault();
+                    const successAlert =
+                        `<x-adminlte-alert id="success-alert" class="position-absolute top-0 end-0 m-3 bg-green" style="right: 0;" icon="fa fa-lg fa-thumbs-up" title="Done" dismissable>
+                                        Import started! Waiting please.
+                                    </x-adminlte-alert>`;
+                    showAlert(successAlert, 'content-wrapper', true, 5000);
 
                     const formData = new FormData(e.target);
                     mainFetch('import/products', 'POST', formData)
                         .then(response => {
                             if (response.status === 'Success') {
                                 removeInputError();
-
                                 const input = e.target.querySelector('#import-file');
                                 input.value = '';
                                 input.nextElementSibling.innerHTML = 'Choose csv import file...';
-
-                                const successAlert =
-                                    `<x-adminlte-alert id="success-alert" class="position-absolute top-0 end-0 m-3 bg-green" style="right: 0;" icon="fa fa-lg fa-thumbs-up" title="Done" dismissable>
-                                        Import started! Waiting please.
-                                    </x-adminlte-alert>`;
-
-                                showAlert(successAlert, 'content-wrapper', true, 5000);
                             } else if (response.status === 'Error' && response.data) {
                                 removeInputError();
 
