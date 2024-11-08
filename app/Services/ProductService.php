@@ -137,4 +137,9 @@ class ProductService extends BaseCrudService implements ProductServiceInterface
 
         return $this->successResponse('Products exportation started');
     }
+
+    public function getNameById(int $id): string
+    {
+        return $this->repository()->getNameById($id);
+    }
 }
