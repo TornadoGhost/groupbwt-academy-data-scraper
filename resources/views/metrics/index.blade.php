@@ -221,7 +221,15 @@
             getMetrics();
         });
 
+        function disabledExportBtn() {
+            document.getElementById('export-btn').setAttribute('disabled', '');
+        }
+        function enabledExportBtn() {
+            document.getElementById('export-btn').removeAttribute('disabled');
+        }
+
         function getMetrics(startDate = '', endDate = '', retailers = [], products = [], userId = '') {
+            if (!document.getElementById('export-btn').getAttribute('disabled')) disabledExportBtn();
             if (controller) {
                 controller.abort('Filter changed');
             }
