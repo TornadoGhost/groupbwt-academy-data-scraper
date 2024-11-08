@@ -130,6 +130,7 @@ class ProductService extends BaseCrudService implements ProductServiceInterface
     {
         $fileName = 'Product Data';
         $filePath = 'excel/export/' . $user->id . '/products/' . md5($fileName . now()) . '.xlsx';
+
         (new ProductsExport($this))->store($filePath)->chain([
             new NotifyUserOfCompletedExport($user, 'Products'),
             new SaveExportTableData($fileName, $filePath, $user, $this->exportTableService)
@@ -141,5 +142,10 @@ class ProductService extends BaseCrudService implements ProductServiceInterface
     public function getNameById(int $id): string
     {
         return $this->repository()->getNameById($id);
+    }
+
+    public function allLatest(User $user): Collection
+    {
+        return $this->repository()->allLatest($user);
     }
 }
