@@ -119,7 +119,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             ->findOrFail($id);
         $retailers = $attributes['retailers'];
 
-        $filteredRetailers = array_filter($retailers, function($item) {
+        $filteredRetailers = array_filter($retailers, function ($item) {
             return $item['product_url'] !== null;
         });
 
@@ -178,11 +178,11 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     {
         return $this->model()
             ->where('user_id', $userId)
-            ->get(
-            ['title',
-            'manufacturer_part_number',
-            'id']
-        );
+            ->get([
+                'title',
+                'manufacturer_part_number',
+                'id'
+            ]);
     }
 
     public function getNameById(int $id): string
