@@ -8,10 +8,7 @@ use App\Repositories\Contracts\ProductRepositoryInterface;
 use App\Services\Contracts\ImageServiceInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\File;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 
 class ProductRepository extends BaseRepository implements ProductRepositoryInterface
 {
@@ -186,5 +183,10 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             'manufacturer_part_number',
             'id']
         );
+    }
+
+    public function getNameById(int $id): string
+    {
+        return $this->model()->query()->find($id, 'title')->title;
     }
 }
