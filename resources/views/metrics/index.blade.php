@@ -197,7 +197,6 @@
             $(`#products`)
                 .on('select2:select', function (e) {
                     products.push(e.params.data.id);
-                    console.log(products)
                     getMetrics(startDate, endDate, retailers, products, userId);
                 })
                 .on('select2:clear', function () {
