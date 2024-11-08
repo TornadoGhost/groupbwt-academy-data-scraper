@@ -22,6 +22,20 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     public function all(): Collection
     {
         if (auth()->user()->isAdmin) {
+            return $this->model()
+                ->with('retailers')
+                ->with('user')
+                ->with('images');
+        }
+
+        return $this->model()
+            ->with('retailers')
+            ->where('user_id', auth()->id());
+    }
+
+    public function allLatest(User $user): Collection
+    {
+        if ($user->isAdmin) {
             $model = $this->model()
                 ->with('retailers')
                 ->with('user')
@@ -29,9 +43,10 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
             return $this->getLatestData($model);
         }
+
         $model = $this->model()
             ->with('retailers')
-            ->where('user_id', auth()->id());
+            ->where('user_id', $user->id);
 
         return $this->getLatestData($model);
     }
