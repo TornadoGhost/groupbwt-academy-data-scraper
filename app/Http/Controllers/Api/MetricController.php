@@ -78,8 +78,7 @@ class MetricController extends Controller
     public function export(MetricExportRequest $request): JsonResponse
     {
         return $this->metricService->exportExcel(
-            $request->validated('start_date'),
-            $request->validated('end_date'),
+            $request->validated(),
             request()->user()
         );
     }
