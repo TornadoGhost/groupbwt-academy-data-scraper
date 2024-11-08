@@ -2,22 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Exports\ScrapedDataByRetailerExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ExportScrapedDataByRetailerRequest;
 use App\Http\Requests\StoreScrapedDataRequest;
 use App\Http\Requests\UpdateScrapedDataRequest;
 use App\Http\Resources\ScrapedDataResource;
-use App\Jobs\NotifyUserOfCompletedExport;
-use App\Jobs\SaveExportTableData;
 use App\Models\ScrapedData;
 use App\Services\Contracts\ExportTableServiceInterface;
 use App\Services\Contracts\RetailerServiceInterface;
 use App\Services\Contracts\ScrapedDataServiceInterface;
 use App\Traits\JsonResponseHelper;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ScrapedDataController extends Controller
 {
@@ -92,7 +87,8 @@ class ScrapedDataController extends Controller
         return $this->scrapedDataService->exportByRetailer(
             $request->validated('retailer_id'),
             $request->validated('date'),
-            request()->user()
+            request()->user(),
+            $request->validated(),
         );
     }
 }
