@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exports;
+namespace App\Exports\Sheets;
 
 use App\Models\User;
 use App\Services\Contracts\ProductServiceInterface;
@@ -14,7 +14,7 @@ use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
 
-class MetricsFiltersExport implements FromCollection, WithHeadings, WithTitle, WithColumnWidths, ShouldQueue
+class MetricsFiltersSheet implements FromCollection, WithHeadings, WithTitle, WithColumnWidths, ShouldQueue
 {
     use Exportable, Queueable;
     public function __construct(
