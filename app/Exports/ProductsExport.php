@@ -2,8 +2,6 @@
 
 namespace App\Exports;
 
-
-use App\Models\Product;
 use App\Services\Contracts\ProductServiceInterface;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -13,11 +11,11 @@ use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithHeadings;
-use Throwable;
 
 class ProductsExport implements FromCollection, WithHeadings, WithColumnWidths, ShouldQueue
 {
     use Exportable, Queueable;
+
     public function __construct(
         protected ProductServiceInterface $productService,
     )
@@ -26,9 +24,6 @@ class ProductsExport implements FromCollection, WithHeadings, WithColumnWidths, 
 
     public function collection(): AnonymousResourceCollection|Collection
     {
-//        $products = $this->productService->all();
-//        return ProductResource::collection($products);
-
         return $this->productService->all()->flatMap(function ($product) {
             return $product->retailers->map(function ($retailer) use ($product) {
                 return [
@@ -75,9 +70,4 @@ class ProductsExport implements FromCollection, WithHeadings, WithColumnWidths, 
             'I' => 74,
         );
     }
-
-    /*public function failed(Throwable $exception): void
-    {
-        $this->user->notify(new NotifyUserOfFailedExport($exception->getMessage()));
-    }*/
 }
