@@ -30,13 +30,12 @@ class MetricController extends Controller
         $lastScrapedDate = $this->scrapingSessionService->getLatestScrapingSession();
         $firstDate = Carbon::parse($firstScrapedData)->format('Y-m-d');
         $lastDate = Carbon::parse($lastScrapedDate)->format('Y-m-d');
-        $retailers = $this->retailerService->all();
-        $products = $this->productService->all();
         $users = null;
+
         if (auth()->user()->isAdmin) {
             $users = $this->userService->all();
         }
 
-        return view('metrics.index', compact('firstDate','lastDate', 'retailers', 'products', 'users'));
+        return view('metrics.index', compact('firstDate','lastDate', 'users'));
     }
 }
