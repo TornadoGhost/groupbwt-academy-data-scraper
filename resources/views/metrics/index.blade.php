@@ -228,6 +228,14 @@
             document.getElementById('export-btn').removeAttribute('disabled');
         }
 
+        function metricsUrl(startUrl, startDate = '', endDate = '', retailers = [], products = [], userId = '') {
+            return `${startUrl}?` + retailers.map(id => `retailers[]=${id}`).join("&")
+                + products.map(id => `&products[]=${id}`).join("&") +
+                `&user_id=${userId}
+                &start_date=${startDate}
+                &end_date=${endDate}`;
+        }
+
         function getMetrics(startDate = '', endDate = '', retailers = [], products = [], userId = '') {
             if (!document.getElementById('export-btn').getAttribute('disabled')) disabledExportBtn();
             if (controller) {
