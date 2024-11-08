@@ -10,8 +10,9 @@ use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithTitle;
 
-class ScrapedDataByRetailerExport implements FromCollection, WithHeadings, WithColumnWidths, ShouldQueue
+class ScrapedDataByRetailerSheet implements FromCollection, WithHeadings, WithTitle, WithColumnWidths, ShouldQueue
 {
     use Exportable, Queueable;
     public function __construct(
@@ -80,5 +81,10 @@ class ScrapedDataByRetailerExport implements FromCollection, WithHeadings, WithC
             'L' => 13,
             'M' => 16,
         ];
+    }
+
+    public function title(): string
+    {
+        return 'Scraped Data';
     }
 }
