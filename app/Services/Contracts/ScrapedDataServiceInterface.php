@@ -13,5 +13,5 @@ interface ScrapedDataServiceInterface extends BaseCrudServiceInterface
 
     public function avgImages(array $products, array $retailers, string $startDate, string $endDate, int $userId);
 
-    public function exportByRetailer(int $retailer_id, string $date, User $user): JsonResponse;
+    public function exportByRetailer(int $retailer_id, string $date, User $user, array $filters): JsonResponse;
 }
