@@ -23,12 +23,14 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             return $this->model()
                 ->with('retailers')
                 ->with('user')
-                ->with('images');
+                ->with('images')
+                ->get();
         }
 
         return $this->model()
             ->with('retailers')
-            ->where('user_id', auth()->id());
+            ->where('user_id', auth()->id())
+            ->get();
     }
 
     public function allLatest(User $user): Collection
