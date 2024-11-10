@@ -64,6 +64,7 @@ class MetricsFiltersSheet implements FromCollection, WithHeadings, WithTitle, Wi
                 return [];
             }
 
+            // TODO change value if value empty from current to real date
             return [
                 'Filter' => ucfirst(str_replace('_', ' ', $key)),
                 'Value' => empty($value) ? 'Last available date' : $value,
