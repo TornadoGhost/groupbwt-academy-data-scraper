@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Requests\ImageProductRequest;
 use App\Repositories\Contracts\ImageProductRepositoryInterface;
 use App\Services\Contracts\ImageServiceInterface;
 use Illuminate\Http\File;
@@ -14,7 +15,6 @@ class ImageService implements ImageServiceInterface
 
     public function __construct(
         protected ImageProductRepositoryInterface $imageProductRepository,
-        protected ImageProductRepositoryInterface $productImageRepository
     )
     {
     }
@@ -40,5 +40,15 @@ class ImageService implements ImageServiceInterface
         });
     }
 
+    public function store(ImageProductRequest $request): array
+    {
+        $product = $this->productService->find($request->validated('product_id'));
+        $images = [];
+        foreach ($request->validated('images') as $image) {
+            $path = $this->imageService->saveImage($image);
+            $images[] = $product->images()->create(['path' => $path]);
+        }
 
+        return $images;
+    }
 }
