@@ -21,14 +21,7 @@ class RetailerController extends Controller
 
     public function index(): View
     {
-        $users = $this->userService->all();
-        $preparedUsers = $this->userService->prepareUsers($users);
-        $firstScrapedData = $this->scrapingSessionService->getFirstScrapingSession();
-        $lastScrapedDate = $this->scrapingSessionService->getLatestScrapingSession();
-        $firstDate = Carbon::parse($firstScrapedData)->format('Y-m-d');
-        $lastDate = Carbon::parse($lastScrapedDate)->format('Y-m-d');
-
-        return view('retailers.index', compact('users', 'preparedUsers', 'firstDate', 'lastDate'));
+        return view('retailers.index', $this->retailerService->prepareDataForIndexView());
     }
 
     public function create(): View
