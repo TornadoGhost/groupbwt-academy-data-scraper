@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Exports\MetricsExport;
+use App\Http\Requests\MetricRequest;
 use App\Jobs\NotifyUserOfCompletedExport;
 use App\Jobs\SaveExportTableData;
 use App\Models\User;
@@ -14,6 +15,7 @@ use App\Services\Contracts\ScrapedDataServiceInterface;
 use App\Services\Contracts\ScrapingSessionServiceInterface;
 use App\Traits\JsonResponseHelper;
 use Carbon\Carbon;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 
@@ -77,5 +79,27 @@ class MetricService implements MetricServiceInterface
             ]);
 
         return $this->successResponse('Metrics data export started');
+    }
+
+    public function getMetrics(MetricRequest $request, User|Authenticatable $user): Collection|\Illuminate\Support\Collection
+    {
+        $products = $request->products ?? [];
+        $retailers = $request->retailers ?? [];
+        $startDate = $request->start_date ?? Carbon::parse($this->scrapingSessionService->getLatestScrapingSession())->format('Y-m-d');
+        $endDate = $request->end_date ?? '';
+
+        if (auth()->user()->isAdmin) {
+            $userId = $request->userId ?? 0;
+        } else {
+            $userId = auth()->id();
+        }
+
+        $avgRating = $this->scrapedDataService->avgRating($products, $retailers, $startDate, $endDate, $userId);
+        $avgPrice = $this->scrapedDataService->avgPrice($products, $retailers, $startDate, $endDate, $userId);
+        $avgImages = $this->scrapedDataService->avgImages($products, $retailers, $startDate, $endDate, $userId);
+        $avgPriceMap = $avgPrice->keyBy('retailer_id')->toArray();
+        $avgImagesMap = $avgImages->keyBy('retailer_id')->toArray();
+
+        return $this->getAvgData($avgRating, $avgPriceMap, $avgImagesMap);
     }
 }
