@@ -18,8 +18,12 @@ use App\Repositories\RetailerRepository;
 use App\Repositories\ScrapedDataRepository;
 use App\Repositories\ScrapingSessionRepository;
 use App\Repositories\UserRepository;
+use App\Services\AuthService;
+use App\Services\Contracts\AuthServiceInterface;
 use App\Services\Contracts\ExportTableServiceInterface;
 use App\Services\Contracts\ImageServiceInterface;
+use App\Services\Contracts\MetricServiceInterface;
+use App\Services\Contracts\NotificationServiceInterface;
 use App\Services\Contracts\ProductServiceInterface;
 use App\Services\Contracts\RegionServiceInterface;
 use App\Services\Contracts\RetailerServiceInterface;
@@ -28,6 +32,8 @@ use App\Services\Contracts\ScrapingSessionServiceInterface;
 use App\Services\Contracts\UserServiceInterface;
 use App\Services\ExportTableService;
 use App\Services\ImageService;
+use App\Services\MetricService;
+use App\Services\NotificationService;
 use App\Services\ProductService;
 use App\Services\RegionService;
 use App\Services\RetailerService;
@@ -66,6 +72,10 @@ class RepositoryServiceProvider extends ServiceProvider
 
         $this->app->singleton(ExportTableRepositoryInterface::class, ExportTableRepository::class);
         $this->app->singleton(ExportTableServiceInterface::class, ExportTableService::class);
+
+        $this->app->singleton(MetricServiceInterface::class, MetricService::class);
+        $this->app->singleton(NotificationServiceInterface::class, NotificationService::class);
+        $this->app->singleton(AuthServiceInterface::class, AuthService::class);
     }
 
     /**
