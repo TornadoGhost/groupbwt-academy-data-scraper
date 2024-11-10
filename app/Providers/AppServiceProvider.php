@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Models\User;
+use App\Services\AuthService;
+use App\Services\Contracts\AuthServiceInterface;
 use App\Services\Contracts\MetricServiceInterface;
 use App\Services\Contracts\NotificationServiceInterface;
 use App\Services\MetricService;
@@ -33,9 +35,5 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('isAdmin', function (User $user) {
             return $user->isAdmin;
         });
-
-        //Services
-        $this->app->singleton(MetricServiceInterface::class, MetricService::class);
-        $this->app->singleton(NotificationServiceInterface::class, NotificationService::class);
     }
 }
