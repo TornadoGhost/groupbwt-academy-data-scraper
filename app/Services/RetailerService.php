@@ -5,10 +5,21 @@ namespace App\Services;
 use App\Models\Retailer;
 use App\Repositories\Contracts\RetailerRepositoryInterface;
 use App\Services\Contracts\RetailerServiceInterface;
+use App\Services\Contracts\ScrapingSessionServiceInterface;
+use App\Services\Contracts\UserServiceInterface;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 
 class RetailerService extends BaseCrudService implements RetailerServiceInterface
 {
+    public function __construct(
+        protected UserServiceInterface $userService,
+        protected ScrapingSessionServiceInterface $scrapingSessionService,
+    )
+    {
+        parent::__construct();
+    }
+
     public function grandAccess(int $retailer_id, array $users_id)
     {
         return $this->repository()->grandAccess($retailer_id, $users_id);
@@ -33,6 +44,7 @@ class RetailerService extends BaseCrudService implements RetailerServiceInterfac
     {
         return $this->repository()->list();
     }
+
     public function retailersForMetrics(int $userId): Collection
     {
         return $this->repository()->retailersForMetrics($userId);
@@ -41,6 +53,25 @@ class RetailerService extends BaseCrudService implements RetailerServiceInterfac
     public function getNameById(int $retailerId)
     {
         return $this->repository()->getNameById($retailerId);
+    }
+
+    public function prepareDataForIndexView(): array
+    {
+        $users = $this->userService->all();
+        $preparedUsers = $this->userService->prepareUsers($users);
+        $firstScrapedData = $this->scrapingSessionService->getFirstScrapingSession();
+        $lastScrapedDate = $this->scrapingSessionService->getLatestScrapingSession();
+        $firstDate = Carbon::parse($firstScrapedData)->format('Y-m-d');
+        $lastDate = Carbon::parse($lastScrapedDate)->format('Y-m-d');
+
+        return [
+            'users' => $users,
+            'preparedUsers' => $preparedUsers,
+            'firstScrapedData' => $firstScrapedData,
+            'lastScrapedDate' => $lastScrapedDate,
+            'firstDate' => $firstDate,
+            'lastDate' => $lastDate,
+        ];
     }
 
     protected function getRepositoryClass()

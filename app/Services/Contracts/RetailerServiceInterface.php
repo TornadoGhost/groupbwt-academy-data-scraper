@@ -11,4 +11,5 @@ interface RetailerServiceInterface extends BaseCrudServiceInterface
     public function list();
     public function retailersForMetrics(int $userId);
     public function getNameById(int $retailerId);
+    public function prepareDataForIndexView(): array;
 }
