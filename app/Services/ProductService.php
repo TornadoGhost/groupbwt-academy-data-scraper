@@ -38,11 +38,6 @@ class ProductService extends BaseCrudService implements ProductServiceInterface
         return ProductRepositoryInterface::class;
     }
 
-    public function findByMpn(string $mpn): Product
-    {
-        return $this->repository()->findByMpn($mpn);
-    }
-
     public function productsForMetrics(int $userId): Collection
     {
         return $this->repository()->productsForMetrics($userId);
@@ -55,7 +50,7 @@ class ProductService extends BaseCrudService implements ProductServiceInterface
         $expectedHeadings = ['title', 'manufacturer_part_number', 'pack_size'];
 
         $headersValidation = $this->importHeadersValidation($headings, $expectedHeadings);
-        $rowsValidation = $this->importRowsValidation($productImport, $file);
+        $rowsValidation = $this->importRowsValidation($productImport, $file, $user);
 
         if (!empty($headersValidation)) {
             return $this->errorResponse('Wrong headings in CSV file', 422, $headersValidation);
@@ -82,7 +77,7 @@ class ProductService extends BaseCrudService implements ProductServiceInterface
         return $errors;
     }
 
-    protected function importRowsValidation(object $productImport, UploadedFile|string $file): array
+    protected function importRowsValidation(object $productImport, UploadedFile|string $file, User $user): array
     {
         $rows = Excel::toArray($productImport, $file);
         $rules = [
@@ -92,7 +87,7 @@ class ProductService extends BaseCrudService implements ProductServiceInterface
                 'string',
                 'min:3',
                 'max:50',
-                Rule::unique('products')->where(fn($query) => $query->where('user_id', request()->user()->id)),
+                Rule::unique('products')->where(fn($query) => $query->where('user_id', $user->id)),
             ],
             'pack_size' => ['required', 'string', 'min:3', 'max:20'],
         ];
@@ -139,7 +134,7 @@ class ProductService extends BaseCrudService implements ProductServiceInterface
         return $this->successResponse('Products exportation started');
     }
 
-    public function getNameById(int $id): string
+    public function getNameById(int $id): ?string
     {
         return $this->repository()->getNameById($id);
     }
