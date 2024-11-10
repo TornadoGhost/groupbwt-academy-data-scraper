@@ -53,7 +53,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
 
     public function delete(int $id): bool
     {
-        return $this->model()->findOrFail($id)->delete($id);
+        return $this->model()->findOrFail($id)->delete();
     }
 
     abstract protected function getModelClass(): string;
