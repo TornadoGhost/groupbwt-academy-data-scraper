@@ -11,11 +11,10 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 interface ProductServiceInterface extends BaseCrudServiceInterface
 {
-    public function findByMpn(string $mpn): Product;
     public function productsForMetrics(int $userId): Collection;
     public function import(UploadedFile $file, User $user): JsonResponse;
     public function downloadExampleImportFile(): StreamedResponse;
     public function exportExcel(User $user): JsonResponse;
-    public function getNameById(int $id): string;
+    public function getNameById(int $id): ?string;
     public function allLatest(User $user): Collection;
 }
