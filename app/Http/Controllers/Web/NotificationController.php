@@ -15,35 +15,8 @@ class NotificationController extends Controller
     {
     }
 
-    public function get(Request $request): array
+    public function get(): array
     {
-        $notifications = auth()->user()->notifications;
-        $unreadNotifications = auth()->user()->unreadNotifications;
-        $dropdownHtml = '';
-
-        foreach ($unreadNotifications as $key => $not) {
-            $icon = "<i class='mr-2 fas fa-fw fa-file text-success'></i>";
-
-            $time = "<span class='float-right text-muted text-sm'>"
-                   . $this->notificationService->getRightTime($not->created_at) .
-                "</span>";
-
-            $dropdownHtml .= "<a href=" . route('exportTables.index') . " class='dropdown-item'>
-                            {$icon}{$not['data']['message']}{$time}
-                          </a>";
-
-            if ($key < count($notifications) - 1) {
-                $dropdownHtml .= "<div class='dropdown-divider'></div>";
-            }
-        }
-
-        // Return the new notification data.
-
-        return [
-            'label' => count($unreadNotifications),
-            'label_color' => 'danger',
-            'icon_color' => 'dark',
-            'dropdown' => $dropdownHtml,
-        ];
+        return $this->notificationService->getNotification(auth()->user());
     }
 }
