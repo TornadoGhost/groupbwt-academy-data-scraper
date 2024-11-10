@@ -96,24 +96,6 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             ->findOrFail($id);
     }
 
-    public function findByMpn(string $mpn): Product
-    {
-        if (auth()->user()->isAdmin) {
-            return $this->model
-                ->with('retailers')
-                ->with('images')
-                ->where('manufacturer_part_number', $mpn)
-                ->firstOrFail();
-        }
-
-        return $this->model()
-            ->with('retailers')
-            ->with('images')
-            ->where('user_id', auth()->id())
-            ->where('manufacturer_part_number', $mpn)
-            ->findOrFail($mpn);
-    }
-
     public function update(int $id, array $attributes): Model
     {
         $product = $this->model
@@ -187,7 +169,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             ]);
     }
 
-    public function getNameById(int $id): string
+    public function getNameById(int $id): ?string
     {
         return $this->model()->query()->find($id, 'title')->title;
     }

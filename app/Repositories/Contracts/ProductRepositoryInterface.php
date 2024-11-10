@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 interface ProductRepositoryInterface extends BaseRepositoryInterface
 {
-    public function findByMpn(string $mpn);
     public function productsForMetrics(int $userId);
-    public function getNameById(int $id): string;
+    public function getNameById(int $id): ?string;
     public function allLatest(User $user): Collection;
 }
