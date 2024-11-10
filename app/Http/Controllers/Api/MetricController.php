@@ -39,26 +39,7 @@ class MetricController extends Controller
 
     public function index(MetricRequest $request): JsonResponse
     {
-        $products = $request->products ?? [];
-        $retailers = $request->retailers ?? [];
-        $startDate = $request->start_date ?? Carbon::parse($this->scrapingSessionService->getLatestScrapingSession())->format('Y-m-d');
-        $endDate = $request->end_date ?? '';
-
-        if (auth()->user()->isAdmin) {
-            $userId = $request->userId ?? 0;
-        } else {
-            $userId = auth()->id();
-        }
-
-        $avgRating = $this->scrapedDataService->avgRating($products, $retailers, $startDate, $endDate, $userId);
-        $avgPrice = $this->scrapedDataService->avgPrice($products, $retailers, $startDate, $endDate, $userId);
-        $avgImages = $this->scrapedDataService->avgImages($products, $retailers, $startDate, $endDate, $userId);
-        $avgPriceMap = $avgPrice->keyBy('retailer_id')->toArray();
-        $avgImagesMap = $avgImages->keyBy('retailer_id')->toArray();
-
-        $mergedData = $this->metricService->getAvgData($avgRating, $avgPriceMap, $avgImagesMap);
-
-        return $this->successResponse("Metrics data received", data: $mergedData);
+        return $this->successResponse("Metrics data received", data: $this->metricService->getMetrics($request, auth()->user()));
     }
 
     public function getProducts(): JsonResponse
