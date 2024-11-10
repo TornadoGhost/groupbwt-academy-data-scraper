@@ -13,7 +13,6 @@ use App\Http\Middleware\AuthenticateAdmin;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth'])->group(function () {
-//    Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::redirect('/', '/products')->name('home');
 
     Route::controller(ProductController::class)->group(function () {
