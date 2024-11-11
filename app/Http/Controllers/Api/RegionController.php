@@ -25,9 +25,10 @@ class RegionController extends Controller
             return $this->unauthorizedResponse();
         }
 
-        $regions = $this->regionService->all();
-
-        return $this->successResponse('Regions list received', data: RegionResource::collection($regions));
+        return $this->successResponse(
+            'Regions list received',
+            data: RegionResource::collection($this->regionService->all())
+        );
     }
 
     public function store(RegionRequest $request): JsonResponse
@@ -36,20 +37,22 @@ class RegionController extends Controller
             return $this->unauthorizedResponse();
         }
 
-        $region = $this->regionService->create($request->validated());
-
-        return $this->successResponse("Region created", 201, RegionResource::make($region));
+        return $this->successResponse(
+            'Region created',
+            201,
+            RegionResource::make($this->regionService->create($request->validated())));
     }
 
     public function show(int $id): JsonResponse
     {
-        $region = $this->regionService->find($id);
-
-        if (auth()->user()->cannot('view', $region)) {
+        if (auth()->user()->cannot('view', $this->regionService->find($id))) {
             return $this->unauthorizedResponse();
         }
 
-        return $this->successResponse("Region received", data: RegionResource::make($region));
+        return $this->successResponse(
+            'Region received',
+            data: RegionResource::make($this->regionService->find($id))
+        );
     }
 
     public function update(RegionRequest $request, string $id): JsonResponse
@@ -58,9 +61,10 @@ class RegionController extends Controller
             return $this->unauthorizedResponse();
         }
 
-        $region = $this->regionService->update($id, $request->validated());
-
-        return $this->successResponse("Region updated", data: RegionResource::make($region));
+        return $this->successResponse(
+            'Region updated',
+            data: RegionResource::make($this->regionService->update($id, $request->validated()))
+        );
     }
 
     public function destroy(string $id): JsonResponse

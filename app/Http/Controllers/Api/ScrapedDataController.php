@@ -40,20 +40,22 @@ class ScrapedDataController extends Controller
             return $this->unauthorizedResponse();
         }
 
-        $scrapedData = $this->scrapedDataService->create($request->validated());
-
-        return $this->successResponse('Scraped data created', 201, ScrapedDataResource::make($scrapedData));
+        return $this->successResponse(
+            'Scraped data created',
+            201,
+            ScrapedDataResource::make($this->scrapedDataService->create($request->validated())));
     }
 
     public function show(int $id): JsonResponse
     {
-        $scrapedData = $this->scrapedDataService->find($id);
-
-        if (auth()->user()->cannot('view', $scrapedData)) {
+        if (auth()->user()->cannot('view', $this->scrapedDataService->find($id))) {
             return $this->unauthorizedResponse();
         }
 
-        return $this->successResponse("Scraped data received", data: ScrapedDataResource::make($scrapedData));
+        return $this->successResponse(
+            'Scraped data received',
+            data: ScrapedDataResource::make($this->scrapedDataService->find($id))
+        );
     }
 
     public function update(UpdateScrapedDataRequest $request, int $id): JsonResponse
@@ -62,9 +64,10 @@ class ScrapedDataController extends Controller
             return $this->unauthorizedResponse();
         }
 
-        $scrapedData = $this->scrapedDataService->update($id, $request->validated());
-
-        return $this->successResponse("Scraped data updated", data: ScrapedDataResource::make($scrapedData));
+        return $this->successResponse(
+            'Scraped data updated',
+            data: ScrapedDataResource::make($this->scrapedDataService->update($id, $request->validated()))
+        );
     }
 
     public function destroy(int $id): JsonResponse
@@ -75,7 +78,7 @@ class ScrapedDataController extends Controller
 
         $this->scrapedDataService->delete($id);
 
-        return $this->successResponse("Scraped data deleted");
+        return $this->successResponse('Scraped data deleted');
     }
 
     public function exportByRetailer(ExportScrapedDataByRetailerRequest $request): JsonResponse
