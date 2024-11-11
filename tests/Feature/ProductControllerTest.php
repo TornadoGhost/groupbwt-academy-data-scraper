@@ -131,10 +131,20 @@ class ProductControllerTest extends TestCase
 
         $productData = [
             'title' => 'Updated Product',
+            'manufacturer_part_number' => $product->manufacturer_part_number,
+            'pack_size' => $product->pack_size,
         ];
 
         $productService = \Mockery::mock(ProductServiceInterface::class);
-        $productService->shouldReceive('update')->once()->andReturn(new Product($productData));
+
+        $productService->shouldReceive('find')->once()->with($product->id)->andReturn($product);
+
+        $updatedProduct = (object) array_merge($product->toArray(), $productData, [
+            'retailers' => $product->retailers,
+            'images' => $product->images,
+        ]);
+
+        $productService->shouldReceive('update')->once()->with($product->id, $productData)->andReturn($updatedProduct);
 
         $this->app->instance(ProductServiceInterface::class, $productService);
 
@@ -153,8 +163,6 @@ class ProductControllerTest extends TestCase
                     'pack_size',
                     'created_at',
                     'updated_at',
-                    'retailers',
-                    'images'
                 ]
             ]);
     }
