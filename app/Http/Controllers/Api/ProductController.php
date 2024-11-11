@@ -22,7 +22,7 @@ class ProductController extends Controller
 
     public function __construct
     (
-        protected ProductServiceInterface $productService,
+        protected ProductServiceInterface     $productService,
         protected ExportTableServiceInterface $exportTableService,
     )
     {
@@ -30,51 +30,46 @@ class ProductController extends Controller
 
     public function index(): JsonResponse
     {
-        $products = $this->productService->allLatest(request()->user());
-
-        return $this->successResponse('Products list received', data: ProductResource::collection($products));
+        return $this->successResponse(
+            'Products list received',
+            data: ProductResource::collection($this->productService->allLatest(request()->user())));
     }
 
     public function store(StoreProductRequest $request): JsonResponse
     {
-        if (auth()->user()->cannot('create', Product::class)) {
-            return $this->unauthorizedResponse();
-        }
-
-        $product = $this->productService->create($request->validated());
-
-        return $this->successResponse('Product created', 201, ProductResource::make($product));
+        return $this->successResponse(
+            'Product created',
+            201,
+            ProductResource::make($this->productService->create($request->validated()))
+        );
     }
 
     public function show(int $id): JsonResponse
     {
-        $product = $this->productService->find($id);
-
-        if (auth()->user()->cannot('view', $product)) {
+        if (auth()->user()->cannot('view', $this->productService->find($id))) {
             return $this->unauthorizedResponse();
         }
 
-        return $this->successResponse("Product received", data: ProductResource::make($product));
+        return $this->successResponse(
+            "Product received",
+            data: ProductResource::make($this->productService->find($id))
+        );
     }
 
     public function update(UpdateProductRequest $request, int $id): JsonResponse
     {
-        $product = $this->productService->find($id);
-
-        if (auth()->user()->cannot('update', $product)) {
+        if (auth()->user()->cannot('update', $this->productService->find($id))) {
             return $this->unauthorizedResponse();
         }
 
-        $product = $this->productService->update($id, $request->validated());
-
-        return $this->successResponse("Product updated", data: ProductResource::make($product));
+        return $this->successResponse(
+            "Product updated",
+            data: ProductResource::make($this->productService->update($id, $request->validated())));
     }
 
     public function destroy(int $id): JsonResponse
     {
-        $product = $this->productService->find($id);
-
-        if (auth()->user()->cannot('delete', $product)) {
+        if (auth()->user()->cannot('delete', $this->productService->find($id))) {
             return $this->unauthorizedResponse();
         }
 
