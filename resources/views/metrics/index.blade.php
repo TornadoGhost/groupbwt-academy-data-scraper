@@ -1,14 +1,8 @@
 @extends('layouts.app')
 
-{{-- Customize layout sections --}}
-@section('adminlte_css_pre')
-@stop
-
 @section('subtitle', 'Metrics')
 @section('content_header_title', 'Metrics')
 @section('plugins.daterangepicker', true)
-
-{{-- Content body: main page content --}}
 
 @section('content_body')
     <div>
@@ -103,14 +97,6 @@
                        data-target="#errors-modal"/>
 @stop
 
-{{-- Push extra CSS --}}
-
-@push('css')
-    {{-- Add here extra stylesheets --}}
-    {{-- <link rel="stylesheet" href="/css/admin_custom.css"> --}}
-@endpush
-
-{{-- Push extra scripts --}}
 @push('js')
     <script type="module">
         import {mainFetch} from "{{ asset('js/mainFetch.js') }}";
