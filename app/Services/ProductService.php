@@ -139,7 +139,7 @@ class ProductService extends BaseCrudService implements ProductServiceInterface
         return $this->repository()->getNameById($id);
     }
 
-    public function allLatest(User $user): Collection
+    public function allLatest(User $user): Collection| \Illuminate\Support\Collection
     {
         return $this->repository()->allLatest($user);
     }

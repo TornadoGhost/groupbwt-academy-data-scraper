@@ -16,5 +16,5 @@ interface ProductServiceInterface extends BaseCrudServiceInterface
     public function downloadExampleImportFile(): StreamedResponse;
     public function exportExcel(User $user): JsonResponse;
     public function getNameById(int $id): ?string;
-    public function allLatest(User $user): Collection;
+    public function allLatest(User $user): Collection| \Illuminate\Support\Collection;
 }
