@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Retailer;
 use App\Models\User;
 use App\Services\Contracts\ProductServiceInterface;
+use Illuminate\Http\UploadedFile;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
 
@@ -139,7 +140,7 @@ class ProductControllerTest extends TestCase
 
         $productService->shouldReceive('find')->once()->with($product->id)->andReturn($product);
 
-        $updatedProduct = (object) array_merge($product->toArray(), $productData, [
+        $updatedProduct = (object)array_merge($product->toArray(), $productData, [
             'retailers' => $product->retailers,
             'images' => $product->images,
         ]);
@@ -164,6 +165,94 @@ class ProductControllerTest extends TestCase
                     'created_at',
                     'updated_at',
                 ]
+            ]);
+    }
+
+    public function test_destroy_method_deletes_product_and_returns_correct_json()
+    {
+        $user = User::factory()->create();
+        $product = Product::factory()->create(['user_id' => $user->id]);
+
+        $productService = \Mockery::mock(ProductServiceInterface::class);
+        $productService->shouldReceive('find')->once()->with($product->id)->andReturn($product);
+        $productService->shouldReceive('delete')->once()->with($product->id)->andReturn(response()->json(['message'=>'CSV data imported successfully']), 201);
+
+        $this->app->instance(ProductServiceInterface::class, $productService);
+
+        Passport::actingAs($user);
+
+        $response = $this->deleteJson('/api/products/' . $product->id);
+
+        $response->assertOk()
+            ->assertJsonStructure([
+                'status',
+                'message'
+            ]);
+    }
+
+    // TODO not working, can't see example file
+    public function test_import_method_returns_correct_json()
+    {
+        $user = User::factory()->create();
+
+        $csvData = "title,manufacturer_part_number,pack_size\ntest_title_1,asd-qwe-asd,each\ntest_title_2,asd-qwe-asd1,each";
+
+        $filePath = storage_path('app/private/excel/example.csv');
+        file_put_contents($filePath, $csvData);
+
+        // Створення об'єкта UploadedFile
+        $file = new UploadedFile($filePath, 'example.csv', 'text/csv', null, true);
+
+        // Мокаємо ProductServiceInterface
+        $productService = \Mockery::mock(ProductServiceInterface::class);
+        $productService->shouldReceive('import')->once()->andReturn(
+            response()->json([
+                'status' => 'Success',
+                'message' => 'CSV data imported successfully'
+            ], 201)
+        );
+
+        $this->app->instance(ProductServiceInterface::class, $productService);
+
+        // Аутентифікація користувача
+        Passport::actingAs($user);
+
+        // Виконання POST запиту
+        $response = $this->postJson('/api/import/products', ['csv_file' => $file]);
+
+        // Перевірка відповіді
+        $response->assertStatus(201)
+            ->assertJson([
+                'status' => 'Success',
+                'message' => 'CSV data imported successfully',
+            ]);
+
+        // Видалення тимчасового файлу
+        unlink($filePath);
+    }
+
+    public function test_export_method_returns_correct_json()
+    {
+        $user = User::factory()->create();
+
+        $productService = \Mockery::mock(ProductServiceInterface::class);
+        $productService->shouldReceive('exportExcel')->once()->andReturn(response()->json(
+            [
+                'status' => 'Success',
+                'message' => 'Products exportation started'
+            ]
+        ));
+
+        $this->app->instance(ProductServiceInterface::class, $productService);
+
+        Passport::actingAs($user);
+
+        $response = $this->getJson('/api/export/products');
+
+        $response->assertOk()
+            ->assertJson([
+                'status' => 'Success',
+                'message' => 'Products exportation started',
             ]);
     }
 }
