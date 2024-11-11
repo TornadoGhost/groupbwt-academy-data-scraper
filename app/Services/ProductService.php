@@ -126,7 +126,7 @@ class ProductService extends BaseCrudService implements ProductServiceInterface
         $fileName = 'Product Data';
         $filePath = 'excel/export/' . $user->id . '/products/' . md5($fileName . now()) . '.xlsx';
 
-        (new ProductsExport($this))->store($filePath)->chain([
+        (new ProductsExport(['current_day' => now()],$this))->store($filePath)->chain([
             new NotifyUserOfCompletedExport($user, 'Products'),
             new SaveExportTableData($fileName, $filePath, $user, $this->exportTableService)
         ]);
