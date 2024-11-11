@@ -1,3 +1,4 @@
+{{--TODO admin views, can be deleted or saved for future, because not used right now--}}
 @extends('layouts.app')
 
 {{-- Customize layout sections --}}
