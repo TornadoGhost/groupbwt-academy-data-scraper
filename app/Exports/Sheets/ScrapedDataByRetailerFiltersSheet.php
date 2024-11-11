@@ -3,6 +3,7 @@
 namespace App\Exports\Sheets;
 
 use App\Services\Contracts\RetailerServiceInterface;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Collection;
@@ -30,6 +31,20 @@ class ScrapedDataByRetailerFiltersSheet implements FromCollection, WithHeadings,
                 return [
                     'Filter' => 'Retailer name',
                     'Value' => $this->retailerService->getNameById($value),
+                ];
+            }
+
+            if ($key === 'date') {
+                return [
+                    'Filter' => 'Scraped Data',
+                    'Value' => $value,
+                ];
+            }
+
+            if ($key === 'current_day') {
+                return [
+                    'Filter' => 'File Created',
+                    'Value' => Carbon::parse($value)->format('Y-m-d H:m'),
                 ];
             }
 
