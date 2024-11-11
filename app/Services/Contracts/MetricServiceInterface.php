@@ -17,4 +17,5 @@ interface MetricServiceInterface
     public function getMetrics(
         MetricRequest $request, User|Authenticatable $user
     ): Collection|\Illuminate\Support\Collection;
+    public function prepareDataForIndexPage(User|Authenticatable $user): array;
 }
