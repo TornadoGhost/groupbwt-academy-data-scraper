@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAuthenticateRequest;
+use App\Services\Contracts\AuthServiceInterface;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
@@ -11,6 +12,12 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    public function __construct(
+        protected AuthServiceInterface $authService,
+    )
+    {
+    }
+
     public function index(): View
     {
         return view('auth.login');
@@ -18,20 +25,11 @@ class AuthController extends Controller
 
     public function login(StoreAuthenticateRequest $request): RedirectResponse
     {
-        if (Auth::attempt($request->validated())) {
-            $request->session()->regenerate();
-
-            return redirect()->route('home');
-        } else {
-            return redirect()->back()->withErrors(['errorLogin' => 'Wrong email or password'])->withInput();
-        }
+        return $this->authService->loginWeb($request);
     }
 
     public function logout(Request $request): RedirectResponse
     {
-        Auth::logout();
-        $request->session()->invalidate();
-
-        return redirect()->route('login');
+        return $this->authService->logoutWeb($request);
     }
 }
