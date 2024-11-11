@@ -5,6 +5,8 @@ namespace App\Exports\Sheets;
 use App\Models\User;
 use App\Services\Contracts\ProductServiceInterface;
 use App\Services\Contracts\RetailerServiceInterface;
+use App\Services\Contracts\ScrapingSessionServiceInterface;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Collection;
@@ -22,6 +24,7 @@ class MetricsFiltersSheet implements FromCollection, WithHeadings, WithTitle, Wi
         protected RetailerServiceInterface $retailerService,
         protected ProductServiceInterface $productService,
         protected User $user,
+        protected ScrapingSessionServiceInterface $scrapingSessionService,
     )
     {
     }
@@ -73,7 +76,7 @@ class MetricsFiltersSheet implements FromCollection, WithHeadings, WithTitle, Wi
 
             return [
                 'Filter' => ucfirst(str_replace('_', ' ', $key)),
-                'Value' => empty($value) ? 'Last available date' : $value,
+                'Value' => empty($value) ? Carbon::parse($this->scrapingSessionService->getLatestScrapingSession())->format('Y-m-d') : $value,
             ];
         });
     }
