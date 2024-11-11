@@ -13,6 +13,7 @@ use App\Services\Contracts\ProductServiceInterface;
 use App\Services\Contracts\RetailerServiceInterface;
 use App\Services\Contracts\ScrapedDataServiceInterface;
 use App\Services\Contracts\ScrapingSessionServiceInterface;
+use App\Services\Contracts\UserServiceInterface;
 use App\Traits\JsonResponseHelper;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -29,6 +30,7 @@ class MetricService implements MetricServiceInterface
         protected ScrapedDataServiceInterface     $scrapedDataService,
         protected RetailerServiceInterface        $retailerService,
         protected ProductServiceInterface         $productService,
+        protected UserServiceInterface            $userService,
     )
     {
     }
@@ -102,5 +104,24 @@ class MetricService implements MetricServiceInterface
         $avgImagesMap = $avgImages->keyBy('retailer_id')->toArray();
 
         return $this->getAvgData($avgRating, $avgPriceMap, $avgImagesMap);
+    }
+
+    public function prepareDataForIndexPage(User|Authenticatable $user): array
+    {
+        $firstScrapedData = $this->scrapingSessionService->getFirstScrapingSession();
+        $lastScrapedDate = $this->scrapingSessionService->getLatestScrapingSession();
+        $firstDate = Carbon::parse($firstScrapedData)->format('Y-m-d');
+        $lastDate = Carbon::parse($lastScrapedDate)->format('Y-m-d');
+        $users = null;
+
+        if ($user->isAdmin) {
+            $users = $this->userService->all();
+        }
+
+        return [
+            'firstDate' => $firstDate,
+            'lastDate' => $lastDate,
+            'users' => $users,
+        ];
     }
 }
