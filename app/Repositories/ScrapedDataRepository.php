@@ -263,7 +263,7 @@ class ScrapedDataRepository extends BaseRepository implements ScrapedDataReposit
         return $productsId;
     }
 
-    public function scrapedDataByRetailer(int $retailerId, string $date): Collection|null
+    public function scrapedDataByRetailer(int $retailerId, string $date): ?Collection
     {
         return $this->model()
             ->with('product')
