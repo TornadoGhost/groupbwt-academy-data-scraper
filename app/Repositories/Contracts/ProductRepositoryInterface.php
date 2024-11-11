@@ -9,5 +9,5 @@ interface ProductRepositoryInterface extends BaseRepositoryInterface
 {
     public function productsForMetrics(int $userId);
     public function getNameById(int $id): ?string;
-    public function allLatest(User $user): Collection;
+    public function allLatest(User $user): Collection| \Illuminate\Support\Collection;
 }
