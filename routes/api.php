@@ -26,13 +26,13 @@ Route::middleware('auth:api')->group(function () {
     ]);
 
     Route::controller(RetailerController::class)->group(function () {
-        Route::patch('/retailers/{id}/restore', 'restore');
+        Route::patch('retailers/{id}/restore', 'restore');
         Route::get('retailers/{retailer_id}/users', 'getWithUsers');
     });
 
     Route::controller(RetailerAccessController::class)->group(function () {
-        Route::patch('/retailers/{retailer_id}/grand-access', 'grandAccess');
-        Route::patch('/retailers/{retailer_id}/revoke-access', 'revokeAccess');
+        Route::patch('retailers/{retailer_id}/grand-access', 'grandAccess');
+        Route::patch('retailers/{retailer_id}/revoke-access', 'revokeAccess');
     });
 
 
@@ -44,8 +44,8 @@ Route::middleware('auth:api')->group(function () {
     });
 
     Route::controller(ImageProductController::class)->group(function () {
-        Route::post('/images', 'store');
-        Route::delete('/images/{id}', 'destroy');
+        Route::post('images', 'store');
+        Route::delete('images/{id}', 'destroy');
     });
 
     Route::controller(ProductController::class)->group(function () {
@@ -54,17 +54,17 @@ Route::middleware('auth:api')->group(function () {
     });
 
     Route::controller(ExportTableController::class)->group(function () {
-        Route::get('/export-tables', 'index');
-        Route::delete('/export-tables/{file}', 'destroy');
+        Route::get('export-tables', 'index');
+        Route::delete('export-tables/{file}', 'destroy');
     });
 
     Route::controller(ScrapedDataController::class)->group(function () {
-        Route::get('/scraped-data/export/export-retailer', 'exportByRetailer');
+        Route::get('scraped-data/export/export-retailer', 'exportByRetailer');
     });
 
     Route::controller(NotificationController::class)->group(function () {
-        Route::patch('/notifications/mark-all-read', 'markAllAsRead');
-        Route::delete('/notifications/delete-all', 'deleteAll');
+        Route::patch('notifications/mark-all-read', 'markAllAsRead');
+        Route::delete('notifications/delete-all', 'deleteAll');
     });
 
     Route::post('logout', [AuthController::class, 'logout']);
