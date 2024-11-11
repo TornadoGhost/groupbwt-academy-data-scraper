@@ -101,8 +101,8 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         $product = $this->model
             ->where('user_id', auth()->id())
             ->findOrFail($id);
-        $retailers = $attributes['retailers'];
 
+        $retailers = $attributes['retailers'] ?? [];
         $filteredRetailers = array_filter($retailers, function ($item) {
             return $item['product_url'] !== null;
         });
@@ -110,7 +110,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         $attributes['retailers'] = $filteredRetailers;
 
         return DB::transaction(function () use ($product, $filteredRetailers, $attributes) {
-            if (isset($attributes['retailers'])) {
+            if (!empty($attributes['retailers'])) {
                 $product->retailers()->sync($attributes['retailers']);
             }
 
