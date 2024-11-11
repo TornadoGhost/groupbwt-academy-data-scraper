@@ -4,7 +4,7 @@ namespace App\Services\Contracts;
 
 interface ScrapingSessionServiceInterface extends BaseCrudServiceInterface
 {
-    public function getLatestScrapingSession();
+    public function getLatestScrapingSession(): string;
 
-    public function getFirstScrapingSession();
+    public function getFirstScrapingSession(): string;
 }
