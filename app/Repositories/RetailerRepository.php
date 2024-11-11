@@ -124,7 +124,7 @@ class RetailerRepository extends BaseRepository implements RetailerRepositoryInt
             );
     }
 
-    public function getNameById(int $retailerId): string|null
+    public function getNameById(int $retailerId): ?string
     {
         return $this->model()->query()->find($retailerId)->name;
     }
