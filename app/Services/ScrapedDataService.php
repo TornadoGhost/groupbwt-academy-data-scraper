@@ -79,7 +79,8 @@ class ScrapedDataService extends BaseCrudService implements ScrapedDataServiceIn
             ->avgImages($products, $retailers, $startDate, $endDate, $userId);
     }
 
-    public function scrapedDataByRetailer(int $retailerId, string $date) {
+    public function scrapedDataByRetailer(int $retailerId, string $date): ?Collection
+    {
         return $this->repository()->scrapedDataByRetailer($retailerId, $date);
     }
 
