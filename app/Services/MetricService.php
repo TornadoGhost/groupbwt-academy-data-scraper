@@ -71,6 +71,7 @@ class MetricService implements MetricServiceInterface
             $this->retailerService,
             $this->productService,
             request()->user(),
+            $this->scrapingSessionService,
         ))
             ->store($filePath)
             ->chain([
