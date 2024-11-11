@@ -2,13 +2,15 @@
 
 namespace App\Services;
 
+use App\Models\User;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Services\Contracts\UserServiceInterface;
 use Illuminate\Database\Eloquent\Collection;
 
 class UserService extends BaseCrudService implements UserServiceInterface
 {
-    public function findByEmail($email) {
+    public function findByEmail($email): User
+    {
         return $this->repository()->findByEmail($email);
     }
 
