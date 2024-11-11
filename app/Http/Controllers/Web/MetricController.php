@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\ScrapingSession;
+use App\Services\Contracts\MetricServiceInterface;
 use App\Services\Contracts\ProductServiceInterface;
 use App\Services\Contracts\RetailerServiceInterface;
 use App\Services\Contracts\ScrapedDataServiceInterface;
@@ -16,26 +17,13 @@ use Illuminate\Http\Request;
 class MetricController extends Controller
 {
     public function __construct(
-        protected ScrapingSessionServiceInterface $scrapingSessionService,
-        protected RetailerServiceInterface $retailerService,
-        protected ProductServiceInterface $productService,
-        protected UserServiceInterface $userService,
+        protected MetricServiceInterface $metricService,
     )
     {
     }
 
     public function index(): View
     {
-        $firstScrapedData = $this->scrapingSessionService->getFirstScrapingSession();
-        $lastScrapedDate = $this->scrapingSessionService->getLatestScrapingSession();
-        $firstDate = Carbon::parse($firstScrapedData)->format('Y-m-d');
-        $lastDate = Carbon::parse($lastScrapedDate)->format('Y-m-d');
-        $users = null;
-
-        if (auth()->user()->isAdmin) {
-            $users = $this->userService->all();
-        }
-
-        return view('metrics.index', compact('firstDate','lastDate', 'users'));
+        return view('metrics.index', $this->metricService->prepareDataForIndexPage(auth()->user()));
     }
 }
