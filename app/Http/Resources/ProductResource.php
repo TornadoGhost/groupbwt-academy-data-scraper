@@ -21,8 +21,8 @@ class ProductResource extends JsonResource
             'title' => $this->title,
             'manufacturer_part_number' => $this->manufacturer_part_number,
             'pack_size' => $this->pack_size,
-            'created_at' => $this->created_at?->format('d-m-Y'),
-            'updated_at' => $this->updated_at?->format('d-m-Y'),
+            'created_at' => Carbon::parse($this->created_at)->format('d-m-Y'),
+            'updated_at' => Carbon::parse($this->updated_at)->format('d-m-Y'),
             'retailers' => $this->retailers->map(function ($retailer) {
                 return [
                     'id' => $retailer->id,
