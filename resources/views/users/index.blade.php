@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 @stop
 
-@section('subtitle', 'Users list')
+@section('subtitle', 'Users')
 @section('content_header_title', 'Home')
 @section('content_header_subtitle', 'Users')
 @section('content_header_subtitle_subtitle', 'All')

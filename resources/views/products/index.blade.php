@@ -4,7 +4,7 @@
 @section('adminlte_css_pre')
 @stop
 
-@section('subtitle', 'Products list')
+@section('subtitle', 'Products')
 @section('content_header_title', 'Products')
 
 {{-- Content body: main page content --}}

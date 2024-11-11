@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 @stop
 
-@section('subtitle', 'Retailers list')
+@section('subtitle', 'Retailers')
 @section('content_header_title', 'Retailers')
 @section('plugins.bootstrap-bs', true)
 @section('plugins.daterangepicker', true)
