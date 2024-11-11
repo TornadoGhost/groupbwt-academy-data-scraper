@@ -10,7 +10,11 @@ use Illuminate\Http\JsonResponse;
 
 interface MetricServiceInterface
 {
-    public function getAvgData(Collection $avgRating, array $avgPrice, array $avgImages): Collection|\Illuminate\Support\Collection;
+    public function getAvgData(
+        Collection $avgRating, array $avgPrice, array $avgImages
+    ): Collection|\Illuminate\Support\Collection;
     public function exportExcel(array $requestData, User $user): JsonResponse;
-    public function getMetrics(MetricRequest $request, User|Authenticatable $user): Collection|\Illuminate\Support\Collection;
+    public function getMetrics(
+        MetricRequest $request, User|Authenticatable $user
+    ): Collection|\Illuminate\Support\Collection;
 }
