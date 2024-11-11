@@ -6,11 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Services\Contracts\ProductServiceInterface;
 use App\Services\Contracts\RetailerServiceInterface;
 use Illuminate\Contracts\View\View;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ProductController extends Controller
 {
 
-    public function __construct(protected ProductServiceInterface $productService, protected RetailerServiceInterface $retailerService)
+    public function __construct(
+        protected ProductServiceInterface  $productService,
+        protected RetailerServiceInterface $retailerService
+    )
     {
     }
 
@@ -38,7 +42,7 @@ class ProductController extends Controller
         return view('products.edit', compact('product'));
     }
 
-    public function getExampleCsv()
+    public function getExampleCsv(): StreamedResponse
     {
         return $this->productService->downloadExampleImportFile();
     }
