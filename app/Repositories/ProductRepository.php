@@ -33,7 +33,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             ->get();
     }
 
-    public function allLatest(User $user): Collection
+    public function allLatest(User $user): Collection| \Illuminate\Support\Collection
     {
         if ($user->isAdmin) {
             $model = $this->model()
