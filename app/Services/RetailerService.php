@@ -20,17 +20,17 @@ class RetailerService extends BaseCrudService implements RetailerServiceInterfac
         parent::__construct();
     }
 
-    public function grandAccess(int $retailer_id, array $users_id)
+    public function grandAccess(int $retailer_id, array $users_id): bool
     {
         return $this->repository()->grandAccess($retailer_id, $users_id);
     }
 
-    public function revokeAccess(int $retailer_id, array $users_id)
+    public function revokeAccess(int $retailer_id, array $users_id): bool
     {
         return $this->repository()->revokeAccess($retailer_id, $users_id);
     }
 
-    public function restore(int $uid)
+    public function restore(int $uid): bool
     {
         return $this->repository()->restore($uid);
     }
@@ -50,7 +50,7 @@ class RetailerService extends BaseCrudService implements RetailerServiceInterfac
         return $this->repository()->retailersForMetrics($userId);
     }
 
-    public function getNameById(int $retailerId)
+    public function getNameById(int $retailerId): ?string
     {
         return $this->repository()->getNameById($retailerId);
     }
