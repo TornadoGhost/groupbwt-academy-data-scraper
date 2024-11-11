@@ -88,7 +88,7 @@ class ScrapedDataController extends Controller
             $request->validated('retailer_id'),
             $request->validated('date'),
             request()->user(),
-            $request->validated(),
+            array_merge($request->validated(), ['current_day' => now()]),
         );
     }
 }
