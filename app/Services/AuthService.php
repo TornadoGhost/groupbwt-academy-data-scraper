@@ -12,7 +12,7 @@ class AuthService implements AuthServiceInterface
 {
     use JsonResponseHelper;
 
-    public function login($request): JsonResponse
+    public function loginApi($request): JsonResponse
     {
         if (Auth::guard('api')->user()) {
             return $this->errorResponse('Authenticated users cannot access the login page', 403);
@@ -34,7 +34,7 @@ class AuthService implements AuthServiceInterface
         }
     }
 
-    public function logout(): JsonResponse
+    public function logoutApi(): JsonResponse
     {
         $user = auth()->user();
 

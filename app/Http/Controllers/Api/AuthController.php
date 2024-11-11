@@ -24,11 +24,11 @@ class AuthController extends Controller
 
     public function login(LoginUserRequest $request): JsonResponse
     {
-        return $this->authService->login($request->validated());
+        return $this->authService->loginApi($request->validated());
     }
 
     public function logout(): JsonResponse
     {
-        return $this->authService->logout();
+        return $this->authService->logoutApi();
     }
 }
