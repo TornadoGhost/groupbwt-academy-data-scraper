@@ -28,10 +28,6 @@ class ScrapedDataController extends Controller
 
     public function index(): JsonResponse
     {
-        if (auth()->user()->cannot('viewAll', ScrapedData::class)) {
-            return $this->unauthorizedResponse();
-        }
-
         //TODO rework with paginate() instead of get(), because with get() method you can't get response with this amount of data
         $scrapedData = $this->scrapedDataService->all();
 
