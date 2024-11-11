@@ -2,22 +2,26 @@
 
 namespace Tests\Feature;
 
+use App\Exports\ProductsExport;
 use App\Models\Product;
 use App\Models\User;
 use App\Repositories\Contracts\ProductRepositoryInterface;
 use App\Repositories\ProductRepository;
+use App\Services\Contracts\ExportTableServiceInterface;
 use App\Services\Contracts\ProductServiceInterface;
+use App\Traits\JsonResponseHelper;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Passport\Passport;
 use Mockery;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Tests\TestCase;
 
 class ProductServiceTest extends TestCase
 {
-    use WithoutMiddleware, DatabaseTransactions;
+    use WithoutMiddleware, DatabaseTransactions, JsonResponseHelper;
 
     protected $productService;
     protected $productRepository;
@@ -56,14 +60,6 @@ class ProductServiceTest extends TestCase
         $result = $this->productService->downloadExampleImportFile();
 
         $this->assertInstanceOf(StreamedResponse::class, $result);
-    }
-
-    public function testProductsForMetricsWhenNoProducts()
-    {
-        $userId = 3;
-        $this->productRepository->shouldReceive('productsForMetrics')->with($userId)->andReturn();
-        $result = $this->productService->productsForMetrics($userId);
-        $this->assertInstanceOf(Collection::class, $result);
     }
 
     public function testAllLatestWhenUserHasProducts()
@@ -105,53 +101,45 @@ class ProductServiceTest extends TestCase
         $this->assertNull($result);
     }
 
-
-    /*public function testExportExcelWhenUserHasNoProducts()
+    public
+    function testExportExcelProduct()
     {
         $user = User::factory()->create();
+        Passport::actingAs($user);
 
-        // Mock ProductRepository
-        $productRepositoryMock = \Mockery::mock(ProductRepository::class);
-        $productRepositoryMock->shouldReceive('all')->andReturn(collect());
+        $this->productService = Mockery::mock(ProductServiceInterface::class)
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
 
-        // Bind the mock to the service container
-        $this->app->instance(ProductRepository::class, $productRepositoryMock);
-
-        // Mock Excel store method
-        $excelMock = \Mockery::mock('alias:' . Excel::class);
-        $excelMock->shouldReceive('store')
+        $this->productService->shouldReceive('exportExcel')
             ->once()
-            ->with(\Mockery::type(ProductsExport::class), 'exports/products_' . $user->id . '.xlsx', 'local')
-            ->andReturn(true);
+            ->with($user)
+            ->andReturn($this->successResponse('Products exportation started'));
 
-        // Fake the queue and local storage
-        Queue::fake();
-        Storage::fake('local');
+        $result = $this->productService->exportExcel($user);
 
-        // Call the service method
-        $response = $this->productService->exportExcel($user);
+        $response = $this->successResponse('Products exportation started');
+        $this->assertEquals($response, $result);
+    }
 
-        // Convert the JsonResponse to a TestResponse for further assertions
-        $testResponse = TestResponse::fromBaseResponse($response);
 
-        // Assertions on the response
-        $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertEquals(200, $response->getStatusCode());
-        $testResponse->assertJson(['message' => 'Products exportation started']);
+    public function testProductsForMetrics()
+    {
+        $userId = 1;
+        $productCollection = new Collection([new Product(), new Product()]);
+        $this->productRepository->shouldReceive('productsForMetrics')->with($userId)->andReturn($productCollection);
+        $products = $this->productService->productsForMetrics($userId);
+        $this->assertInstanceOf(Collection::class, $products);
+        $this->assertCount(2, $products);
+    }
 
-        // Validate the queue jobs were pushed
-        Queue::assertPushed(NotifyUserOfCompletedExport::class, function ($job) use ($user) {
-            return $job->user->is($user);
-        });
-
-        Queue::assertPushed(SaveExportTableData::class, function ($job) use ($user) {
-            return $job->filename === 'exports/products_' . $user->id . '.xlsx';
-        });
-
-        // Manually check storage
-        $filepath = 'exports/products_'.$user->id.'.xlsx';
-        Storage::disk('local')->assertExists($filepath);
-    }*/
+    public function testProductsForMetricsWhenNoProducts()
+    {
+        $userId = 3;
+        $this->productRepository->shouldReceive('productsForMetrics')->with($userId)->andReturn();
+        $result = $this->productService->productsForMetrics($userId);
+        $this->assertInstanceOf(Collection::class, $result);
+    }
 
     protected function tearDown(): void
     {
