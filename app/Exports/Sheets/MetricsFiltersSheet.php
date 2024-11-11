@@ -64,7 +64,13 @@ class MetricsFiltersSheet implements FromCollection, WithHeadings, WithTitle, Wi
                 return [];
             }
 
-            // TODO change value if value empty from current to real date
+            if ($key === 'current_day') {
+                return [
+                    'Filter' => 'File Created',
+                    'Value' => Carbon::parse($value)->format('Y-m-d H:m'),
+                ];
+            }
+
             return [
                 'Filter' => ucfirst(str_replace('_', ' ', $key)),
                 'Value' => empty($value) ? 'Last available date' : $value,
