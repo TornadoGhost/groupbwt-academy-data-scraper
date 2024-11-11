@@ -26,9 +26,10 @@ class UserController extends Controller
             return $this->unauthorizedResponse();
         }
 
-        $users = $this->userService->all(15);
-
-        return $this->successResponse('Users list received', data: UserResource::collection($users));
+        return $this->successResponse(
+            'Users list received',
+            data: UserResource::collection($this->userService->all())
+        );
     }
 
     public function store(StoreUserRequest $request): JsonResponse
@@ -37,9 +38,10 @@ class UserController extends Controller
             return $this->unauthorizedResponse();
         }
 
-        $user = $this->userService->create($request->validated());
-
-        return $this->successResponse("User created", code: 201, data: UserResource::make($user));
+        return $this->successResponse(
+            'User created',
+            201,
+            UserResource::make($this->userService->create($request->validated())));
     }
 
     public function show(int $id): JsonResponse
@@ -48,9 +50,9 @@ class UserController extends Controller
             return $this->unauthorizedResponse();
         }
 
-        $user = $this->userService->find($id);
-
-        return $this->successResponse("User received", data: UserResource::make($user));
+        return $this->successResponse(
+            'User received',
+            data: UserResource::make($this->userService->find($id)));
     }
 
     public function update(UpdateUserRequest $request, int $id): JsonResponse
@@ -59,10 +61,9 @@ class UserController extends Controller
             return $this->unauthorizedResponse();
         }
 
-        $user = $this->userService->update($id, $request->validated());
-
-
-        return $this->successResponse('User updated', data: UserResource::make($user));
+        return $this->successResponse(
+            'User updated',
+            data: UserResource::make($this->userService->update($id, $request->validated())));
     }
 
     public function destroy(int $id): JsonResponse
