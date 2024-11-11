@@ -314,7 +314,7 @@ return [
             'dropdown_flabel' => 'All exports',
             'update_cfg' => [
                 'route' => 'notifications.get',         // The url to periodically fetch new data (optional).
-                'period' => 5,                       // The update period for get new data (in seconds, optional).
+                'period' => 20,                       // The update period for get new data (in seconds, optional).
             ],
         ],
 
