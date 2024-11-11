@@ -2,9 +2,12 @@
 
 namespace App\Services;
 
+use App\Http\Requests\StoreAuthenticateRequest;
 use App\Services\Contracts\AuthServiceInterface;
 use App\Traits\JsonResponseHelper;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 
@@ -45,5 +48,24 @@ class AuthService implements AuthServiceInterface
         }
 
         return $this->errorResponse('User unauthorized', 401);
+    }
+
+    public function loginWeb(StoreAuthenticateRequest $request): RedirectResponse
+    {
+        if (Auth::attempt($request->validated())) {
+            $request->session()->regenerate();
+
+            return redirect()->route('home');
+        } else {
+            return redirect()->back()->withErrors(['errorLogin' => 'Wrong email or password'])->withInput();
+        }
+    }
+
+    public function logoutWeb(Request $request): RedirectResponse
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+
+        return redirect()->route('login');
     }
 }
