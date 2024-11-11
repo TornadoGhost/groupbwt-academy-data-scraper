@@ -23,7 +23,11 @@ class ImageProductController extends Controller
 
     public function store(ImageProductRequest $request): JsonResponse
     {
-        return $this->successResponse('Image saved', 201, $this->imageService->store($request));
+        return $this->successResponse(
+            'Image saved',
+            201,
+            $this->imageService->storeImage($request, $this->productService->find($request->validated('product_id')))
+        );
     }
 
     public function destroy(string $id): JsonResponse
