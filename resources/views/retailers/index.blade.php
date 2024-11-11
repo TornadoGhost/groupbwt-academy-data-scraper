@@ -1,16 +1,9 @@
 @extends('layouts.app')
 
-{{-- Customize layout sections --}}
-@section('adminlte_css_pre')
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-@stop
-
 @section('subtitle', 'Retailers')
 @section('content_header_title', 'Retailers')
 @section('plugins.bootstrap-bs', true)
 @section('plugins.daterangepicker', true)
-
-{{-- Content body: main page content --}}
 
 @section('content_body')
     @if(Auth::user()->isAdmin)
@@ -112,14 +105,6 @@
     <x-adminlte-button id="grand-access-button" data-toggle="modal" data-target="#retailer-access"
                        class="d-none bg-teal"/>
 @stop
-{{-- Push extra CSS --}}
-
-@push('css')
-    {{-- Add here extra stylesheets --}}
-    {{-- <link rel="stylesheet" href="/css/admin_custom.css"> --}}
-@endpush
-
-{{-- Push extra scripts --}}
 
 @push('js')
     <script type="module">
