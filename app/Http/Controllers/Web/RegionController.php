@@ -26,7 +26,6 @@ class RegionController extends Controller
 
     public function show(int $id): View
     {
-        $region = $this->regionService->find($id);
-        return view('regions.show', compact('region'));
+        return view('regions.show', ['region' => $this->regionService->find($id)]);
     }
 }

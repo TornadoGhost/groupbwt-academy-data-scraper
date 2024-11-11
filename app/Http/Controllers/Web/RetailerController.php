@@ -9,11 +9,12 @@ use App\Services\Contracts\UserServiceInterface;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+
 class RetailerController extends Controller
 {
     public function __construct(
-        protected RetailerServiceInterface $retailerService,
-        protected UserServiceInterface $userService,
+        protected RetailerServiceInterface        $retailerService,
+        protected UserServiceInterface            $userService,
         protected ScrapingSessionServiceInterface $scrapingSessionService,
     )
     {
@@ -31,8 +32,6 @@ class RetailerController extends Controller
 
     public function show(int $id): View
     {
-        $retailer = $this->retailerService->find($id);
-
-        return view('retailers.show', compact('retailer'));
+        return view('retailers.show', ['retailer' => $this->retailerService->find($id)]);
     }
 }
