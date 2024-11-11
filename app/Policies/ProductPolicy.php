@@ -21,11 +21,6 @@ class ProductPolicy
         return $product->user_id === $user->id;
     }
 
-    public function create()
-    {
-        return true;
-    }
-
     public function update(User $user, Product $product)
     {
         return $product->user_id === $user->id;

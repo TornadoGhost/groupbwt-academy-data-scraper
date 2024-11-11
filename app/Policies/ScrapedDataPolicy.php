@@ -16,12 +16,6 @@ class ScrapedDataPolicy
         return null;
     }
 
-    public function viewAll()
-    {
-        return true;
-    }
-
-
     public function create()
     {
         return false;
