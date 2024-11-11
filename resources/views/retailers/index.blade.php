@@ -124,6 +124,7 @@
         }
 
         $(document).ready(function () {
+            // TODO make receive first and last date from api, then move js
             const today = moment('{{ $firstDate }}');
             const lastDate = moment('{{ $lastDate }}')
             $('#scraped-date').daterangepicker({
