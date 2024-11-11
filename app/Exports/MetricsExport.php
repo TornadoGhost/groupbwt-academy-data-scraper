@@ -9,6 +9,7 @@ use App\Services\Contracts\MetricServiceInterface;
 use App\Services\Contracts\ProductServiceInterface;
 use App\Services\Contracts\RetailerServiceInterface;
 use App\Services\Contracts\ScrapedDataServiceInterface;
+use App\Services\Contracts\ScrapingSessionServiceInterface;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Maatwebsite\Excel\Concerns\Exportable;
@@ -30,6 +31,7 @@ class MetricsExport implements WithMultipleSheets, ShouldQueue
         protected RetailerServiceInterface    $retailerService,
         protected ProductServiceInterface     $productService,
         protected User                        $user,
+        protected ScrapingSessionServiceInterface $scrapingSessionService,
     )
     {
     }
@@ -37,7 +39,13 @@ class MetricsExport implements WithMultipleSheets, ShouldQueue
     public function sheets(): array
     {
         return [
-            new MetricsFiltersSheet($this->filters, $this->retailerService, $this->productService, $this->user),
+            new MetricsFiltersSheet(
+                array_merge($this->filters, ['current_day' => now()]),
+                $this->retailerService,
+                $this->productService,
+                $this->user,
+                $this->scrapingSessionService,
+            ),
             new MetricsSheet(
                 $this->scrapedDataService,
                 $this->metricService,
