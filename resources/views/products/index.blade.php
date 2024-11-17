@@ -75,7 +75,7 @@
 @stop
 
 @push('js')
-{{--    <script type="module" src="{{ asset('js/products/index.js') }}"></script>--}}
+    {{--    <script type="module" src="{{ asset('js/products/index.js') }}"></script>--}}
     <script type="module">
         import {mainFetch} from "{{ asset('js/mainFetch.js') }}";
         import {showAlert} from "{{ asset('js/showAlert.js') }}";
@@ -129,36 +129,29 @@
                     ],
                 });
 
-                const showButtons = document.querySelectorAll('button[id=product-show]');
-                showButtons.forEach(elem => {
-                    elem.addEventListener('click', function (event) {
-                        const id = getRowData(event.target.closest('tr')).id;
-                        window.location.href = `products/${id}`;
-                    });
-                })
+                function showProduct(event) {
+                    const id = getRowData(event.target.closest('tr')).id;
+                    window.location.href = `products/${id}`;
+                }
 
-                const removeButtons = document.querySelectorAll('button[id=product-delete]');
-                removeButtons.forEach(elem => {
-                    const handler = function (event) {
-                        document.getElementById('modal-delete-btn').click();
-                        modalRemoveProductAccept(event.target.closest('tr'));
-                        elem.removeEventListener('click', handler);
-                    };
-                    elem.addEventListener('click', handler);
-                });
+                function deleteProduct(event) {
+                    document.getElementById('modal-delete-btn').click();
+                    modalRemoveProductAccept(event.target.closest('tr'));
+                }
 
-                const editButtons = document.querySelectorAll('button[id=product-edit]');
-                editButtons.forEach(elem => {
-                    elem.addEventListener('click', function (event) {
-                        const id = getRowData(event.target.closest('tr')).id;
-                        window.location.href = `products/${id}/edit`;
-                    });
-                })
+                function editProduct(event) {
+                    const id = getRowData(event.target.closest('tr')).id;
+                    window.location.href = `products/${id}/edit`;
+                }
+
+                tableActions(table, '#product-delete', deleteProduct);
+                tableActions(table, '#product-edit', editProduct);
+                tableActions(table, '#product-show', showProduct);
 
                 function modalRemoveProductAccept(element) {
                     const handler = function (event) {
                         if (event.target === document.getElementById('delete-btn')) {
-                            const id = getIdFromRow(element);
+                            const id = getRowData(element).id;
                             mainFetch(`products/${id}`, 'delete')
                                 .then(response => {
                                     if (response?.status === 'Error') {
@@ -173,10 +166,6 @@
                     document.addEventListener('click', handler);
                 }
 
-                function getIdFromRow(element) {
-                    return getRowData(element).id;
-                }
-
                 function getRowData(element) {
                     return table.row(element).data();
                 }
@@ -185,7 +174,6 @@
             if ($.fn.DataTable.isDataTable('#table2')) {
                 $('#table2').DataTable().clear().destroy();
             }
-
             initTable();
 
             function importData(formId) {
@@ -241,12 +229,9 @@
             }
         }
 
-        function getProductId(button) {
-            return button.closest('tr[class=odd]').firstElementChild.textContent;
-        }
-
         function setModalWindow(title, body, theme = 'red') {
             const modal = document.getElementById('error-modal');
+            modal.removeAttribute('aria-hidden');
             const modalHeader = modal.getElementsByClassName('modal-header')[0];
             const modalTitle = modal.getElementsByClassName('modal-title')[0];
             const modalBody = modal.getElementsByClassName('modal-body')[0];
@@ -264,13 +249,27 @@
 
         function exportScrapedDataRetailer() {
             const exportBtn = document.getElementById('export-btn');
-            exportBtn.addEventListener('click', function() {
+            exportBtn.addEventListener('click', function () {
                 const successAlert = `<x-adminlte-alert id="success-alert" class="position-absolute top-0 end-0 m-3 bg-green" style="right: 0;" icon="fa fa-lg fa-thumbs-up" title="Started" dismissable>
                                         Export started! Wait for a notification.
                                     </x-adminlte-alert>`;
                 exportData('export/products', successAlert);
             });
-        }exportScrapedDataRetailer();
+        }
+
+        exportScrapedDataRetailer();
+
+        function tableActions(table, id, callback) {
+            table.on('click', id, function (event) {
+                callback(event);
+            });
+            table.on('draw', function () {
+                table.off('click', id);
+                table.on('click', id, function (event) {
+                    callback(event);
+                });
+            })
+        }
 
     </script>
 @endpush
