@@ -51,12 +51,11 @@ $(document).ready(function () {
             });
         });
 
-        const removeButtons = document.querySelectorAll('button[id=export-delete]');
-        removeButtons.forEach(elem => {
-            elem.addEventListener('click', function (event) {
+        document.querySelector('#table2').addEventListener('click', function(event) {
+            if ((event.target && event.target.id === 'export-delete') || event.target.closest('button[id=export-delete]')) {
                 document.getElementById('modal-delete-btn').click();
                 modalRemoveExportAccept(event.target.closest('tr'));
-            });
+            }
         });
 
         function modalRemoveExportAccept(element) {
