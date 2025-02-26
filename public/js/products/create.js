@@ -1,4 +1,6 @@
 import {mainFetch} from "../mainFetch.js";
+import {productCreatedSuccessfullyModalWindow} from "../modalWindows/productCreatedSuccessfullyModalWindow.js";
+import {showModal} from "../modalWindows/showModal.js";
 
 const submitButton = document.getElementById('save-button');
 submitButton.addEventListener('click', function (event) {
@@ -18,13 +20,14 @@ submitButton.addEventListener('click', function (event) {
                     addValidationMessage(value[0], value[1][0])
                 })
             } else {
-                document.getElementById('modal-open-btn').click();
+                productCreatedSuccessfullyModalWindow();
                 form.reset();
+                showModal('modalWindow');
             }
         });
 });
 
-function addReturnButton() {
+/*function addReturnButton() {
     const modal = document.getElementById('modalMin');
     const footer = modal.querySelector('.modal-footer');
     const button = `
@@ -33,7 +36,7 @@ function addReturnButton() {
     footer.insertAdjacentHTML("afterbegin", button)
 }
 
-addReturnButton();
+addReturnButton();*/
 
 function addValidationMessage(id, message) {
     const element = document.getElementById(id);
@@ -68,22 +71,34 @@ async function getRetailers() {
 async function setRetailersData() {
     const retailers = await getRetailers();
     const retailersForm = document.getElementById('retailers');
-    for (let i = 0; i < retailers.length; i++) {
-        retailersForm.insertAdjacentHTML("beforeend", `
-                    <div class="input-group mb-2">
-                        <div class="input-group col-md-6 pl-0">
-                        <input class="form-control" id="retailers.${i}.product_url" name="retailers[${i}][product_url]"
-                        type="text" placeholder="Enter product url">
-                                <span class="invalid-feedback" role="alert">
-                                    <strong></strong>
-                                </span>
+
+    for (let i = -1; i < retailers.length;) {
+        const row = document.createElement('div');
+        row.classList.add('row', 'mb-2');
+
+        for (let j = 0; j < 3; j++) {
+            i += 1;
+
+            if (i >= retailers.length) {
+                break;
+            }
+
+            row.insertAdjacentHTML('beforeend', `
+                    <div class="form-group col-md-4">
+                        <input type="hidden" name="retailers[${i}][retailer_id]" value="${retailers[i]['id']}">
+                        <input disabled class="form-control rounded-bottom-0" type="text" value="${retailers[i]['name']}" >
+                        <div>
+                            <input class="form-control rounded-top-0" id="retailers.${i}.product_url" name="retailers[${i}][product_url]"
+                            type="text" placeholder="Enter product url">
+                            <span class="invalid-feedback" role="alert">
+                                <strong></strong>
+                            </span>
                         </div>
-                    <input disabled class="form-control" type="text" value="${retailers[i]['name']}" >
-                    <input type="hidden" name="retailers[${i}][retailer_id]" value="${retailers[i]['id']}">
-                                <span class="invalid-feedback" role="alert">
-                                    <strong></strong>
-                                </span>
-                    </div>`);
+                    </div>
+                `);
+        }
+
+        retailersForm.append(row);
     }
 }
 

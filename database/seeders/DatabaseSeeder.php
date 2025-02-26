@@ -19,8 +19,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             ProductSeeder::class,
             ScrapingSessionSeeder::class,
-//            ScrapedDataSeeder::class,
-//            ScrapedDataImageSeeder::class
+            ScrapedDataSeeder::class,
+            ScrapedDataImageSeeder::class
         ]);
     }
 }

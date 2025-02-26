@@ -1,7 +1,7 @@
 export function showAlert(alertToAdd, elementClass, destroy, timer) {
     const div = document.getElementsByClassName(elementClass)[0];
     div.classList.add('position-relative');
-    div.insertAdjacentHTML('afterbegin', alertToAdd);
+    div.insertAdjacentHTML('beforeend', alertToAdd);
 
     if (destroy) {
         destroyAlert(timer, div);
@@ -10,8 +10,8 @@ export function showAlert(alertToAdd, elementClass, destroy, timer) {
 
 function destroyAlert(timer, block) {
     setTimeout(function () {
-        if (block.firstChild) {
-            block.removeChild(block.firstChild);
+        if (block.lastChild) {
+            block.removeChild(block.lastChild);
         }
     }, timer);
 }

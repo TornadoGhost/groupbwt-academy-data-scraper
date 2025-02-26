@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Exports\ProductsExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductImportRequest;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\ProductResource;
-use App\Jobs\NotifyUserOfCompletedExport;
-use App\Jobs\SaveExportTableData;
-use App\Models\Product;
 use App\Services\Contracts\ExportTableServiceInterface;
 use App\Services\Contracts\ProductServiceInterface;
 use App\Traits\JsonResponseHelper;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ProductController extends Controller
 {
@@ -28,11 +26,11 @@ class ProductController extends Controller
     {
     }
 
-    public function index(): JsonResponse
+    public function index(Request $request): AnonymousResourceCollection
     {
-        return $this->successResponse(
-            'Products list received',
-            data: ProductResource::collection($this->productService->allLatest(request()->user())));
+        return ProductResource::collection(
+            $this->productService->allPaginate(auth()->user()->isAdmin, $request->all())
+        );
     }
 
     public function store(StoreProductRequest $request): JsonResponse

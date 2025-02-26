@@ -62,6 +62,7 @@
 @push('js')
     <script type="module">
         import {mainFetch} from "{{ asset('js/mainFetch.js') }}";
+        
 
         form.addEventListener('submit', function () {
             const formData = {

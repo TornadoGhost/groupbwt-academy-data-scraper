@@ -54,7 +54,7 @@ class AuthService implements AuthServiceInterface
     {
         if (Auth::attempt($request->validated())) {
             $request->session()->regenerate();
-
+            
             return redirect()->route('home');
         } else {
             return redirect()->back()->withErrors(['errorLogin' => 'Wrong email or password'])->withInput();

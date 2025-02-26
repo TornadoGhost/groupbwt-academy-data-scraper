@@ -12,20 +12,20 @@
 Before you start, you must have installed Composer and Docker.
 Steps to start the project:
 
-- Copy `.env.example` file and change name to `.env`
-- composer install
-- run docker
-- ./vendor/bin/sail up -d
-- ./vendor/bin/sail npm install
-- ./vendor/bin/sail artisan key:generate
-- ./vendor/bin/sail artisan migrate
-- ./vendor/bin/sail artisan db:seed
-- ./vendor/bin/sail artisan passport:client --personal, after you will get `Client ID` and `Client secret`, inside of
-  `.env` you will find PASSPORT_PERSONAL_ACCESS_CLIENT_ID="client-id-value"
-  PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET="unhashed-client-secret-value" and put data accordingly
-- ./vendor/bin/sail artisan storage:link
-- ./vendor/bin/sail composer require maatwebsite/excel
-- ./vendor/bin/sail artisan queue:work
+-   Copy `.env.example` file and change name to `.env`
+-   composer install
+-   run docker
+-   ./vendor/bin/sail up -d
+-   ./vendor/bin/sail npm install
+-   ./vendor/bin/sail artisan key:generate
+-   ./vendor/bin/sail artisan migrate
+-   ./vendor/bin/sail artisan db:seed
+-   ./vendor/bin/sail artisan passport:client --personal, after you will get `Client ID` and `Client secret`, inside of
+    `.env` you will find PASSPORT_PERSONAL_ACCESS_CLIENT_ID="client-id-value"
+    PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET="unhashed-client-secret-value" and put data accordingly
+-   ./vendor/bin/sail artisan storage:link
+-   ./vendor/bin/sail composer require maatwebsite/excel
+-   ./vendor/bin/sail artisan queue:work
 
 ## Additional
 
@@ -35,6 +35,7 @@ If you don't want to purge tokens manually every day, you can use schedule, run 
 You can config scheduler for how often it will be removing revoked tokens, you just need find this file `routes/console.php` and
 change method. [(hourly(), daily(), weekly()...)](https://laravel.com/docs/11.x/scheduling#schedule-frequency-options) and so on
 should run.
+
 ## Status codes for Scraping session
 
 `RUNNING = 0`

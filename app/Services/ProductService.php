@@ -12,6 +12,7 @@ use App\Repositories\Contracts\ProductRepositoryInterface;
 use App\Services\Contracts\ExportTableServiceInterface;
 use App\Services\Contracts\ProductServiceInterface;
 use App\Traits\JsonResponseHelper;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\UploadedFile;
@@ -58,7 +59,7 @@ class ProductService extends BaseCrudService implements ProductServiceInterface
         }
 
         if (!empty($rowsValidation)) {
-            return $this->errorResponse('Validation error', 422, $rowsValidation);
+            return $this->errorResponse('Validation errors', 422, $rowsValidation);
         }
 
         (new ProductsImport(request()->user()))->queue($file);
@@ -92,18 +93,9 @@ class ProductService extends BaseCrudService implements ProductServiceInterface
             'pack_size' => ['required', 'string', 'min:3', 'max:20'],
         ];
         $validationErrors = [];
-        $manufacturerPartNumbers = [];
 
         foreach ($rows[0] as $index => $row) {
             $validator = Validator::make($row, $rules);
-
-            $manufacturerPartNumber = $row['manufacturer_part_number'];
-            if (in_array($manufacturerPartNumber, $manufacturerPartNumbers)) {
-                $validationErrors[] = 'Row №' . ($index + 2) . ' - ' . "Duplicate manufacturer_part_number found";
-            } else {
-                $manufacturerPartNumbers[] = $manufacturerPartNumber;
-            }
-
             if ($validator->fails()) {
                 foreach ($validator->errors()->messages() as $messages) {
                     foreach ($messages as $message) {
@@ -142,5 +134,11 @@ class ProductService extends BaseCrudService implements ProductServiceInterface
     public function allLatest(User $user): Collection| \Illuminate\Support\Collection
     {
         return $this->repository()->allLatest($user);
+    }
+
+
+    public function allPaginate(bool $isAdmin, array $filters): LengthAwarePaginator
+    {
+        return $this->repository()->allPaginate($isAdmin, $filters);
     }
 }

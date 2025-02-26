@@ -1,4 +1,6 @@
 @extends('layouts.app')
+@section('plugins.Datatables', true)
+@section('plugins.DatatablesPlugins', false)
 
 @section('subtitle', 'Exported Files')
 @section('content_header_title', 'Exported files')

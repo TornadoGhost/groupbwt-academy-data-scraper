@@ -7,7 +7,7 @@
 @section('content_body')
     <form id="product-create">
         <div class="row">
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-4">
                 <label for="title">Title</label>
                 <div class="input-group">
                     <input class="form-control" id="title" name="title"
@@ -17,9 +17,7 @@
                         </span>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-4">
                 <label for="manufacturer_part_number">Manufacturer part number</label>
                 <div class="input-group">
                     <input class="form-control" id="manufacturer_part_number" name="manufacturer_part_number"
@@ -29,9 +27,7 @@
                     </span>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-4">
                 <label for="pack_size">Pack size</label>
                 <div class="input-group">
                     <input class="form-control" id="pack_size" name="pack_size"
@@ -43,9 +39,9 @@
             </div>
         </div>
         <div class="row">
-            <div class="form-group col-md-6">
+            <div class="form-group">
                 <label>Retailers</label>
-                <div class="input-group" id="retailers"></div>
+                <div id="retailers"></div>
             </div>
         </div>
         <label>Images</label>
@@ -53,11 +49,15 @@
         <x-adminlte-button class="d-block btn-flat rounded mt-2" id="save-button" type="submit" label="Save" theme="success"
                            icon="fas fa-lg fa-save"/>
     </form>
-    <x-adminlte-modal id="modalMin" title="Success" theme="green">
-        <p>Product was created.</p>
-    </x-adminlte-modal>
-    <x-adminlte-button class="d-none" id="modal-open-btn" label="Open Modal" data-toggle="modal"
-                       data-target="#modalMin"/>
+    <div class="modal fade" id="modalWindow">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header"></div>
+                <div class="modal-body"></div>
+                <div class="modal-footer"></div>
+            </div>
+        </div>
+    </div>
 @stop
 
 @push('js')
